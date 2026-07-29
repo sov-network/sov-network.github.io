@@ -52,11 +52,16 @@ section .sub{color:var(--dim); margin:0 0 22px}
 .note{background:rgba(91,141,239,.10); border:1px solid rgba(91,141,239,.4); border-radius:10px;
       padding:12px 14px; color:#cfe0ff; font-size:14px}
 
-/* screenshots strip */
-.shots{display:flex; gap:16px; overflow-x:auto; padding:6px 2px 22px; scroll-snap-type:x mandatory}
-.shots img{height:380px; width:auto; border-radius:16px; border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 10px 30px rgba(0,0,0,.4); scroll-snap-align:start; flex:0 0 auto; display:block}
-@media(max-width:640px){.shots img{height:300px}}
+/* screenshots — image + caption, not a bare strip */
+.shots-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
+@media(max-width:900px){.shots-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.shots-grid{grid-template-columns:1fr}}
+.shot{background:var(--panel); border:1px solid rgba(255,255,255,.06); border-radius:14px;
+      padding:16px; text-align:center}
+.shot img{width:100%; max-width:210px; border-radius:10px; border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 8px 22px rgba(0,0,0,.35); margin:0 auto 14px; display:block}
+.shot h3{margin:0 0 6px; font-size:15px; color:#fff}
+.shot p{margin:0; font-size:13.5px; color:var(--dim); line-height:1.5}
 
 /* article (rendered markdown) */
 .article{padding:40px 0 60px}
