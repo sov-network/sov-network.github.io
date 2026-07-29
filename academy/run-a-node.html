@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run a Node — SOV Network</title>
+<meta name="description" content="SOV Network Academy — Run a Node.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <span class="brand"><img src="../sov-logo.png" alt="">SOV&nbsp;NETWORK</span>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Academy</a>
+    <a href="run-a-node.html">Run a node</a>
+  </nav>
+</div></header>
+<main class="wrap article">
+<a class="backlink" href="../index.html">&larr; Back to home</a>
+<h1 id="run-a-sov-node">Run a SOV Node</h1>
+<blockquote>
+<p>Anyone can run a SOV node, join the peer mesh as a fully-equal peer, and earn the<br />
+operator payout for keeping the network alive. The hardware bar is deliberately low<br />
+— "a person with a small free VPS" qualifies. This guide takes you from nothing to a<br />
+converged, earning node, on any of the common hosts.</p>
+<p>This is the same operator walkthrough shown in the SOV app's Academy, expanded with<br />
+copy-pasteable commands for a technical reader.</p>
+</blockquote>
+<p><strong>Contents</strong></p>
+<ol>
+<li><a href="#1-where-to-run-it--pick-a-host">Where to run it — pick a host</a></li>
+<li><a href="#2-the-firewall--the-part-that-actually-blocks-people">The firewall — the part that actually blocks people</a></li>
+<li><a href="#3-google-cloud--stand-up-a-free-node">Google Cloud — stand up a free node</a></li>
+<li><a href="#4-amazon-aws--stand-up-a-node">Amazon AWS — stand up a node</a></li>
+<li><a href="#5-oracle-cloud--free-forever-node-recommended">Oracle Cloud — free-forever node (recommended)</a></li>
+<li><a href="#6-install-the-node-software-the-snap">Install the node software (the snap)</a></li>
+<li><a href="#7-run-a-node-on-windows--no-vps-no-linux">Run a node on Windows — no VPS, no Linux</a></li>
+<li><a href="#8-earning--the-operator-payout">Earning — the operator payout</a></li>
+</ol>
+<hr />
+<h2 id="1-where-to-run-it-pick-a-host">1. Where to run it — pick a host</h2>
+<table>
+<thead>
+<tr>
+<th>Host</th>
+<th>Cost</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Oracle Cloud "Always Free"</strong> ✅ recommended</td>
+<td>Free <strong>forever</strong> (no 12-month expiry)</td>
+<td>Pick shape <code>VM.Standard.E2.1.Micro</code> (AMD x86_64). The longest-lived node on the network runs here.</td>
+</tr>
+<tr>
+<td><strong>Google Cloud <code>e2-micro</code></strong></td>
+<td>Always-free tier</td>
+<td>Free in <code>us-west1</code> / <code>us-central1</code> / <code>us-east1</code>. Keep a billing alert on.</td>
+</tr>
+<tr>
+<td><strong>Amazon AWS <code>t3.micro</code>/<code>t2.micro</code></strong></td>
+<td>Free <strong>12 months only</strong>, then paid</td>
+<td>Fine to learn on; not ideal for a node you want to keep for years.</td>
+</tr>
+<tr>
+<td><strong>Your Windows PC at home</strong></td>
+<td>Free · no VPS · easiest</td>
+<td>The SOV app is itself a full node — see <a href="#7-run-a-node-on-windows--no-vps-no-linux">section 7</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>Any provider works — a paid droplet, a home server, any box with a public IPv4 and<br />
+ports you can open.</p>
+<blockquote>
+<h3 id="the-one-hard-rule-choose-x86_64-not-arm">🔴 The one hard rule: choose x86_64, not ARM</h3>
+<p>The node ships an <strong>x86_64</strong> Node.js runtime and a native AES SQLite module. It will<br />
+<strong>not</strong> start on an ARM machine. Avoid <strong>Oracle Ampere A1</strong> (<code>VM.Standard.A1.Flex</code>)<br />
+and <strong>AWS Graviton</strong> — pick an Intel/AMD (x86_64) shape.</p>
+</blockquote>
+<p><strong>Minimum spec:</strong> Ubuntu 20.04+ (22.04 LTS recommended), 1 GB RAM (2 GB comfortable),<br />
+10 GB disk, a public IPv4.</p>
+<hr />
+<h2 id="2-the-firewall-the-part-that-actually-blocks-people">2. The firewall — the part that actually blocks people</h2>
+<p>The single most common reason a node "installs fine but nobody can reach it" is the<br />
+firewall. <strong>Cloud providers block inbound ports in two separate places, and you must<br />
+open both.</strong></p>
+<ul>
+<li><strong>Door 1 — the cloud firewall</strong> (in the provider console): a <strong>Security List</strong> on<br />
+  Oracle, a <strong>Security Group</strong> on AWS, or a <strong>VPC firewall rule</strong> on Google.</li>
+<li><strong>Door 2 — the machine's own firewall</strong> (Ubuntu <code>iptables</code>/<code>ufw</code> on the box).<br />
+  Oracle images in particular ship this <strong>closed</strong> — it's the number-one "the console<br />
+  says the port is open but the box still drops it" cause.</li>
+</ul>
+<p>Open these inbound, TCP, source <code>0.0.0.0/0</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Purpose</th>
+<th>Open?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>443</strong></td>
+<td>Citizens connect here (the main one)</td>
+<td>✅ open</td>
+</tr>
+<tr>
+<td><strong>7771</strong></td>
+<td>Peer mesh — node to node</td>
+<td>✅ open</td>
+</tr>
+<tr>
+<td><strong>80</strong></td>
+<td>Snap download + health</td>
+<td>✅ open</td>
+</tr>
+<tr>
+<td><strong>22</strong></td>
+<td>SSH — admin (tighten source to <em>your</em> IP)</td>
+<td>✅ open</td>
+</tr>
+<tr>
+<td><strong>8080</strong></td>
+<td>Node dashboard — <strong>localhost only</strong></td>
+<td>❌ keep closed</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Never expose 8080 to the internet</strong> — it is the private node dashboard and is meant<br />
+to stay on localhost.</p>
+</blockquote>
+<p>Get these ports right and the rest of running a node is easy. The three cloud sections<br />
+below show exactly where each provider hides Door 1.</p>
+<hr />
+<h2 id="3-google-cloud-stand-up-a-free-node">3. Google Cloud — stand up a free node</h2>
+<p><strong>Create the instance</strong></p>
+<ol>
+<li><strong>Compute Engine → VM instances → Create.</strong> Region <code>us-west1</code> / <code>us-central1</code> /<br />
+<code>us-east1</code>, machine type <strong><code>e2-micro</code></strong> (always-free-eligible).</li>
+<li>Boot disk <strong>Ubuntu 22.04 LTS</strong> (x86_64). Allow HTTP/HTTPS if asked. Create, and copy<br />
+   the <strong>External IP</strong>.</li>
+</ol>
+<p><strong>Open the ports (VPC firewall — Door 1)</strong></p>
+<ol start="3">
+<li><strong>VPC network → Firewall → Create firewall rule.</strong></li>
+<li>Direction <strong>Ingress</strong> · Targets <strong>All instances</strong> · Source IPv4 ranges <code>0.0.0.0/0</code>.</li>
+<li>Protocols and ports → <strong>TCP</strong> → <code>443,7771,80,22</code> → <strong>Create</strong>.</li>
+<li>GCP's Ubuntu images don't ship an extra host firewall, so Door 2 is usually already<br />
+   open — but verify you can reach port 443 after installing.</li>
+</ol>
+<blockquote>
+<p>⚠️ GCP free instances have been billing-terminated before. Set a <strong>Budget alert</strong><br />
+(e.g. at \$1) so an accident can't silently run up a bill.</p>
+</blockquote>
+<hr />
+<h2 id="4-amazon-aws-stand-up-a-node">4. Amazon AWS — stand up a node</h2>
+<p><strong>Launch the instance</strong></p>
+<ol>
+<li><strong>EC2 → Launch instance.</strong> AMI <strong>Ubuntu 22.04 LTS (64-bit x86)</strong>, type <strong><code>t3.micro</code></strong><br />
+   or <strong><code>t2.micro</code></strong> (free-tier eligible).</li>
+<li>Create/choose a key pair and <strong>download the <code>.pem</code></strong> — that's your SSH key. Launch,<br />
+   and note the <strong>Public IPv4</strong>.</li>
+</ol>
+<p><strong>Open the ports (Security Group — Door 1)</strong></p>
+<ol start="3">
+<li><strong>EC2 → Network &amp; Security → Security Groups →</strong> select this instance's group <strong>→<br />
+   Inbound rules → Edit.</strong></li>
+<li><strong>Add rule → Custom TCP → port <code>443</code> → source Anywhere-IPv4 (<code>0.0.0.0/0</code>)</strong>. Repeat<br />
+   for <strong>7771</strong> and <strong>80</strong>.</li>
+<li>Keep the SSH (<strong>22</strong>) rule but tighten its source to <strong>My IP</strong>. Save rules.</li>
+</ol>
+<blockquote>
+<p>⏳ AWS free tier is only <strong>12 months</strong> — great to learn on, but for a permanent node<br />
+prefer Oracle Always Free (no expiry).</p>
+</blockquote>
+<hr />
+<h2 id="5-oracle-cloud-free-forever-node-recommended">5. Oracle Cloud — free-forever node (recommended)</h2>
+<p>Oracle Cloud Infrastructure "Always Free" is the recommended host: free forever with no<br />
+12-month expiry.</p>
+<p><strong>Create the instance</strong></p>
+<ol>
+<li><strong>Compute → Instances → Create.</strong> Image <strong>Canonical Ubuntu 22.04</strong>.</li>
+<li><strong>Change shape → AMD → <code>VM.Standard.E2.1.Micro</code></strong> (Always-Free-eligible). <strong>Do NOT<br />
+   pick Ampere A1 — that is ARM</strong> and the node won't run on it.</li>
+<li>Assign a public IPv4 = <strong>Yes</strong>. Paste your SSH <strong>public</strong> key. Create, and copy the<br />
+   Public IP.</li>
+</ol>
+<p><strong>Door 1 — cloud Security List</strong></p>
+<ol start="4">
+<li><strong>Networking → Virtual Cloud Networks → your VCN → Security Lists → Default → Add<br />
+   Ingress Rules.</strong></li>
+<li>For each of <strong>22, 80, 443, 7771</strong>: Source <code>0.0.0.0/0</code> · IP Protocol <strong>TCP</strong> · that<br />
+   Destination Port.</li>
+</ol>
+<p><strong>Door 2 — the box's own firewall</strong> (Oracle images block these by default)</p>
+<pre><code class="language-bash">sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443  -j ACCEPT
+sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 7771 -j ACCEPT
+sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80   -j ACCEPT
+sudo netfilter-persistent save     # persists across reboot
+</code></pre>
+<blockquote>
+<p>❗ Skipping Door 2 is the classic Oracle mistake — the console shows the ports "open"<br />
+while the box still silently drops them.</p>
+</blockquote>
+<hr />
+<h2 id="6-install-the-node-software-the-snap">6. Install the node software (the snap)</h2>
+<p>The node software is distributed by <strong>the network itself</strong> — there is no GitHub repo and<br />
+no app store to trust. You download it straight from a running node, and you verify it<br />
+yourself.</p>
+<p><strong>Download from a live node</strong></p>
+<pre><code class="language-bash">curl -O http://&lt;LIVE_NODE_IP&gt;/sov-relay.snap
+</code></pre>
+<p><strong>Verify it is authentic</strong> — download the <em>same</em> file from a second node and compare<br />
+hashes. If they match, no one tampered with your copy in transit.</p>
+<pre><code class="language-bash">curl -o b.snap http://&lt;SECOND_NODE_IP&gt;/sov-relay.snap
+sha256sum sov-relay.snap b.snap    # the two hashes MUST be identical
+rm b.snap
+</code></pre>
+<p><strong>Install</strong> (<code>--dangerous</code> = not from the Snap Store, by design; <code>--devmode</code> =<br />
+unconfined sandbox for now)</p>
+<pre><code class="language-bash">sudo apt-get update &amp;&amp; sudo apt-get install -y snapd
+sudo snap install --dangerous --devmode sov-relay.snap
+</code></pre>
+<p><strong>Configure your node identity</strong></p>
+<pre><code class="language-bash">sudo snap stop sov-relay.sov-relay
+sudo nano /var/snap/sov-relay/current/.env
+</code></pre>
+<p>Set at minimum:</p>
+<pre><code class="language-ini">RELAY_ID=&lt;a-short-name-you-choose&gt;   # e.g. citizen-node-1
+RELAY_IP=&lt;this-box's-public-IP&gt;      # used in peer-mesh announcements
+# Leave RELAY_POOL_IPS as the bundled live nodes — that's how you find the mesh on first boot.
+</code></pre>
+<p><strong>Start it and watch it join</strong></p>
+<pre><code class="language-bash">sudo snap start sov-relay.sov-relay
+sudo snap logs -f sov-relay.sov-relay
+</code></pre>
+<p>You want to see it load its identity, bind the ports, and connect to peers. Once it<br />
+converges and stays continuously up for the qualifying period (about three weeks), your<br />
+node begins earning the operator payout.</p>
+<blockquote>
+<p>The default ports are <code>SOV_PORT=443</code> (citizen WebSocket) and <code>SYNC_PORT=7771</code> (peer<br />
+mesh). If you must move the citizen port (e.g. 443 is already taken by nginx), set<br />
+<code>SOV_PORT</code> in the <code>.env</code> and open that port in both firewall layers instead.</p>
+</blockquote>
+<hr />
+<h2 id="7-run-a-node-on-windows-no-vps-no-linux">7. Run a node on Windows — no VPS, no Linux</h2>
+<p>You don't need a VPS, Linux, or any firewall edits to be an operator — the SOV Windows<br />
+app is itself a full node.</p>
+<p><strong>Path A — normal home broadband</strong></p>
+<ol>
+<li>Install the SOV app (<code>SovNode.exe</code>) and sign in / restore your wallet.</li>
+<li>Open the <strong>Node</strong> tab → the <strong>"Run a Node"</strong> card. Leave <strong>Reachability = Auto</strong>.</li>
+<li>Toggle <strong>Run a Node → ON.</strong> It opens your router by UPnP, or relays <em>through</em> the SOV<br />
+   mesh if it can't. When it's serving, the card shows <strong>"Reachable at: …"</strong>.</li>
+</ol>
+<p>That's the whole setup for most people. Keep the PC on — <strong>uptime is what earns.</strong></p>
+<p><strong>Path B — mobile hotspot / CGNAT / "can't port-forward"</strong></p>
+<p>Use this if Path A can't make you reachable (common on mobile hotspots and CGNAT ISPs).<br />
+Tailscale Funnel gives your node a stable public HTTPS address, free forever, over a<br />
+purely outbound connection — no port-forward, no domain, no VPS.</p>
+<ol>
+<li>Make a free Tailscale account at <code>login.tailscale.com/start</code> and install Tailscale for<br />
+   Windows; log in once. (Tailscale uses SSO — there is no in-app password by design.)</li>
+<li>In the SOV app: <strong>Node</strong> tab → set <strong>Reachability = Tailscale Funnel</strong> → toggle <strong>ON</strong>.</li>
+<li>The first time only, tap <strong>"Enable Tailscale Funnel"</strong> and click <strong>Approve</strong> in the<br />
+   browser. The app then serves at <code>wss://&lt;your-pc&gt;.&lt;tailnet&gt;.ts.net</code>.</li>
+</ol>
+<p>Behind CGNAT the peer-mesh port (7771) is outbound-only — that's normal; citizens still<br />
+reach you inbound on 443 via Funnel.</p>
+<hr />
+<h2 id="8-earning-the-operator-payout">8. Earning — the operator payout</h2>
+<p>Running a node earns SOV for the real work of keeping the network running: witnessing<br />
+transactions and staying online.</p>
+<ul>
+<li>A node must be <strong>continuously up for a qualifying period</strong> (a governance-set default of<br />
+  about three weeks) before it earns — sleeping or shutting the machine down breaks the<br />
+  streak, so payouts reward genuine uptime, not machines that are mostly off.</li>
+<li>Payment is a <strong>fixed reward per relay per 30-day period</strong> (governance-set), with a<br />
+  steep anti-monopoly curve: your first relay earns the full reward, a second and third<br />
+  earn a small fraction, and a fourth or beyond earns nothing — so running a farm of<br />
+  nodes gives you no advantage, and the network stays spread across many independent<br />
+  operators.</li>
+<li>Operators are paid <strong>from the fees that flow in first</strong>, and only then, capped, from<br />
+  the genesis reserve — so as the network grows and fee revenue rises, it funds its own<br />
+  operators and the reserve becomes a long-term runway rather than a pot that drains.</li>
+</ul>
+<p>You can watch every fee flow into the pool and every payout leave it on the app's live<br />
+<strong>SOV Economy</strong> screen — the ledger is public.</p>
+<hr />
+<p><em>This guide is part of the SOV Network Academy. For what SOV is and how to use it, see<br />
+<a href="knowledge-bank.html">the Knowledge Bank</a>.</em></p>
+</main>
+<footer class="site"><div class="wrap">
+  <p>SOV Network — an open, self-contained protocol. No central operator, no single switch to flip.</p>
+  <p>This page is part of the SOV Academy and mirrors the in-app content.</p>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,75 @@
+/* SOV Network — public site theme (navy + gold, matches the app Academy).
+   Self-contained, no external fonts/CDNs, so it works identically on GitHub
+   Pages and on IPFS. */
+:root{
+  --navy:#0A1628; --navy2:#0F2038; --panel:#12233f;
+  --gold:#D4AF37; --green:#4CAF7D; --blue:#5B8DEF; --red:#E0685A;
+  --ink:#E8EEF6; --dim:#9BB0CC; --line:rgba(212,175,55,.22);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--navy); color:var(--ink);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--gold); text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:860px; margin:0 auto; padding:0 20px}
+header.site{border-bottom:1px solid var(--line); background:var(--navy2); position:sticky; top:0; z-index:5}
+header.site .wrap{display:flex; align-items:center; gap:14px; height:60px}
+.brand{font-weight:800; letter-spacing:.5px; color:var(--gold); font-size:18px; display:flex; align-items:center; gap:9px}
+.brand img{width:26px; height:26px; display:block}
+.hero-logo{width:96px; height:96px; margin:0 auto 18px; display:block; filter:drop-shadow(0 4px 18px rgba(212,175,55,.25))}
+.tagline{font-size:15px; color:var(--gold); font-weight:600; max-width:640px; margin:0 auto 24px}
+.tagline b{color:#fff}
+header.site nav{margin-left:auto; display:flex; gap:18px; font-size:14px}
+header.site nav a{color:var(--dim)}
+header.site nav a:hover{color:var(--ink); text-decoration:none}
+
+/* hero */
+.hero{padding:72px 0 48px; text-align:center; border-bottom:1px solid var(--line)}
+.hero h1{font-size:38px; line-height:1.15; margin:0 0 14px; color:#fff}
+.hero p.lead{font-size:19px; color:var(--dim); max-width:640px; margin:0 auto 26px}
+.cta{display:inline-flex; gap:12px; flex-wrap:wrap; justify-content:center}
+.btn{display:inline-block; padding:12px 22px; border-radius:10px; font-weight:700; font-size:15px}
+.btn.primary{background:var(--gold); color:#1a1300}
+.btn.primary:hover{filter:brightness(1.08); text-decoration:none}
+.btn.ghost{border:1px solid var(--line); color:var(--ink)}
+.btn.ghost:hover{border-color:var(--gold); text-decoration:none}
+
+/* sections + cards */
+section{padding:44px 0; border-bottom:1px solid rgba(255,255,255,.05)}
+section h2{font-size:24px; color:#fff; margin:0 0 8px}
+section .sub{color:var(--dim); margin:0 0 22px}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media(max-width:640px){.grid{grid-template-columns:1fr} .hero h1{font-size:30px}}
+.card{background:var(--panel); border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:18px 18px}
+.card h3{margin:0 0 6px; font-size:17px; color:#fff}
+.card p{margin:0 0 10px; color:var(--dim); font-size:14.5px}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px;
+     border:1px solid var(--line); color:var(--gold); background:rgba(212,175,55,.10)}
+.note{background:rgba(91,141,239,.10); border:1px solid rgba(91,141,239,.4); border-radius:10px;
+      padding:12px 14px; color:#cfe0ff; font-size:14px}
+
+/* article (rendered markdown) */
+.article{padding:40px 0 60px}
+.article h1{font-size:32px; color:#fff; margin:0 0 6px}
+.article h2{font-size:23px; color:#fff; margin:34px 0 10px; padding-top:8px; border-top:1px solid rgba(255,255,255,.06)}
+.article h3{font-size:18px; color:var(--gold); margin:22px 0 6px}
+.article p,.article li{color:#d7e2f0}
+.article blockquote{margin:16px 0; padding:10px 16px; border-left:3px solid var(--gold);
+     background:rgba(212,175,55,.07); color:#e8dfc0; border-radius:0 8px 8px 0}
+.article code{background:rgba(0,0,0,.35); padding:1px 6px; border-radius:5px; font-size:13.5px; color:var(--green)}
+.article pre{background:#081120; border:1px solid rgba(255,255,255,.08); border-radius:10px;
+     padding:14px 16px; overflow-x:auto}
+.article pre code{background:none; padding:0; color:#c7f0da}
+.article table{width:100%; border-collapse:collapse; margin:16px 0; font-size:14.5px; display:block; overflow-x:auto}
+.article th,.article td{border:1px solid rgba(255,255,255,.10); padding:8px 11px; text-align:left}
+.article th{background:var(--navy2); color:var(--gold)}
+.article a{color:var(--gold)}
+.article hr{border:none; border-top:1px solid rgba(255,255,255,.08); margin:28px 0}
+.backlink{display:inline-block; margin:6px 0 20px; color:var(--dim); font-size:14px}
+
+footer.site{padding:30px 0 50px; color:var(--dim); font-size:13.5px; text-align:center}
+footer.site p{margin:4px 0}

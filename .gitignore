@@ -1,0 +1,7 @@
+# Never let secrets into the PUBLIC repo.
+*.env
+*.env.*
+!*.env.example
+*secret*
+*.key
+*.pem
