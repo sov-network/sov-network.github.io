@@ -52,6 +52,12 @@ section .sub{color:var(--dim); margin:0 0 22px}
 .note{background:rgba(91,141,239,.10); border:1px solid rgba(91,141,239,.4); border-radius:10px;
       padding:12px 14px; color:#cfe0ff; font-size:14px}
 
+/* screenshots strip */
+.shots{display:flex; gap:16px; overflow-x:auto; padding:6px 2px 22px; scroll-snap-type:x mandatory}
+.shots img{height:380px; width:auto; border-radius:16px; border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 30px rgba(0,0,0,.4); scroll-snap-align:start; flex:0 0 auto; display:block}
+@media(max-width:640px){.shots img{height:300px}}
+
 /* article (rendered markdown) */
 .article{padding:40px 0 60px}
 .article h1{font-size:32px; color:#fff; margin:0 0 6px}
