@@ -56,48 +56,279 @@
 </div></section>
 
 <section id="screenshots"><div class="wrap">
-  <h2>See it</h2>
-  <p class="sub">The real app — every screen below is the actual UI, not a mockup.</p>
-  <div class="shots-grid">
-    <div class="shot">
-      <img src="screens/home.jpg" alt="SOV Network home screen" loading="lazy">
-      <h3>Home</h3>
-      <p>Your balance, quick actions, and live node status at a glance.</p>
+  <h2>A visual tour of the app</h2>
+  <p class="sub">Real screens from the SOV app. The phone app and the desktop app look the same —
+  only the desktop can also run a Full Node.</p>
+
+  <div class="tour-stage"><span class="num">1</span><div>
+    <h3>Join in a few taps</h3><p>Your palm is your key — no password, no username. One human, one wallet.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/apk_enroll_1_palmkey.jpg" alt="Your palm is your key" loading="lazy">
+    <div class="info"><h4>Your palm is your key</h4><span class="platform-tag">Phone (APK)</span>
+      <p class="subtitle">The onboarding explains it: your palm's crease pattern is your unbreakable identity.</p>
     </div>
-    <div class="shot">
-      <img src="screens/send.jpg" alt="Sending SOV" loading="lazy">
-      <h3>Send</h3>
-      <p>Instant SOV transfers for a tiny, capped, citizen-voted fee.</p>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/apk_enroll_3_ownit.jpg" alt="Begin enrollment" loading="lazy">
+    <div class="info"><h4>Begin enrollment</h4><span class="platform-tag">Phone (APK)</span>
+      <ul><li>Tap "Begin Enrollment" to create your wallet</li></ul>
     </div>
-    <div class="shot">
-      <img src="screens/receive_qr.jpg" alt="Receiving SOV via QR code" loading="lazy">
-      <h3>Receive</h3>
-      <p>Share your QR code or Sovereign ID to get paid instantly.</p>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/apk_enroll_4_camera.jpg" alt="Allow the camera" loading="lazy">
+    <div class="info"><h4>Allow the camera</h4><span class="platform-tag">Phone (APK)</span>
+      <ul><li>Tap "While using the app" — needed for the liveness + palm scan</li></ul>
     </div>
-    <div class="shot">
-      <img src="screens/messages.jpg" alt="Encrypted messaging" loading="lazy">
-      <h3>Messages</h3>
-      <p>End-to-end encrypted chat that works behind firewalls — no content ever touches a relay.</p>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/apk_enroll_5_liveness.jpg" alt="Prove you're a live person" loading="lazy">
+    <div class="info"><h4>Prove you're a live person</h4><span class="platform-tag">Phone (APK)</span>
+      <ul><li>Follow the on-screen challenge — turn your head the way the arrow points, so no photo or video can fake it</li></ul>
     </div>
-    <div class="shot">
-      <img src="screens/exchange_browse.jpg" alt="SOV Exchange order book" loading="lazy">
-      <h3>Exchange</h3>
-      <p>Browse the live peer-to-peer order book — no central operator, no custody.</p>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/apk_enroll_8_palm_ok.jpg" alt="Scan your palm" loading="lazy">
+    <div class="info"><h4>Scan your palm</h4><span class="platform-tag">Phone (APK)</span>
+      <ul><li>Hold your open palm inside the frame until it locks (green corners)</li></ul>
     </div>
-    <div class="shot">
-      <img src="screens/governance.jpg" alt="Governance voting" loading="lazy">
-      <h3>Governance</h3>
-      <p>Vote directly on network parameters — one citizen, one vote, binding.</p>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/apk_enroll_7_dedup.jpg" alt="One human = one wallet" loading="lazy">
+    <div class="info"><h4>One human = one wallet</h4><span class="platform-tag">Phone (APK)</span>
+      <ul><li>If your palm is already enrolled, tap "Recover My Wallet" instead of making a second account</li></ul>
     </div>
-    <div class="shot">
-      <img src="screens/vault.jpg" alt="SOV Vault" loading="lazy">
-      <h3>Vault</h3>
-      <p>Escrow-protected holds, with citizen-jury dispute resolution built in.</p>
+  </div>
+
+  <div class="tour-stage"><span class="num">2</span><div>
+    <h3>Your money</h3><p>Send, receive and hold SOV. Your balance lives on your device.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/home.jpg" alt="Home screen" loading="lazy">
+    <div class="info"><h4>Home</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>Send SOV to anyone by their Sovereign ID</li>
+        <li>Receive — show a QR to get paid</li>
+        <li>Exchange SOV for cash or services</li>
+      </ul>
     </div>
-    <div class="shot">
-      <img src="screens/academy.jpg" alt="In-app Academy" loading="lazy">
-      <h3>Academy</h3>
-      <p>The in-app library explaining every protocol in plain language — no install required to read it.</p>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/send.jpg" alt="Send SOV" loading="lazy">
+    <div class="info"><h4>Send SOV</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>Paste the recipient's Sovereign ID</li>
+        <li>Enter the amount</li>
+        <li>Tap "Send SOV" — it arrives in seconds</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/receive_qr.jpg" alt="Receive SOV" loading="lazy">
+    <div class="info"><h4>Receive SOV</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>Your pay-to QR code — let anyone scan it to pay you</li>
+        <li>Copy your ID, share it, or request a specific amount</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tour-stage"><span class="num">3</span><div>
+    <h3>The marketplace</h3><p>Trade SOV peer-to-peer, or offer a service you're certified for.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/exchange_browse.jpg" alt="Exchange — browse offers" loading="lazy">
+    <div class="info"><h4>Exchange — browse offers</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Browse citizens' offers and fill one — funds are escrowed until you confirm</li></ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/exchange_myorders.jpg" alt="Exchange — sell or offer a service" loading="lazy">
+    <div class="info"><h4>Exchange — sell or offer a service</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>List SOV for sale at your price</li>
+        <li>Or list a paid service your certification qualifies you for</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/exchange_orderbook.jpg" alt="Exchange — order book" loading="lazy">
+    <div class="info"><h4>Exchange — order book</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>The live order book — open depth and recent fills, in the open</li></ul>
+    </div>
+  </div>
+
+  <div class="tour-stage"><span class="num">4</span><div>
+    <h3>Messages — private chat + the public Enclave</h3><p>Four tabs: encrypted 1-to-1 chat, your contacts, the public forum, and group chats.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/messages.jpg" alt="SOV Speak — encrypted messages" loading="lazy">
+    <div class="info"><h4>SOV Speak — encrypted messages</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>SOV Speak — private end-to-end encrypted chats</li>
+        <li>Tap the pencil to start a new secure conversation</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/messages_contacts.jpg" alt="Contacts" loading="lazy">
+    <div class="info"><h4>Contacts</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Your saved citizens — message or pay them in a tap</li></ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/messages_enclave.jpg" alt="SOV Enclave — the public town square" loading="lazy">
+    <div class="info"><h4>SOV Enclave — the public town square</h4><span class="platform-tag">Phone + Desktop</span>
+      <p class="subtitle">The Enclave is citizen-governed: it goes live once citizens vote it on. Then any citizen can post — and any citizen can flag spam.</p>
+      <ul><li>SOV Enclave — activated by a citizen vote in the Constitution tab</li></ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/messages_groups.jpg" alt="Groups" loading="lazy">
+    <div class="info"><h4>Groups</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Group chats — many citizens, one encrypted thread</li></ul>
+    </div>
+  </div>
+
+  <div class="tour-stage"><span class="num">5</span><div>
+    <h3>Vault — your funds can never be lost</h3><p>Lock SOV for your family, claim an inherited vault, or serve on a recovery jury.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/vault.jpg" alt="My Vaults" loading="lazy">
+    <div class="info"><h4>My Vaults</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>My Vaults — SOV you've locked away</li>
+        <li>Create a vault — a family claim key + keyword, recoverable by a citizen jury if the key is ever lost</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/vault_claim.jpg" alt="Claim a Vault" loading="lazy">
+    <div class="info"><h4>Claim a Vault</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Claim a vault left to you — prove it with the family keyword</li></ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/vault_justice.jpg" alt="Justice Council" loading="lazy">
+    <div class="info"><h4>Justice Council</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>If chosen, you help a family recover a vault — citizens protecting citizens</li></ul>
+    </div>
+  </div>
+
+  <div class="tour-stage"><span class="num">6</span><div>
+    <h3>Governance — the citizen government</h3><p>Four tabs: justice cases, the constitution, live votes, and petitions.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/governance.jpg" alt="Justice" loading="lazy">
+    <div class="info"><h4>Justice</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>Justice — cases you're a juror on</li>
+        <li>File a dispute with a 10 SOV bond — a random jury reviews it within 72 hours</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/gov_constitution.jpg" alt="Constitution — turn protocols on" loading="lazy">
+    <div class="info"><h4>Constitution — turn protocols on</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Vote protocols on or off — SOV Enclave, SOV Login, payment links and more</li></ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/gov_votes.jpg" alt="Votes" loading="lazy">
+    <div class="info"><h4>Votes</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Every open vote — one enrolled human, one vote</li></ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/gov_petitions.jpg" alt="Petitions" loading="lazy">
+    <div class="info"><h4>Petitions</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Start or sign a petition to force a network-wide vote</li></ul>
+    </div>
+  </div>
+
+  <div class="tour-stage"><span class="num">7</span><div>
+    <h3>Watch the network</h3><p>Anyone can see the network is healthy and honest — nothing is hidden.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/node_status.jpg" alt="The live network" loading="lazy">
+    <div class="info"><h4>The live network — the nodes you're connected to</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>Every node you're connected to, live — a green dot means connected</li>
+        <li>The count of nodes carrying the network right now</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/economy.jpg" alt="Economy — the 50M cap, in the open" loading="lazy">
+    <div class="info"><h4>Economy — the 50M cap, in the open</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Pools + wallets always add up to the 50,000,000 cap — verify it yourself</li></ul>
+    </div>
+  </div>
+
+  <div class="note" style="margin:8px 0 18px"><strong>Phone vs desktop:</strong> the two apps are
+  the same, with one addition on the desktop (Windows / Mac): a Full Node switch on this screen.
+  Turn it on and your computer helps carry the network and earns the operator payout. The phone
+  app connects to nodes but does not run one.</div>
+
+  <div class="tour-shot">
+    <img src="screens/win_reach_modes.jpg" alt="How citizens reach your home node" loading="lazy">
+    <div class="info"><h4>How citizens reach your home node</h4><span class="platform-tag">Full node</span>
+      <p class="subtitle">Behind home internet? Pick how people reach you — the node handles the rest.</p>
+      <ul>
+        <li>Automatic — router or circuit-relay through a public node (zero setup)</li>
+        <li>Tailscale Funnel — a free public address, no port-forwarding</li>
+        <li>Static IP / port-forward — if you run your own server</li>
+      </ul>
+    </div>
+  </div>
+  <p class="sub" style="font-size:13px">When you turn the node on, Windows will ask to allow
+  <em>Node.js JavaScript Runtime</em> through the firewall — that's normal and safe; it's the SOV
+  node software on your PC asking to let other citizens reach it so it can serve the network and
+  earn your operator payout. Click Cancel instead and your node still runs, just invisibly to
+  other citizens.</p>
+
+  <div class="tour-stage"><span class="num">8</span><div>
+    <h3>Certify &amp; stay secure</h3><p>Turn knowledge into income, and lock your wallet down.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/academy.jpg" alt="Academy — learn and certify" loading="lazy">
+    <div class="info"><h4>Academy — learn &amp; certify</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul><li>Take a track, pass the test, earn a certification you can charge clients for</li></ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/profile_security.jpg" alt="Profile and security" loading="lazy">
+    <div class="info"><h4>Profile &amp; security</h4><span class="platform-tag">Phone + Desktop</span>
+      <ul>
+        <li>Set or require a PIN so no one else can open your wallet</li>
+        <li>Proof of Life keeps your vaults sealed to you</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tour-stage"><span class="num">9</span><div>
+    <h3>Connect your website</h3><p>Any website owner can add "Sign in with SOV" — registered straight from the wallet, no server setup.</p>
+  </div></div>
+  <div class="tour-shot">
+    <img src="screens/platform_register.jpg" alt="Register a Platform" loading="lazy">
+    <div class="info"><h4>Register a Platform</h4><span class="platform-tag">Phone + Desktop</span>
+      <p class="subtitle">Profile → Register a Platform. Your registration is signed by your wallet; a one-time SOV fee goes to the node operator pool.</p>
+      <ul>
+        <li>Enter your website's domain</li>
+        <li>Your callback URL — where the network sends the signed login result</li>
+        <li>Tap "Register &amp; Pay Fee" — done. Citizens can now sign in to your site with their SOV ID</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tour-shot">
+    <img src="screens/sov_link_verify.jpg" alt="Signing in to a website" loading="lazy">
+    <div class="info"><h4>Signing in to a website — what the citizen sees</h4><span class="platform-tag">Phone + Desktop</span>
+      <p class="subtitle">On the website they click "Sign in with SOV"; the wallet shows this. They type the 6-digit code from the site — one tap proves they are a real, unique human.</p>
+      <ul>
+        <li>The website shows a 6-digit code — type it here</li>
+        <li>It proves your personhood ONCE — the site never sees your wallet, messages, or anything else</li>
+        <li>Tap Continue — you are signed in as a verified human, no password</li>
+      </ul>
     </div>
   </div>
 </div></section>

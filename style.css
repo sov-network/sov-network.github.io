@@ -52,16 +52,26 @@ section .sub{color:var(--dim); margin:0 0 22px}
 .note{background:rgba(91,141,239,.10); border:1px solid rgba(91,141,239,.4); border-radius:10px;
       padding:12px 14px; color:#cfe0ff; font-size:14px}
 
-/* screenshots — image + caption, not a bare strip */
-.shots-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
-@media(max-width:900px){.shots-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.shots-grid{grid-template-columns:1fr}}
-.shot{background:var(--panel); border:1px solid rgba(255,255,255,.06); border-radius:14px;
-      padding:16px; text-align:center}
-.shot img{width:100%; max-width:210px; border-radius:10px; border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 8px 22px rgba(0,0,0,.35); margin:0 auto 14px; display:block}
-.shot h3{margin:0 0 6px; font-size:15px; color:#fff}
-.shot p{margin:0; font-size:13.5px; color:var(--dim); line-height:1.5}
+/* visual tour — mirrors the in-app Academy tour exactly (stage groups + captioned shots) */
+.tour-stage{display:flex; gap:12px; align-items:flex-start; margin:30px 0 14px}
+.tour-stage .num{background:rgba(212,175,55,.15); color:var(--gold); font-weight:700; font-size:12px;
+      padding:4px 9px; border-radius:8px; flex:0 0 auto}
+.tour-stage h3{margin:0 0 4px; font-size:17px; color:#fff}
+.tour-stage p{margin:0; font-size:13px; color:var(--dim)}
+.tour-shot{display:flex; gap:20px; align-items:flex-start; background:var(--panel);
+      border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:16px; margin-bottom:14px}
+.tour-shot img{max-width:190px; width:100%; border-radius:10px; border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 8px 22px rgba(0,0,0,.35); flex:0 0 auto; display:block}
+.tour-shot .info{flex:1; min-width:0}
+.tour-shot h4{margin:0; font-size:15px; color:#fff; display:inline}
+.platform-tag{display:inline-block; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px;
+      border:1px solid var(--line); color:var(--gold); background:rgba(212,175,55,.10); margin-left:8px;
+      white-space:nowrap; vertical-align:middle}
+.tour-shot .subtitle{color:var(--dim); font-size:13px; margin:8px 0 0}
+.tour-shot ul{margin:8px 0 0; padding-left:18px}
+.tour-shot li{color:#d7e2f0; font-size:13px; margin-bottom:5px; line-height:1.4}
+@media(max-width:640px){.tour-shot{flex-direction:column}
+  .tour-shot img{max-width:100%; max-height:360px; margin:0 auto; width:auto}}
 
 /* article (rendered markdown) */
 .article{padding:40px 0 60px}
