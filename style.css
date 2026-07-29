@@ -60,8 +60,9 @@ section .sub{color:var(--dim); margin:0 0 22px}
 .tour-stage p{margin:0; font-size:13px; color:var(--dim)}
 .tour-shot{display:flex; gap:20px; align-items:flex-start; background:var(--panel);
       border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:16px; margin-bottom:14px}
-.tour-shot img{max-width:190px; width:100%; border-radius:10px; border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 8px 22px rgba(0,0,0,.35); flex:0 0 auto; display:block}
+.tour-shot img{max-width:190px; width:100%; border-radius:22px; border:3px solid var(--gold);
+      box-shadow:0 8px 22px rgba(0,0,0,.45), 0 0 0 1px rgba(212,175,55,.25);
+      flex:0 0 auto; display:block; background:#000}
 .tour-shot .info{flex:1; min-width:0}
 .tour-shot h4{margin:0; font-size:15px; color:#fff; display:inline}
 .platform-tag{display:inline-block; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px;
