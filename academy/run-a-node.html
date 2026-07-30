@@ -232,17 +232,65 @@ sudo snap install --dangerous --devmode sov-relay.snap
 sudo nano /var/snap/sov-relay/current/.env
 </code></pre>
 <p>Set at minimum:</p>
-<pre><code class="language-ini">RELAY_ID=&lt;a-short-name-you-choose&gt;   # e.g. citizen-node-1
+<pre><code class="language-ini"># The one that decides whether you get paid. Your Sovereign ID is the wallet
+# credited for your proof of service. Enrol on the phone app, then copy it from
+# Profile. Form: SOV- followed by 16 hex characters.
+OPERATOR_SOVEREIGN_ID=SOV-1A2B3C4D5E6F7A8B
+
+RELAY_ID=&lt;a-short-name-you-choose&gt;   # e.g. citizen-node-1
 RELAY_IP=&lt;this-box's-public-IP&gt;      # used in peer-mesh announcements
 # Leave RELAY_POOL_IPS as the bundled live nodes — that's how you find the mesh on first boot.
 </code></pre>
+<blockquote>
+<p><strong>A brand-new node refuses to start with <code>OPERATOR_SOVEREIGN_ID</code> blank, on purpose.</strong>
+Left empty, the network has no wallet to credit &mdash; you would serve citizens for weeks and
+earn nothing, with nothing on screen to tell you. A typo is rejected too, because an ID nobody
+owns sends your payouts nowhere. Upgrading a node that already has an identity only warns, so
+an update can never take your node down over a config field.</p>
+</blockquote>
 <p><strong>Start it and watch it join</strong></p>
 <pre><code class="language-bash">sudo snap start sov-relay.sov-relay
 sudo snap logs -f sov-relay.sov-relay
 </code></pre>
-<p>You want to see it load its identity, bind the ports, and connect to peers. Once it<br />
-converges and stays continuously up for the qualifying period (about three weeks), your<br />
-node begins earning the operator payout.</p>
+<p>A healthy first boot walks through nine steps. This is real output from a live node &mdash;
+yours should look like this:</p>
+<pre><code>══════════════════════════════════════════════════════════
+   SOV Node  —  Sovereign Citizen Infrastructure
+══════════════════════════════════════════════════════════
+[1/9] Verifying software integrity...
+      ✓ Source files verified
+[2/9] Loading node identity...
+      Node key loaded from encrypted file
+      ✓ Operator: SOV-1A2B3C4D5E6F7A8B
+      ✓ Node ID: b201198e699a6a8fd50ad936432f89a7...
+      ✓ Key: encrypted-file
+[3/9] Opening node database...
+      Node database: /var/snap/sov-relay/current/node.db (AES-256 encrypted)
+[4/9] Configuring network reachability...
+      ✓ Public IP:     &lt;your-ip&gt;:443
+      ✓ Reachability:  circuit-relay
+[5/9] Loading node discovery pool...
+      ✓ Known nodes in pool: 6
+      Peer mesh server listening on :7771
+[6/9] Starting phone mesh fragment router...
+      ✓ Fragment routing ready (K=3 of N=5)
+[7/9] Starting SOV transfer engine...
+      ✓ Guard 1 (nonce chain)    active
+      ✓ Guard 2 (spend lock)     active
+      ✓ Guard 3 (version gate)   active
+      ✓ Operator engine initialised
+[8/9] Opening citizen gateway...
+      ✓ Listening for SOV app connections
+</code></pre>
+<p><strong>How to read it.</strong> Step 2 is the one to check first: if it says
+<code>! No OPERATOR_SOVEREIGN_ID set &mdash; this node earns nothing</code>, stop and fix your
+<code>.env</code> before walking away. At step 4, <code>Reachability: circuit-relay</code> is
+normal and fine &mdash; it means your box sits behind NAT and reaches the mesh through peers
+instead of directly. Step 5 binding <code>:7771</code> is what proves the peer mesh came up; if
+you see <code>EADDRINUSE</code> retries there instead, a second copy of the node is almost
+certainly already running.</p>
+<p>Once it converges and stays continuously up for the qualifying period (about three weeks),
+your node begins earning the operator payout.</p>
 <blockquote>
 <p>The default ports are <code>SOV_PORT=443</code> (citizen WebSocket) and <code>SYNC_PORT=7771</code> (peer<br />
 mesh). If you must move the citizen port (e.g. 443 is already taken by nginx), set<br />
