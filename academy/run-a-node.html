@@ -259,7 +259,7 @@ sudo nano /var/snap/sov-relay/current/.env
 <pre><code class="language-ini"># The one that decides whether you get paid. Your Sovereign ID is the wallet
 # credited for your proof of service. Enrol on the phone app, then copy it from
 # Profile. Form: SOV- followed by 16 hex characters.
-OPERATOR_SOVEREIGN_ID=SOV-1A2B3C4D5E6F7A8B
+OPERATOR_SOVEREIGN_ID=SOV-1A2B3C4D5E6F7A8B   # <- your own ID, not this one
 
 RELAY_ID=&lt;a-short-name-you-choose&gt;   # e.g. citizen-node-1
 RELAY_IP=&lt;this-box's-public-IP&gt;      # used in peer-mesh announcements
@@ -272,6 +272,58 @@ earn nothing, with nothing on screen to tell you. A typo is rejected too, becaus
 owns sends your payouts nowhere. Upgrading a node that already has an identity only warns, so
 an update can never take your node down over a config field.</p>
 </blockquote>
+<p><strong>What a refusal actually looks like.</strong> Two mistakes account for nearly every
+failed first boot, and the node names both of them rather than exiting quietly. This is real
+output, not an illustration.</p>
+<p><em>You left the field blank:</em></p>
+<pre><code>[1/9] Verifying software integrity...
+      &#10003; Source files verified
+      &#10003; Source root: fd50c4e5ec915012... (42 files)
+[2/9] Loading node identity...
+
+  ==============================================================
+   CANNOT START &mdash; operator Sovereign ID problem
+  ==============================================================
+      OPERATOR_SOVEREIGN_ID is not set.
+      This node would serve citizens but earn nothing, because the network has
+      no wallet to credit for your proof of service.
+      Enrol on the SOV phone app, copy your Sovereign ID from Profile, set it in
+      your .env, then start the node again.
+</code></pre>
+<p><em>You mistyped it &mdash; here, one character short:</em></p>
+<pre><code>[2/9] Loading node identity...
+
+  ==============================================================
+   CANNOT START &mdash; operator Sovereign ID problem
+  ==============================================================
+      OPERATOR_SOVEREIGN_ID is "SOV-CA234DCCA7BDEDE", which is not a Sovereign ID.
+      Expected SOV- followed by 16 hex characters, e.g. SOV-1A2B3C4D5E6F7A8B.
+      Copy it exactly from your wallet: Profile -&gt; your Sovereign ID.
+</code></pre>
+<p>Refusing is deliberate. A node that started anyway would serve citizens perfectly well for
+weeks while quietly earning nothing, and you would have no way to notice. A wrong ID is worse
+than a blank one, because the payouts go somewhere real that simply is not you.</p>
+<p><em>And when it is right, step 2 says so plainly:</em></p>
+<pre><code>[2/9] Loading node identity...
+      First run &mdash; generating node identity...
+      Private key stored in encrypted file (AES-256-GCM)
+      &#10003; Operator: SOV-CA234DCCA7BDEDEB
+      &#10003; Node ID: 31dbbe855da81c624c37825a50ac0797...
+      &#10003; Key: encrypted-file
+</code></pre>
+
+<p><strong>What the rest of the network does with that ID.</strong> Your node does not admit itself.
+When it first meets the mesh it sends a signup, and the peers that receive it check, on their
+own copies of the ledger, that the Sovereign ID belongs to a real enrolled citizen and that
+this citizen is not already running more nodes than the rules allow. A node offering no ID at
+all is refused outright &mdash; anonymous nodes are exactly what a Sybil attack is made of.</p>
+<p>It is not put to every node on the network, which would get slower the more the network grew.
+A small random sample of peers is asked, and a majority of that sample has to agree. The cost
+stays flat as the network grows, and the security improves rather than degrades: an attacker
+would have to control most of a randomly chosen group, and cannot know in advance which peers
+will be picked. The check itself is free &mdash; every node already holds the enrollment ledger,
+so "is this a real citizen" is answered locally, never by asking anyone.</p>
+
 <p><strong>Start it and watch it join</strong></p>
 <pre><code class="language-bash">sudo snap start sov-relay.sov-relay
 sudo snap logs -f sov-relay.sov-relay

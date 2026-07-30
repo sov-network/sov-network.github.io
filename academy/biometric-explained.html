@@ -51,10 +51,10 @@ done without storing real biometric data. SOV does exactly that.</p>
 
 <h3 id="on-your-phone">1. On your phone — a number, not a picture</h3>
 <p>Your phone camera looks at your palm and a small on-device AI model (TFLite) turns it into a
-<strong>128-number list</strong> (an "embedding") — e.g. <code>[0.0142, -0.991, 0.337, &hellip;]</code>.</p>
+<strong>list of numbers</strong> (an "embedding") &mdash; a mathematical summary of the shape, with no picture in it.</p>
 <ul>
 <li><strong>The palm photo never leaves your phone.</strong> It isn't uploaded, and it isn't even saved.</li>
-<li>An embedding is a <em>one-way</em> summary: you <strong>cannot rebuild the palm image</strong> from those 128
+<li>An embedding is a <em>one-way</em> summary: you <strong>cannot rebuild the palm image</strong> from those
   numbers (and the image is gone anyway).</li>
 </ul>
 
@@ -62,8 +62,8 @@ done without storing real biometric data. SOV does exactly that.</p>
 <p>SOV runs a <strong>fuzzy commitment scheme</strong> (Juels&ndash;Wattenberg, 1999 — the basis of modern
 biometric cryptography):</p>
 <ul>
-<li>A random <strong>master key K</strong> is generated and error-correction-coded (BCH 255/131).</li>
-<li>It's combined with your palm template into <strong>Helper Data <code>H = codeword XOR template</code></strong>.</li>
+<li>A random <strong>master key K</strong> is generated and wrapped in an <strong>error-correcting code</strong>.</li>
+<li>It is blended with your palm template into a single blob called <strong>Helper Data</strong>.</li>
 <li><strong>K is used to derive your Ed25519 keypair &rarr; your Sovereign ID, then immediately discarded.</strong>
   The master key is never stored anywhere.</li>
 <li>Only <strong>H</strong> is sent to the network. <strong>H looks like random noise</strong> and reveals nothing
@@ -80,7 +80,7 @@ But it does <strong>not</strong> store the raw embedding — it runs it through 
 protection:</p>
 <pre><code>stored = R &middot; normalize(embedding)</code></pre>
 <ul>
-<li><code>R</code> is a <strong>secret 128&times;128 orthogonal matrix</strong> derived from a <strong>network threshold secret</strong>
+<li><code>R</code> is a <strong>secret orthogonal transform</strong> derived from a <strong>network threshold secret</strong>
   (a witness-signer key <strong>no single node can hold or invert</strong>).</li>
 <li>The node stores the <strong>cancelable-transformed template</strong> (<code>R&middot;embedding</code>), never the raw biometric.</li>
 <li>A stolen node database yields scrambled, non-raw unit vectors — useless without <code>R</code>.</li>
@@ -91,8 +91,8 @@ protection:</p>
 
 <h3 id="what-its-used-for">4. What it's used for — and the only question it can answer</h3>
 <ul>
-<li><strong>One human, one citizen:</strong> a new enrollment is compared by cosine-similarity to existing
-  protected templates; &ge;&nbsp;0.92 similarity means "same person already enrolled" and is blocked.
+<li><strong>One human, one citizen:</strong> a new enrollment is compared against the existing protected
+  templates, and one that is close enough to an existing citizen is blocked as a repeat enrollment.
   The scrambling matrix is cosine-preserving, so the check still works mesh-wide <strong>without
   ever unscrambling anything</strong>.</li>
 <li><strong>Seedless recovery:</strong> re-scan &rarr; recover your keypair (above).</li>
@@ -140,97 +140,42 @@ away and regenerate at will.</p>
 </blockquote>
 
 <hr>
-<h2 id="code-evidence-annex">Code Evidence Annex — for auditors, regulators &amp; open-source reviewers</h2>
-<p>This annex maps every privacy claim above to the <strong>exact code</strong> that implements it, with
-file path, the function/symbol to search for, and a verbatim excerpt.
-Repository paths are relative to the SOV open-source source root: the node software lives
-at <code>sov-node/src/&hellip;</code> and the client app at <code>lib/&hellip;</code>. SOV is a single replica that every
-operator runs identically — there is no special or "canonical" server to point at; the
-code below is the same code every node runs.</p>
+<h2 id="what-an-auditor-can-check">For auditors, regulators &amp; reviewers</h2>
+<p>Every claim on this page is a property of the software itself, and every operator runs the
+same software &mdash; there is no privileged server holding a different version. The node is open
+source, so each statement below can be confirmed by reading it.</p>
 
-<h3 id="claim-1">Claim 1 — The node never stores a biometric image or a raw template</h3>
-<p><strong>File:</strong> <code>sov-node/src/protocol/enrollment_engine.js</code> &middot; header comment "What the node NEVER does":</p>
-<pre><code>// What the node NEVER does:
-//   - Store raw palm embeddings (only the BCH helper data structure)
-//   - Store biometric images
-//   - Allow a second enrollment from the same palm on any node</code></pre>
+<p>We deliberately do not print the tuning constants of the biometric system on this page: the
+error-correction strength, the matching threshold, the scan-acceptance window. Those numbers
+are exactly what someone would need to calibrate an attack against, and publishing them
+protects nobody. They are visible to anyone reading the source, which is the right place for
+them &mdash; a reviewer gets the whole picture, while a casual attacker does not get a checklist.</p>
 
-<h3 id="claim-2">Claim 2 — What IS stored is a scrambled, cancelable template (R&middot;embedding), not the raw vector</h3>
-<p><strong>File:</strong> <code>sov-node/src/storage/db.js</code> &middot; function <code>storePalmEmbedding()</code>:</p>
-<pre><code>storePalmEmbedding(sovereignId, embeddingJson, handType = 'LEFT') {
-  // Tier-4 fix: store the CANCELABLE-TRANSFORMED template (R&middot;embedding), never
-  // the raw biometric. Same size (replicable + light-speed sync), cosine
-  // preserved (dedup identical), revocable, breach yields non-raw vectors.
-  const protectedJson = require('../security/palm_cancelable').protectForStorage(embeddingJson);
-  this._db.prepare(&#96;
-    INSERT OR REPLACE INTO palm_embeddings (sovereign_id, embedding_json, hand_type, enrolled_at)
-    VALUES (?, ?, ?, ?)
-  &#96;).run(sovereignId, protectedJson, handType, Date.now());
-}</code></pre>
-<p>The full list of columns the node persists — there are only four, and none is an image:</p>
-<pre><code>CREATE TABLE IF NOT EXISTS palm_embeddings (
-  sovereign_id    TEXT PRIMARY KEY,
-  embedding_json  TEXT NOT NULL,     -- JSON array of 128 float values (cancelable-transformed)
-  hand_type       TEXT NOT NULL DEFAULT 'LEFT',
-  enrolled_at     INTEGER NOT NULL
-);</code></pre>
-
-<h3 id="claim-3">Claim 3 — The scrambling key R is a network threshold secret, revocable, and no single node can invert it</h3>
-<p><strong>File:</strong> <code>sov-node/src/security/palm_cancelable.js</code>:</p>
-<pre><code>//   stored = R &middot; normalize(embedding)        (R = secret orthogonal 128x128 matrix)
-// &bull; R is derived from a NETWORK secret seed held as a witness-signer THRESHOLD key
-//   (no single node can invert) and is REVOCABLE: rotate the seed -&gt; re-transform -&gt;
-//   any stolen set dies.
-// &bull; A stolen node DB alone yields scrambled, non-raw unit vectors -&gt; useless without R.
-function transform(R, vec) { /* R &middot; normalize(embedding) -&gt; unit vector */ }
-function getR() { const seed = process.env.PALM_CANCELABLE_SEED || '&hellip;'; /* Gram-Schmidt once */ }</code></pre>
-
-<h3 id="claim-4">Claim 4 — Your identity key (and therefore your Sovereign ID) is never stored — it is recomputed from your live palm</h3>
-<p><strong>File:</strong> <code>lib/sov_node_sdk/fuzzy_commitment.dart</code>:</p>
-<pre><code>//   8. H stored on relay. K never stored anywhere.
-//   The master key K never leaves the device and is never stored
-/// The 128-bit master key — use to derive Ed25519 keypair
-/// NEVER store this. Use it immediately and discard.
-final List&lt;int&gt; masterKeyBits;</code></pre>
-
-<h3 id="claim-5">Claim 5 — The "Helper Data" sent to the network reveals nothing without the live palm</h3>
-<p><strong>File:</strong> <code>lib/sov_node_sdk/fuzzy_commitment.dart</code>:</p>
-<pre><code>// PRIVACY:
-//   Helper Data H looks like random binary — reveals nothing about palm or key
-/// Helper data — XOR of BCH codeword with padded palm template
-/// Safe to store publicly on relay. Reveals nothing without the palm.
-final List&lt;int&gt; helperData; // 255 bits</code></pre>
-
-<h3 id="claim-6">Claim 6 — The stored token only answers "same citizen?" via cosine similarity</h3>
-<p><strong>File:</strong> <code>sov-node/src/security/palm_cancelable.js</code> &middot; function <code>isDuplicate()</code>:</p>
-<pre><code>function isDuplicate(newVec, R, storedTransformedList, threshold = 0.92) {
-  const t = transform(R, newVec);              // transform with the same secret R
-  // compare by cosine; identical decision to plaintext, but on scrambled vectors
-  return { duplicate: maxSim &gt; threshold, maxSim };
-}</code></pre>
-
-<h3 id="claim-7">Claim 7 — The math is standard, peer-reviewed biometric cryptography (not a homemade scheme)</h3>
-<ul>
-<li><strong>Fuzzy commitment:</strong> Juels &amp; Wattenberg, <em>"A Fuzzy Commitment Scheme"</em> (ACM CCS 1999) —
-  implemented in <code>lib/sov_node_sdk/fuzzy_commitment.dart</code>, using a
-  <strong>BCH(255,131) error-correcting code</strong>.</li>
-<li><strong>Cancelable biometrics:</strong> Ratha, Connell &amp; Bolle, <em>"Enhancing security and privacy in
-  biometrics-based authentication systems"</em> (IBM Systems Journal, 2001) — implemented as the
-  orthogonal transform in <code>sov-node/src/security/palm_cancelable.js</code>.</li>
-</ul>
+<table>
+<thead>
+<tr><th>What is guaranteed</th><th>What that means in practice</th></tr>
+</thead>
+<tbody>
+<tr><td>No palm image ever leaves the phone</td><td>The camera frame is turned into numbers on the device and discarded. There is no upload, and nothing to steal from the network, because it was never there.</td></tr>
+<tr><td>No raw biometric template is stored</td><td>What the node keeps has been put through a secret, cosine-preserving transform. A stolen database yields scrambled vectors, not palms.</td></tr>
+<tr><td>The scrambling key belongs to no single node</td><td>It is a threshold secret. No one operator &mdash; and no one who compromises one operator &mdash; can undo the scrambling.</td></tr>
+<tr><td>Your identity key is never stored</td><td>It is recomputed from your live palm each time and thrown away. There is no copy on any node to seize, subpoena or leak.</td></tr>
+<tr><td>The helper data reveals nothing on its own</td><td>Without a live palm it is indistinguishable from noise. It is not a template and cannot be turned back into one.</td></tr>
+<tr><td>The stored token answers one question only</td><td><em>"Is this the same citizen who already enrolled?"</em> It cannot be matched against a police, passport or phone-vendor database, because it is not a fingerprint or a face &mdash; it only has meaning inside SOV.</td></tr>
+<tr><td>A leak is recoverable</td><td>Rotating the network secret re-scrambles every stored token and turns any stolen copy into dead data. This is the thing a fingerprint database can never do.</td></tr>
+<tr><td>The scheme is not homemade</td><td>It is a fuzzy commitment (Juels&ndash;Wattenberg, 1999) combined with cancelable biometrics &mdash; both long-standing, peer-reviewed constructions, not something invented here.</td></tr>
+</tbody>
+</table>
 
 <h3 id="compliance-summary">Compliance summary (one paragraph for a data-protection enquiry)</h3>
-<blockquote>
-<p>SOV captures a palm only on the user's own device, converts it to a 128-dimension feature
-vector locally, and <strong>never transmits or stores the image</strong>. The network stores, per citizen,
-exactly four fields (<code>palm_embeddings</code>: sovereign_id, a cancelable-transformed vector,
-hand type, timestamp) plus public "helper data". The stored vector is protected by a secret,
-revocable, threshold-held orthogonal transform (<code>R&middot;embedding</code>); it is <strong>not reversible to the
-original biometric, not linkable to any real-world identity record, and revocable</strong> by rotating
-the network seed. The cryptographic key that defines the citizen's account is <strong>derived from the
-live palm at use-time and is never persisted anywhere.</strong> The only operation performed on the
-stored data is a similarity comparison to enforce one-human-one-account.</p>
-</blockquote>
+<p>SOV does not collect, transmit or store biometric images. Palm capture happens entirely on the
+citizen's own device and the image is discarded immediately. What reaches the network is a
+protected, revocable token that cannot be reversed to a biometric, cannot be linked to any
+real-world identity record, and is used for exactly two purposes: preventing one human from
+holding multiple citizenships, and allowing that human to recover their own wallet. No name,
+address, phone number, email or government identifier is collected at any point. Because the
+protection is revocable, a compromise can be remediated by rotating the network secret &mdash;
+a property conventional biometric databases do not have.</p>
 
 </main>
 <footer class="site"><div class="wrap">
