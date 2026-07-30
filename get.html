@@ -26,20 +26,85 @@
 </div>
 
 <section><div class="wrap" style="max-width:520px">
-  <div class="grid" style="grid-template-columns:1fr">
+
+  <!-- ── ONE BIG BUTTON for the device you're actually holding ──────────────
+       Someone who scanned the QR wants the app, not a menu. We detect the
+       platform and lead with a single obvious action; everything else drops
+       into "Other platforms" below. We deliberately do NOT auto-start the
+       download: mobile browsers block unprompted downloads, and a file that
+       appears with no explanation reads as an attack, not a feature. One tap
+       is the floor. Falls back to showing everything if JS is off. -->
+  <div id="primary-dl" style="display:none; margin-bottom:8px">
+    <a id="primary-link" class="btn primary"
+       style="display:block; text-align:center; padding:18px 22px; font-size:17px"
+       href="#">Download</a>
+    <p id="primary-note" style="text-align:center; color:var(--dim); font-size:13px; margin:10px 0 0"></p>
+  </div>
+
+  <div id="all-platforms" class="grid" style="grid-template-columns:1fr">
     <div class="card"><h3>Android <span class="tag">APK</span></h3>
-      <p>Install directly on your phone.<br>
+      <p>Install directly on your phone. 192 MB.<br>
       <a class="btn primary" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-android.apk">Download APK</a></p></div>
     <div class="card"><h3>Windows <span class="tag">portable</span></h3>
-      <p>Portable — also runs as a full node.<br>
+      <p>Portable — also runs as a full node. 163 MB.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
     <div class="card"><h3>macOS <span class="tag">.app</span></h3>
-      <p>Also runs as a full node. Unsigned/ad-hoc — first launch needs a right-click &rarr; Open.<br>
+      <p>Also runs as a full node. Unsigned/ad-hoc — first launch needs a right-click &rarr; Open. 111 MB.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos.tar.gz">Download for macOS</a></p></div>
   </div>
+  <p id="show-all" style="display:none; text-align:center; margin-top:14px">
+    <a href="#" style="font-size:13px; color:var(--dim)">Other platforms &darr;</a>
+  </p>
+
+  <script>
+  (function () {
+    var B = 'https://github.com/sov-network/relay-releases/releases/latest/download/';
+    var ua = navigator.userAgent || '';
+    var p = null;
+    // iOS first: iPads report as Mac, so check touch before assuming desktop.
+    if (/Android/i.test(ua)) {
+      p = { label: 'Download for Android', file: 'sovnode-android.apk',
+            note: 'APK, 192 MB. Your phone will ask you to allow installing from this source — that is normal outside an app store.' };
+    } else if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) {
+      p = { ios: true };
+    } else if (/Windows/i.test(ua)) {
+      p = { label: 'Download for Windows', file: 'sovnode-windows-x64.zip',
+            note: 'Portable, 163 MB. No installer — unzip and run. Also works as a full node.' };
+    } else if (/Macintosh|Mac OS X/i.test(ua)) {
+      p = { label: 'Download for macOS', file: 'sovnode-macos.tar.gz',
+            note: '111 MB. First launch: right-click the app and choose Open.' };
+    }
+    if (!p) return;                      // unknown device — leave the full list showing
+    var box = document.getElementById('primary-dl');
+    var link = document.getElementById('primary-link');
+    var note = document.getElementById('primary-note');
+    if (p.ios) {
+      // Be honest rather than hand them a file that cannot run.
+      link.textContent = 'No iPhone app yet';
+      link.href = 'index.html';
+      link.className = 'btn ghost';
+      link.style.cursor = 'default';
+      note.textContent = 'SOV does not have an iOS build yet. Android, Windows and macOS are ready today.';
+    } else {
+      link.textContent = p.label;
+      link.href = B + p.file;
+      link.setAttribute('download', '');
+      note.textContent = p.note;
+    }
+    box.style.display = 'block';
+    document.getElementById('all-platforms').style.display = 'none';
+    var more = document.getElementById('show-all');
+    more.style.display = 'block';
+    more.querySelector('a').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('all-platforms').style.display = '';
+      more.style.display = 'none';
+    });
+  })();
+  </script>
   <p class="note" style="margin-top:18px">
     Every release ships a threshold-signed manifest — check it before installing.
     <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json">manifest</a>
