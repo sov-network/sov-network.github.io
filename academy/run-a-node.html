@@ -216,17 +216,41 @@ yourself.</p>
 <p><strong>Download from a live node</strong></p>
 <pre><code class="language-bash">curl -O http://&lt;LIVE_NODE_IP&gt;/sov-relay.snap
 </code></pre>
-<p><strong>Verify it is authentic</strong> — download the <em>same</em> file from a second node and compare<br />
-hashes. If they match, no one tampered with your copy in transit.</p>
-<pre><code class="language-bash">curl -o b.snap http://&lt;SECOND_NODE_IP&gt;/sov-relay.snap
-sha256sum sov-relay.snap b.snap    # the two hashes MUST be identical
-rm b.snap
+<p><strong>Verify it before you install it.</strong> Nobody signs this for you and no app store
+vouched for it, so the checking is yours. It takes about thirty seconds.</p>
+<p><em>Step 1 &mdash; hash what you downloaded.</em></p>
+<pre><code class="language-bash">sha256sum sov-relay.snap
 </code></pre>
+<p><em>Step 2 &mdash; fetch the same file from two <strong>other</strong> nodes and hash those too.</em>
+One node could be compromised, or one network path tampered with. Three independent sources
+agreeing is what makes that implausible &mdash; an attacker would need all three at once.</p>
+<pre><code class="language-bash">curl -s -o b.snap http://&lt;SECOND_NODE_IP&gt;/sov-relay.snap
+curl -s -o c.snap http://&lt;THIRD_NODE_IP&gt;/sov-relay.snap
+sha256sum sov-relay.snap b.snap c.snap   # all three MUST match
+rm b.snap c.snap
+</code></pre>
+<p>If even one differs, stop. Do not install it, and tell the community which node served the
+odd copy.</p>
 <p><strong>Install</strong> (<code>--dangerous</code> = not from the Snap Store, by design; <code>--devmode</code> =<br />
 unconfined sandbox for now)</p>
 <pre><code class="language-bash">sudo apt-get update &amp;&amp; sudo apt-get install -y snapd
 sudo snap install --dangerous --devmode sov-relay.snap
 </code></pre>
+<p><em>Step 3 &mdash; verify what actually landed on disk.</em> This is the step people skip, and
+it is the one that matters: it proves the software now installed is the software you checked,
+not something swapped in between download and install.</p>
+<pre><code class="language-bash">snap list sov-relay                                  # note the Rev, e.g. x4
+sudo sha256sum /var/lib/snapd/snaps/sov-relay_x4.snap
+</code></pre>
+<p>Real output from a live node:</p>
+<pre><code>Name       Version  Rev  Tracking  Publisher  Notes
+sov-relay  1.3.1    x4   -         -          devmode
+
+4fb089dffd604112b67fb2ad9280624fc07cc80cb79c1e8d12a2e2dd208743b1
+</code></pre>
+<p>That hash must equal the one all three nodes agreed on in step 2. If it does, the node you
+are about to run is byte-for-byte the software the network is running. Keep the hash &mdash;
+after any future upgrade, repeat this check against what the network is serving then.</p>
 <p><strong>Configure your node identity</strong></p>
 <pre><code class="language-bash">sudo snap stop sov-relay.sov-relay
 sudo nano /var/snap/sov-relay/current/.env
