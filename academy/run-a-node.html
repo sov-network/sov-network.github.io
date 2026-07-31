@@ -251,27 +251,52 @@ sov-relay  1.3.1    x4   -         -          devmode
 <p>That hash must equal the one all three nodes agreed on in step 2. If it does, the node you
 are about to run is byte-for-byte the software the network is running. Keep the hash &mdash;
 after any future upgrade, repeat this check against what the network is serving then.</p>
-<p><strong>Configure your node identity</strong></p>
-<pre><code class="language-bash">sudo snap stop sov-relay.sov-relay
-sudo nano /var/snap/sov-relay/current/.env
+<p><strong>Tell the node who you are</strong></p>
+<p>One command. It asks for your Sovereign ID, checks it while you are still
+sitting there, and writes the configuration itself.</p>
+<pre><code class="language-bash">sudo snap run sov-relay.setup
 </code></pre>
-<p>Set at minimum:</p>
-<pre><code class="language-ini"># The one that decides whether you get paid. Your Sovereign ID is the wallet
-# credited for your proof of service. Enrol on the phone app, then copy it from
-# Profile. Form: SOV- followed by 16 hex characters.
-OPERATOR_SOVEREIGN_ID=SOV-1A2B3C4D5E6F7A8B   # <- your own ID, not this one
+<p>This is real output from an operator setting up a node, including the typo,
+because mistyping the ID is the mistake that actually happens:</p>
+<pre><code>SOV Node &mdash; operator setup
+------------------------------------------------------------
 
-RELAY_ID=&lt;a-short-name-you-choose&gt;   # e.g. citizen-node-1
-RELAY_IP=&lt;this-box's-public-IP&gt;      # used in peer-mesh announcements
-# Leave RELAY_POOL_IPS as the bundled live nodes — that's how you find the mesh on first boot.
+Your Sovereign ID is the wallet the network pays for your proof of service.
+Enrol on the SOV phone app, then copy it from Profile.
+Form: SOV- followed by 16 hex characters.
+Sovereign ID:   That is not a Sovereign ID. Expected SOV- then 16 hex characters,
+  for example SOV-1A2B3C4D5E6F7A8B. Copy it exactly from Profile.
+
+Your Sovereign ID is the wallet the network pays for your proof of service.
+Sovereign ID:   Looks right.
+
+A new node needs ONE address to find the network; it learns the rest by gossip.
+Get one from whoever gave you the software, or from another operator.
+Bootstrap address(es), comma-separated (blank to skip):
+Saved to /var/snap/sov-relay/current/.env
+  operator : SOV-1A2B3C4D5E6F7A8B
+
+Start the node and watch it join:
+  sudo snap restart sov-relay
+  sudo snap logs -f sov-relay.sov-relay
 </code></pre>
+<p>The mistake is caught while you are typing rather than three restarts later.
+That is the entire reason this command exists.</p>
+
+<p><strong>About the bootstrap address.</strong> You can leave it blank. A node with
+no address asks the published pool mirrors where the network is, the same way the
+wallet app does, and carries on from there. Supplying one is simply faster, and is
+what you do if someone invited you to run a node and handed you theirs.</p>
+
 <blockquote>
-<p><strong>A brand-new node refuses to start with <code>OPERATOR_SOVEREIGN_ID</code> blank, on purpose.</strong>
-Left empty, the network has no wallet to credit &mdash; you would serve citizens for weeks and
-earn nothing, with nothing on screen to tell you. A typo is rejected too, because an ID nobody
-owns sends your payouts nowhere. Upgrading a node that already has an identity only warns, so
-an update can never take your node down over a config field.</p>
+<p><strong>A brand-new node refuses to start without a Sovereign ID, on purpose.</strong>
+Left empty, the network has no wallet to credit &mdash; you would serve citizens for
+weeks and earn nothing, with nothing on screen to tell you. A mistyped ID is refused
+too, because an ID nobody owns sends your payouts nowhere. Upgrading a node that
+already has an identity only warns, so an update can never take your node down over
+a config field.</p>
 </blockquote>
+
 <p><strong>What a refusal actually looks like.</strong> Two mistakes account for nearly every
 failed first boot, and the node names both of them rather than exiting quietly. This is real
 output, not an illustration.</p>
