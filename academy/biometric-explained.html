@@ -80,8 +80,10 @@ But it does <strong>not</strong> store the raw embedding — it runs it through 
 protection:</p>
 <pre><code>stored = R &middot; normalize(embedding)</code></pre>
 <ul>
-<li><code>R</code> is a <strong>secret orthogonal transform</strong> derived from a <strong>network threshold secret</strong>
-  (a witness-signer key <strong>no single node can hold or invert</strong>).</li>
+<li><code>R</code> is a <strong>secret orthogonal transform</strong> derived from a seed shared by the network.
+  <strong>Being precise about today:</strong> that seed is held by the nodes, so an operator who has it
+  can undo the scrambling. Splitting it into a witness-signer key that no single node can hold is
+  planned and not yet shipped, and we would rather say so than imply a protection you do not have.</li>
 <li>The node stores the <strong>cancelable-transformed template</strong> (<code>R&middot;embedding</code>), never the raw biometric.</li>
 <li>A stolen node database yields scrambled, non-raw unit vectors — useless without <code>R</code>.</li>
 <li>It is <strong>revocable</strong>: rotate the network seed &rarr; re-transform everyone &rarr; <strong>any stolen copy
@@ -109,12 +111,12 @@ meaning inside SOV.</p>
 <tr><th></th><th>Real-world biometry (passport, police, phone FaceID DBs)</th><th>SOV soft biometry</th></tr>
 </thead>
 <tbody>
-<tr><td>Stores your actual fingerprint/face image?</td><td><strong>Yes</strong></td><td><strong>No</strong> — never captured off-device</td></tr>
+<tr><td>Stores your actual fingerprint/face image?</td><td><strong>Yes</strong></td><td><strong>No</strong> — the picture is discarded on your device. Only numbers ever leave it</td></tr>
 <tr><td>Stores the raw biometric template?</td><td>Often</td><td><strong>No</strong> — only <code>R&middot;embedding</code>, scrambled</td></tr>
-<tr><td>Can identify you in real life?</td><td><strong>Yes</strong> (that's the point)</td><td><strong>No</strong> — meaningless outside SOV</td></tr>
-<tr><td>Reversible to the original?</td><td>Frequently</td><td><strong>No</strong> (one-way embedding + secret R + random helper data)</td></tr>
+<tr><td>Can identify you in real life?</td><td><strong>Yes</strong> (that's the point)</td><td><strong>Palm: no</strong> — nothing in the world holds palm records to match it against. <strong>Face: only</strong> by someone holding a stolen node database, the network seed <em>and</em> a photo of you</td></tr>
+<tr><td>Reversible to the original?</td><td>Frequently</td><td><strong>Palm: no, by construction</strong> — the reading is a texture summary that throws away <em>where</em> each pattern sat, so there is no picture left to rebuild. <strong>Face: scrambled and revocable</strong>, but we do not claim it is mathematically irreversible</td></tr>
 <tr><td>Revocable if leaked?</td><td><strong>No</strong> — you can't change your hand</td><td><strong>Yes</strong> — rotate the seed, stolen sets die</td></tr>
-<tr><td>Who can read it?</td><td>The authority holding the DB</td><td><strong>No single node</strong> — R is a threshold secret</td></tr>
+<tr><td>Who can read it?</td><td>The authority holding the DB</td><td><strong>Today:</strong> a node operator holding the network seed could unscramble it. <strong>Planned:</strong> a split key no single node holds</td></tr>
 <tr><td>What it proves</td><td><em>Who you are</em></td><td><em>That you're a unique, returning citizen</em></td></tr>
 </tbody>
 </table>
@@ -124,9 +126,12 @@ meaning inside SOV.</p>
 back to a real person. Three independent walls would all have to fall at once, and even then
 you'd get nothing usable:</p>
 <ol>
-<li>The <strong>palm image</strong> is never sent (it can't be stolen from the network — it isn't there).</li>
-<li>The <strong>stored vector</strong> is scrambled by a <strong>threshold secret no one node holds</strong>, and is
-   <strong>revocable</strong>.</li>
+<li>No <strong>image</strong> is ever sent — not of your palm, not of your face. It cannot be stolen from
+   the network because it was never there.</li>
+<li>The <strong>stored vector</strong> is scrambled and <strong>revocable</strong>. Its limit, stated plainly: the
+   scrambling seed is currently shared by the nodes, so it defends against a stolen database but
+   not against a node operator who also holds the seed. Splitting that key so no single node holds
+   it is planned work, not shipped work.</li>
 <li>Your <strong>identity key</strong> is recomputed from your live palm and <strong>never stored at all</strong>.</li>
 </ol>
 <p>What SOV deliberately keeps is the <em>minimum</em> needed to enforce one-human-one-citizen and to let
@@ -134,10 +139,32 @@ you recover your wallet with your hand — and not one bit more. It is a <strong
 that "could be anything," carries no real-world meaning, and cannot be used to trace, surveil,
 or de-anonymize the human behind it.</p>
 <blockquote>
-<p><strong>The promise, restated:</strong> SOV doesn't know your face, your name, or your hand. It only knows
-that <em>you</em> are <em>you</em> — one citizen, returning — and even that, it stores in a form it can throw
-away and regenerate at will.</p>
+<p><strong>The promise, restated:</strong> SOV never learns your name, your email or your phone number, and
+it never holds a picture of you. What it keeps is computed data — numbers derived from a scan and
+then scrambled — whose only purpose is to answer one question: <em>is this the same citizen who
+already enrolled?</em> It gives you a digital identity that proves you are a real, single human
+without describing which human you are. And it keeps that in a form it can throw away and reissue
+at will.</p>
 </blockquote>
+
+<h2 id="face-binding">Why we also read your face — and what that means</h2>
+<p>SOV binds one face to one citizen. The reason is narrow and worth stating plainly: without it,
+a person could enrol their left palm as one citizen and their right palm as another, and the
+one-human-one-account rule would quietly fail. The face reading is what links the two attempts
+to the same person.</p>
+<p><strong>What is captured:</strong> a photo is taken on your device, converted to a list of numbers,
+and the photo is discarded. The numbers are scrambled before storage, exactly like the palm.
+<strong>No face image is stored, sent, or held anywhere on the network.</strong></p>
+<p><strong>Where face differs from palm, honestly:</strong> the palm reading is a texture summary — it
+counts patterns and discards where each one appeared, so there is no picture left inside it to
+recover. The face reading is produced by a neural model, and that kind of representation retains
+more of the original. We scramble it and we can revoke it, but we do not claim it is
+mathematically irreversible the way the palm reading is. That is why the face record is the one
+we protect most carefully, and why the scrambling key is being split so no single operator holds
+it.</p>
+<p>Neither reading can be checked against a passport, police or phone-vendor database. Those
+systems store their own formats, computed by their own models; a number produced by one system
+has no meaning in another.</p>
 
 <hr>
 <h2 id="what-an-auditor-can-check">For auditors, regulators &amp; reviewers</h2>
@@ -158,10 +185,10 @@ them &mdash; a reviewer gets the whole picture, while a casual attacker does not
 <tbody>
 <tr><td>No palm image ever leaves the phone</td><td>The camera frame is turned into numbers on the device and discarded. There is no upload, and nothing to steal from the network, because it was never there.</td></tr>
 <tr><td>No raw biometric template is stored</td><td>What the node keeps has been put through a secret, cosine-preserving transform. A stolen database yields scrambled vectors, not palms.</td></tr>
-<tr><td>The scrambling key belongs to no single node</td><td>It is a threshold secret. No one operator &mdash; and no one who compromises one operator &mdash; can undo the scrambling.</td></tr>
+<tr><td>The scrambling key is shared, and being split</td><td>Today the key comes from a seed the nodes share, so an operator holding it can undo the scrambling &mdash; it defends against a stolen database, not against an operator. Splitting it so no one operator can hold it is planned work. We publish the current state rather than the intended one.</td></tr>
 <tr><td>Your identity key is never stored</td><td>It is recomputed from your live palm each time and thrown away. There is no copy on any node to seize, subpoena or leak.</td></tr>
 <tr><td>The helper data reveals nothing on its own</td><td>Without a live palm it is indistinguishable from noise. It is not a template and cannot be turned back into one.</td></tr>
-<tr><td>The stored token answers one question only</td><td><em>"Is this the same citizen who already enrolled?"</em> It cannot be matched against a police, passport or phone-vendor database, because it is not a fingerprint or a face &mdash; it only has meaning inside SOV.</td></tr>
+<tr><td>The stored token answers one question only</td><td><em>"Is this the same citizen who already enrolled?"</em> It cannot be matched against a police, passport or phone-vendor database: those systems hold their own formats, computed by their own models, and a number produced by one system has no meaning in another.</td></tr>
 <tr><td>A leak is recoverable</td><td>Rotating the network secret re-scrambles every stored token and turns any stolen copy into dead data. This is the thing a fingerprint database can never do.</td></tr>
 <tr><td>The scheme is not homemade</td><td>It is a fuzzy commitment (Juels&ndash;Wattenberg, 1999) combined with cancelable biometrics &mdash; both long-standing, peer-reviewed constructions, not something invented here.</td></tr>
 </tbody>
