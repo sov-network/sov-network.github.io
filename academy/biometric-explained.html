@@ -80,10 +80,14 @@ But it does <strong>not</strong> store the raw embedding — it runs it through 
 protection:</p>
 <pre><code>stored = R &middot; normalize(embedding)</code></pre>
 <ul>
-<li><code>R</code> is a <strong>secret orthogonal transform</strong> derived from a seed shared by the network.
-  <strong>Being precise about today:</strong> that seed is held by the nodes, so an operator who has it
-  can undo the scrambling. Splitting it into a witness-signer key that no single node can hold is
-  planned and not yet shipped, and we would rather say so than imply a protection you do not have.</li>
+<li><code>R</code> is a <strong>secret orthogonal transform</strong> derived from a per-network seed.
+  <strong>That seed is not published anywhere.</strong> It is not a value in the source code, so
+  reading the software tells you nothing about how to undo the scrambling &mdash; and a copy of a
+  node's database, on its own, is useless.
+  <strong>Being precise about what remains:</strong> the operators who run nodes do hold that seed,
+  so an operator could undo it. Splitting it into a witness-signer key that no single node can hold
+  is planned and not yet shipped, and we would rather say so than imply a protection you do not
+  have.</li>
 <li>The node stores the <strong>cancelable-transformed template</strong> (<code>R&middot;embedding</code>), never the raw biometric.</li>
 <li>A stolen node database yields scrambled, non-raw unit vectors — useless without <code>R</code>.</li>
 <li>It is <strong>revocable</strong>: rotate the network seed &rarr; re-transform everyone &rarr; <strong>any stolen copy
@@ -128,10 +132,12 @@ you'd get nothing usable:</p>
 <ol>
 <li>No <strong>image</strong> is ever sent — not of your palm, not of your face. It cannot be stolen from
    the network because it was never there.</li>
-<li>The <strong>stored vector</strong> is scrambled and <strong>revocable</strong>. Its limit, stated plainly: the
-   scrambling seed is currently shared by the nodes, so it defends against a stolen database but
-   not against a node operator who also holds the seed. Splitting that key so no single node holds
-   it is planned work, not shipped work.</li>
+<li>The <strong>stored vector</strong> is scrambled and <strong>revocable</strong>. The scrambling seed is a
+   per-network secret that appears nowhere in the published source, so a stolen database is useless
+   on its own. Its limit, stated plainly: node operators hold that seed, so an operator could undo
+   the scrambling. Splitting the key so no single node holds it is planned work, not shipped work.
+   The seed can also be rotated at any time, which re-scrambles every template and kills any copy
+   taken earlier &mdash; that has been exercised on the live network, not just designed.</li>
 <li>Your <strong>identity key</strong> is recomputed from your live palm and <strong>never stored at all</strong>.</li>
 </ol>
 <p>What SOV deliberately keeps is the <em>minimum</em> needed to enforce one-human-one-citizen and to let
@@ -185,7 +191,7 @@ them &mdash; a reviewer gets the whole picture, while a casual attacker does not
 <tbody>
 <tr><td>No palm image ever leaves the phone</td><td>The camera frame is turned into numbers on the device and discarded. There is no upload, and nothing to steal from the network, because it was never there.</td></tr>
 <tr><td>No raw biometric template is stored</td><td>What the node keeps has been put through a secret, cosine-preserving transform. A stolen database yields scrambled vectors, not palms.</td></tr>
-<tr><td>The scrambling key is shared, and being split</td><td>Today the key comes from a seed the nodes share, so an operator holding it can undo the scrambling &mdash; it defends against a stolen database, not against an operator. Splitting it so no one operator can hold it is planned work. We publish the current state rather than the intended one.</td></tr>
+<tr><td>The scrambling key is a secret, shared between operators, and being split</td><td>The seed is a per-network secret and appears nowhere in the published source, so a stolen database alone cannot be unscrambled. Operators who run nodes do hold it, so an operator could &mdash; splitting it so no one operator can is planned work. Rotation has been exercised on the live network: every stored template was re-scrambled under a new key and verified to be the same biometric afterwards. We publish the current state rather than the intended one.</td></tr>
 <tr><td>Your identity key is never stored</td><td>It is recomputed from your live palm each time and thrown away. There is no copy on any node to seize, subpoena or leak.</td></tr>
 <tr><td>The helper data reveals nothing on its own</td><td>Without a live palm it is indistinguishable from noise. It is not a template and cannot be turned back into one.</td></tr>
 <tr><td>The stored token answers one question only</td><td><em>"Is this the same citizen who already enrolled?"</em> It cannot be matched against a police, passport or phone-vendor database: those systems hold their own formats, computed by their own models, and a number produced by one system has no meaning in another.</td></tr>
