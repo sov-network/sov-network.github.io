@@ -54,13 +54,16 @@
       <p>Portable — also runs as a full node. 87 MB. Version 1.2.2.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
-    <div class="card"><h3>macOS <span class="tag">.app</span></h3>
-      <p>Runs as a full node on Apple&nbsp;Silicon. Unsigned/ad-hoc &mdash; first launch needs a right-click &rarr; Open. 101 MB. Version 1.2.2.<br>
+    <div class="card"><h3>macOS <span class="tag">Apple Silicon</span></h3>
+      <p>M1 and later. Also runs as a full node. Unsigned/ad-hoc &mdash; first launch needs a
+      right-click &rarr; Open. 101 MB. Version 1.2.2.<br>
       <a class="btn ghost" style="margin-top:10px"
-         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Download for macOS</a></p>
-      <p style="font-size:13px"><strong>Intel Macs:</strong> the wallet works, but the built-in node
-      cannot start &mdash; this build&rsquo;s node is Apple&nbsp;Silicon only, despite the file name. A
-      separate Intel build is coming in the next release. Apple&nbsp;Silicon (M1 and later) is unaffected.</p></div>
+         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-arm64.tar.gz">Download for Apple Silicon</a></p></div>
+    <div class="card"><h3>macOS <span class="tag">Intel</span></h3>
+      <p>Intel Macs. Also runs as a full node. Unsigned/ad-hoc &mdash; first launch needs a
+      right-click &rarr; Open. 102 MB. Version 1.2.2.<br>
+      <a class="btn ghost" style="margin-top:10px"
+         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Download for Intel</a></p></div>
     <div class="card"><h3>Linux <span class="tag">AppImage</span></h3>
       <p>Also runs as a full node. Make it executable, then run it — no install. 95 MB. Version 1.2.2.<br>
       <a class="btn ghost" style="margin-top:10px"
@@ -85,8 +88,10 @@
       p = { label: 'Download for Windows', file: 'sovnode-windows-x64.zip',
             note: 'Portable, 87 MB. No installer — unzip and run. Also works as a full node.' };
     } else if (/Macintosh|Mac OS X/i.test(ua)) {
-      p = { label: 'Download for macOS', file: 'sovnode-macos-x64.tar.gz',
-            note: '102 MB. First launch: right-click the app and choose Open. On an Intel Mac the wallet works but the built-in node will not start yet — an Intel build is coming.' };
+      // A browser cannot distinguish an Apple Silicon Mac from an Intel one (both report
+      // "MacIntel"), so offer the common case and name the other rather than guess wrong.
+      p = { label: 'Download for macOS (Apple Silicon)', file: 'sovnode-macos-arm64.tar.gz',
+            note: '101 MB. First launch: right-click the app and choose Open. On an Intel Mac, use the Intel build below instead.' };
     } else if (/Linux/i.test(ua)) {
       p = { label: 'Download for Linux', file: 'sovnode-linux-x64.AppImage',
             note: 'AppImage, 95 MB. Make it executable and run it — no install. Also works as a full node.' };
@@ -134,7 +139,8 @@
   <p style="font-size:13px; line-height:2">
     <a href="magnet:?xt=urn:btih:90b376cfd9715b288fc03892ee62022dd1100ff3&amp;dn=sovnode-android.apk&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-android.apk.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-android.apk">Android — magnet link</a> &middot; <a href="torrents/sovnode-android.apk.torrent">.torrent file</a><br>
     <a href="magnet:?xt=urn:btih:9ea8443164a2300809489fac40966a2ba51dc743&amp;dn=sovnode-windows-x64.zip&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-windows-x64.zip.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-windows-x64.zip">Windows — magnet link</a> &middot; <a href="torrents/sovnode-windows-x64.zip.torrent">.torrent file</a><br>
-    <a href="magnet:?xt=urn:btih:79074009fdea0470f61efe6fe6db0ba00fc4631e&amp;dn=sovnode-macos-x64.tar.gz&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-macos-x64.tar.gz.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-macos-x64.tar.gz">macOS — magnet link</a> &middot; <a href="torrents/sovnode-macos-x64.tar.gz.torrent">.torrent file</a><br>
+    <a href="magnet:?xt=urn:btih:5c57731ebda7ba3268c403fc8148eadf6164c42b&amp;dn=sovnode-macos-arm64.tar.gz&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-macos-arm64.tar.gz.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-macos-arm64.tar.gz">macOS (Apple Silicon) — magnet link</a> &middot; <a href="torrents/sovnode-macos-arm64.tar.gz.torrent">.torrent file</a><br>
+    <a href="magnet:?xt=urn:btih:e1c329b7df77243c71cc9c83057dcdfea067aade&amp;dn=sovnode-macos-x64.tar.gz&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-macos-x64.tar.gz.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-macos-x64.tar.gz">macOS (Intel) — magnet link</a> &middot; <a href="torrents/sovnode-macos-x64.tar.gz.torrent">.torrent file</a><br>
     <a href="magnet:?xt=urn:btih:d5f64fa4f46b1d02faddf90323e3e4618a25e939&amp;dn=sovnode-linux-x64.AppImage&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-linux-x64.AppImage.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-linux-x64.AppImage">Linux — magnet link</a> &middot; <a href="torrents/sovnode-linux-x64.AppImage.torrent">.torrent file</a><br>
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
@@ -143,7 +149,8 @@
   <p style="font-size:13px; line-height:2">
     <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeibj64jdh5ga6npa3jwd645nqmfjutgtblnsmtfpcbtq7kxbx263wu">Android &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeigstfp&hellip;)</span><br>
     <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeibntduhjdivkioyenh7sk6zywgwmn6xj7mmyjgjpgzngr6guu2he4">Windows &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeieeis2&hellip;)</span><br>
-    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeia7ds2yxvcy6yehmvf2ij3x6svj7zvfwqziw3gisw5fvsk4tx7fvy">macOS &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeia7ds2&hellip;)</span><br>
+    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeicjr7cwjnjdhrrr2njo7qavclwfd6sev45qhsf5bizhwtfmx4ymuu">macOS (Apple Silicon) &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeicjr7c&hellip;)</span><br>
+    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeihxawtjqywq3w6tl4mljrtaux2wsxbwu5o7mxxkebbnhem42eoycm">macOS (Intel) &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeihxawt&hellip;)</span><br>
     <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeifwtr54rivoguqr6cwc5v57uknqwqtmwh2mqc745u2qerzbw7b4de">Linux &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeibqbzg&hellip;)</span><br>
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
