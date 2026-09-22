@@ -210,15 +210,19 @@ while the box still silently drops them.</p>
 </blockquote>
 <hr />
 <h2 id="6-install-the-node-software-the-snap">6. Install the node software (the snap)</h2>
-<div class="note"><strong>Where this stands (September 2026).</strong> The network is live &mdash; it launched
-on 25 August 2026 on its founding nodes, and every node checks the <em>exact</em> software its peers
-are running before it will talk to them. A node built from anything else is refused, on purpose.
-The Linux node package is <strong>not yet publicly distributed</strong>: the channel described below
-&mdash; the nodes themselves serving the package, so you can check one node's copy against two
-others &mdash; is being brought up, and until it is, a new Linux node cannot join. The Windows app
-(section 7) already contains a full node and is the path being finished first. Nothing below is a
-plan: it is the procedure, written against the real software, for the day the package is served.
-Check this page before you start.</div>
+<div class="note"><strong>Where this stands (September 2026).</strong> The network is live &mdash; it
+launched on 25 August 2026 &mdash; and every node checks the exact software its peers are running
+before it will talk to them. A node built from anything else is refused, on purpose.
+<br><br>
+<strong>You may not need this section at all.</strong> The desktop app <em>is</em> a full node on
+all three systems: Windows, macOS and Linux. Install it, switch the node on, and you are serving
+&mdash; no snap, no VPS, no terminal. That is section 7, and for most operators it is the whole job.
+<br><br>
+This section is the <em>headless server</em> route: the standalone package for a machine with no
+desktop, which you download from a running node and check against two others. <strong>That download
+channel is not live yet</strong> &mdash; the nodes do not serve the package at the moment, so the
+commands below cannot be followed today. They are written against the real software and are kept
+here for the day the channel opens. Check this page before you start.</div>
 <p>The node software is distributed by <strong>the network itself</strong> — there is no app store to
 trust. You download it straight from a running node, and you verify it yourself.</p>
 <p><strong>Download from a live node</strong> (once the channel is live)</p>
