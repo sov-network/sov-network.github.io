@@ -55,9 +55,12 @@
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
     <div class="card"><h3>macOS <span class="tag">.app</span></h3>
-      <p>Also runs as a full node. Unsigned/ad-hoc — first launch needs a right-click &rarr; Open. 101 MB. Version 1.2.1.<br>
+      <p>Runs as a full node on Apple&nbsp;Silicon. Unsigned/ad-hoc &mdash; first launch needs a right-click &rarr; Open. 101 MB. Version 1.2.1.<br>
       <a class="btn ghost" style="margin-top:10px"
-         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Download for macOS</a></p></div>
+         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Download for macOS</a></p>
+      <p style="font-size:13px"><strong>Intel Macs:</strong> the wallet works, but the built-in node
+      cannot start &mdash; this build&rsquo;s node is Apple&nbsp;Silicon only, despite the file name. A
+      separate Intel build is coming in the next release. Apple&nbsp;Silicon (M1 and later) is unaffected.</p></div>
     <div class="card"><h3>Linux <span class="tag">AppImage</span></h3>
       <p>Also runs as a full node. Make it executable, then run it — no install. 95 MB. Version 1.2.1.<br>
       <a class="btn ghost" style="margin-top:10px"
@@ -83,7 +86,7 @@
             note: 'Portable, 87 MB. No installer — unzip and run. Also works as a full node.' };
     } else if (/Macintosh|Mac OS X/i.test(ua)) {
       p = { label: 'Download for macOS', file: 'sovnode-macos-x64.tar.gz',
-            note: '101 MB. First launch: right-click the app and choose Open.' };
+            note: '101 MB. First launch: right-click the app and choose Open. On an Intel Mac the wallet works but the built-in node will not start yet — an Intel build is coming.' };
     } else if (/Linux/i.test(ua)) {
       p = { label: 'Download for Linux', file: 'sovnode-linux-x64.AppImage',
             note: 'AppImage, 95 MB. Make it executable and run it — no install. Also works as a full node.' };
