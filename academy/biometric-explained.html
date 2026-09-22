@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Biometric Identity Explained — SOV Network</title>
-<meta name="description" content="SOV Network Academy — how palm identity keeps one human = one account, without storing any real biometric data.">
+<meta name="description" content="SOV Network Academy — how palm identity keeps one human = one account: no palm image is stored, only a scrambled, revocable template, and what that means.">
   <link rel="canonical" href="https://sov-network.github.io/academy/biometric-explained.html">
 <link rel="stylesheet" href="../style.css">
 </head>
@@ -19,12 +19,14 @@
 </div></header>
 <main class="wrap article">
 <a class="backlink" href="../index.html">&larr; Back to home</a>
-<h1 id="your-palm-is-your-citizenship">Your Palm Is Your Citizenship (and Nothing Is Stored)</h1>
+<h1 id="your-palm-is-your-citizenship">Your Palm Is Your Citizenship (and No Palm Is Stored)</h1>
 <blockquote>
-<p><strong>A plain-language explainer + a live code audit of the SOV palm-biometric protocol.</strong><br />
-Every claim here maps to the exact source that implements it — file and line references are
-included so it can be independently checked. Nothing here is marketing; it's what the code
-actually does.</p>
+<p><strong>A plain-language explainer of the SOV palm-biometric protocol — including what it does
+<em>not</em> yet do.</strong><br />
+No palm image is ever stored, but the network does keep a scrambled template of one, and this
+page sets out exactly what that means. Where a protection is designed but not yet shipped, it
+is marked as such rather than counted. Nothing here is marketing; it is what the code actually
+does today.</p>
 </blockquote>
 
 <h2 id="the-one-sentence-version">The one-sentence version</h2>

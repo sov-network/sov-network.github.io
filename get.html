@@ -44,9 +44,12 @@
 
   <div id="all-platforms" class="grid" style="grid-template-columns:1fr">
     <div class="card"><h3>Android <span class="tag">APK</span></h3>
-      <p>Install directly on your phone. 159 MB.<br>
+      <p>Install directly on your phone. 159 MB. Version 1.2.0.<br>
       <a class="btn primary" style="margin-top:10px"
-         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-android.apk">Download APK</a></p></div>
+         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-android.apk">Download APK</a></p>
+      <p style="font-size:13px">Had a version before 1.2.0 installed? Uninstall it first &mdash; it was signed with a
+      different certificate and Android will not update it in place. Then install this one and restore your wallet
+      from your recovery words.</p></div>
     <div class="card"><h3>Windows <span class="tag">portable</span></h3>
       <p>Portable — also runs as a full node. 163 MB.<br>
       <a class="btn ghost" style="margin-top:10px"
@@ -107,16 +110,17 @@
   })();
   </script>
   <p class="note" style="margin-top:18px">
-    Every release ships a threshold-signed manifest — check it before installing.
-    <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json">manifest</a>
-    &middot;
-    <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json.sig">signature</a>
+    Every release ships its checksums &mdash; compare your download against
+    <a href="https://github.com/sov-network/relay-releases/releases/latest/download/SHA256SUMS.txt">SHA256SUMS.txt</a>
+    before installing. The manifest the network's own nodes sign for each release is not published yet; until it is,
+    the checksum is the check, and this page will say so when that changes.
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
-  <p class="sub">GitHub down or blocked where you are? Every SOV node seeds these files directly
-  — no account, no company, nothing to suspend.</p>
+  <p class="sub">GitHub down or blocked where you are? These copies live outside it
+  — no account, no company, nothing to suspend. The desktop copies are the current desktop
+  builds (v1.1.3). The Android copies are being re-seeded for v1.2.0 and will be listed here
+  when they are; until then use the direct download above.</p>
   <p style="font-size:13px; line-height:2">
-    <a href="magnet:?xt=urn:btih:0ae779f292b65868e9db2359743a1081feeb32d7&amp;dn=sovnode-android.apk&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce">Android — magnet link</a><br>
     <a href="magnet:?xt=urn:btih:5a800b8ca8557b3791d83ab3c1a687e53f6c4a18&amp;dn=sovnode-windows-x64.zip&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce">Windows — magnet link</a><br>
     <a href="magnet:?xt=urn:btih:f91569beb465784d2d5a4f4f355ea95f769d2cdb&amp;dn=sovnode-macos.tar.gz&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce">macOS — magnet link</a>
   </p>
@@ -124,7 +128,6 @@
   <p class="sub">Also pinned on IPFS — content-addressed, so the hash itself proves the file
   is unmodified. Works through any public gateway.</p>
   <p style="font-size:13px; line-height:2">
-    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeifa24ogbqdyr6blfbgglb2x3vrs4ujenrazg3ieb674abiikzdbei">Android &mdash; IPFS</a><br>
     <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeih5ia4yvappsaktbiup6s57avfuwk7w663jw2hnf3rpa3nog5tdau">Windows &mdash; IPFS</a><br>
     <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeig6hb52eaxfaeq3enkfvziqlccayhz37qlhdrp5sa2yhu7kkqsf2a">macOS &mdash; IPFS</a>
   </p>

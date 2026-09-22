@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — SOV Network</title>
+<meta name="description" content="What the SOV Network holds about a citizen, why, for how long, and what a citizen can and cannot ask for.">
+<link rel="canonical" href="https://sov-network.github.io/privacy.html">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <span class="brand"><img src="sov-logo.png" alt="">SOV&nbsp;NETWORK</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="academy/index.html">Academy</a>
+    <a href="academy/run-a-node.html">Run a node</a>
+  </nav>
+</div></header>
+<main class="wrap article">
+<a class="backlink" href="index.html">&larr; Back to home</a>
+
+<h1 id="privacy">Privacy on the SOV Network</h1>
+<blockquote>
+<p>Version 1.0 &mdash; 1 August 2026.<br />
+This describes what the network actually holds today, including the parts that are not yet
+where we want them. Where a protection is designed but not shipped, it says so. The technical
+detail behind every statement here is in the
+<a href="academy/biometric-explained.html">biometric explainer</a>.</p>
+</blockquote>
+
+<h2 id="who-is-responsible">Who is responsible for your data</h2>
+<p>There is no company behind the SOV Network and no central server. The network is a set of
+independent nodes, each run by whoever chose to run it, all running the same software. Every node
+holds a copy of the network's state.</p>
+<p>In data-protection terms that means there is no single controller to write to. <strong>Each node
+operator is an independent controller of the copy they hold.</strong> We are not going to dress that up:
+it is an honest description of a decentralised network, and it is also the reason some of the
+rights described below are harder to exercise here than against an ordinary company. If that
+matters to you, it should weigh in your decision to enrol.</p>
+
+<h2 id="what-is-held">What the network holds about you</h2>
+<table>
+<thead><tr><th>What</th><th>Why it exists</th></tr></thead>
+<tbody>
+<tr><td><strong>Your Sovereign ID</strong> (e.g. <code>SOV-XXXXXXXXXXXXXXXX</code>) and public key</td><td>Your account. Everything else hangs off it.</td></tr>
+<tr><td><strong>A nickname</strong> derived from that ID</td><td>So people see a readable name. It is computed from the ID alone and carries nothing about your body, despite the legacy field name.</td></tr>
+<tr><td><strong>A protected palm template</strong></td><td>The one-human-one-account check. Not a palm image &mdash; a list of numbers put through a scrambling transform.</td></tr>
+<tr><td><strong>A protected face template</strong></td><td>The same check, across both hands: a palm template cannot tell that a person's left and right hands belong to one human, so the face captured during the liveness step is the cross-hand anchor. Also scrambled, never an image.</td></tr>
+<tr><td><strong>Helper data</strong> from enrolment</td><td>Lets you recover your wallet by re-scanning instead of keeping a seed phrase. On its own it is indistinguishable from noise.</td></tr>
+<tr><td><strong>Your balance, and recent transactions</strong></td><td>The ledger. Balances are permanent; the transaction log is pruned after a governed retention period.</td></tr>
+<tr><td><strong>Message metadata and undelivered messages</strong></td><td>To deliver messages you are offline for. Retained for a governed period, then removed.</td></tr>
+</tbody>
+</table>
+<p><strong>What is never collected at all:</strong> your name, address, phone number, email address, date of
+birth, or any government identifier. The network does not ask for them and has nowhere to put them.
+No palm photograph or face photograph is ever uploaded &mdash; the camera frame is turned into
+numbers on your own device and discarded there.</p>
+
+<h2 id="biometric-status">The biometric templates, stated precisely</h2>
+<p>This is the part that matters most, so it gets no euphemism.</p>
+<p>The palm and face templates are <strong>biometric data used to identify a person</strong>. Under the UK GDPR
+that is special category data (Art.9), and under the EU GDPR the same. Calling them "just numbers"
+would be a dodge: they are numbers whose entire purpose is to recognise you.</p>
+<p>They are stored in a protected form &mdash; each is put through a cosine-preserving cancelable
+transform, so what sits on disk is a scrambled vector rather than the raw measurement, and nothing
+on any node can be matched against a police, passport or phone-vendor database. Four limits belong
+next to that, because a protection you have overstated is worse than one you have explained:</p>
+<ul>
+<li><strong>Every node holds a copy.</strong> The uniqueness check is network-wide, so the template set
+  replicates to each node rather than living on one server. A node operator holds your protected
+  template.</li>
+<li><strong>The scrambling is reversible by whoever holds the key</strong>, and that key is a per-network secret
+  that every approved node holds in full &mdash; not in the published source code, but not split across the network either. It defends against someone
+  who steals a node's database; it does not defend against the operator of that node. Splitting it
+  so no single operator holds it is planned work and is not shipped.</li>
+<li><strong>Rotation is not implemented.</strong> The reason to use a cancelable transform is that a leak can
+  be remedied by rotating the key and re-scrambling everyone. The design supports it; the code does
+  not do it yet, so we do not offer it as a protection you currently have.</li>
+<li><strong>There is no erasure path.</strong> See below &mdash; it is significant enough to have its own
+  section.</li>
+</ul>
+
+<h2 id="retention">How long it is kept, and the erasure problem</h2>
+<p>Balances are permanent by design. Transaction records and message metadata are pruned on a
+schedule the citizens themselves vote on.</p>
+<p><strong>The biometric templates are kept indefinitely, and today there is no mechanism to delete
+one.</strong> Not on request, and not by expiry. We would rather write that sentence plainly than let you
+discover it.</p>
+<p>The reason is structural rather than careless. The template <em>is</em> the one-human-one-account
+guarantee: it exists to notice that someone enrolling now is someone who already enrolled before.
+Delete it and that person can enrol again, which is precisely the thing the network is built to
+prevent &mdash; and which, in a network where citizenship carries a vote and an income, is not a
+minor abuse. A right to erasure and a guarantee of uniqueness pull in opposite directions here, and
+we have not yet found the design that honours both.</p>
+<p>That is an explanation, not a justification, and we are not claiming it discharges the obligation.
+It is recorded as an open problem. If you are deciding whether to enrol, decide knowing that the
+template you create is, for now, permanent.</p>
+
+<h2 id="your-rights">Your rights, and how far they currently reach</h2>
+<ul>
+<li><strong>Access.</strong> Everything the network holds under your ID is visible to you in the app: your
+  balance, your history, your messages. There is no hidden profile.</li>
+<li><strong>Rectification.</strong> Nothing held is a factual assertion about you that could be wrong, other
+  than ledger entries, which are corrected by transacting rather than by editing.</li>
+<li><strong>Erasure.</strong> You can stop using an account and clear it from your own device. <strong>The biometric
+  template cannot presently be erased from the network</strong> &mdash; see above. We are not going to
+  describe a request path that does not work.</li>
+<li><strong>Portability.</strong> Your keys and history are yours and leave with you; the wallet is recoverable
+  on any device.</li>
+<li><strong>Objection and withdrawal of consent.</strong> You can leave. Because there is no erasure path, leaving
+  does not remove the template.</li>
+</ul>
+<p>Exercising a right against a decentralised network is genuinely harder than against a company, and
+the route to do it is being worked out rather than settled. If you are reading this because you want
+to make a request, that is exactly the gap we are describing.</p>
+
+<h2 id="what-others-see">What websites you log into with SOV receive</h2>
+<p>When you use your SOV identity to sign in to another site, that site receives your Sovereign ID,
+your public key and signatures proving the ID is genuine, your ID-derived nickname, a one-way check
+value for the password you chose for that site, and a list of node addresses so it can reach the
+network. <strong>It receives no biometric data of any kind</strong>, and it cannot see your balance, your
+messages, or anything else you do on the network. It is told <em>that</em> you were verified, never
+<em>how</em>.</p>
+<p>Those sites are separate operations with their own privacy policies, and what they do with your ID
+once they have it is between you and them.</p>
+
+<h2 id="changes">Changes to this page</h2>
+<p>The honest version of this document changes when the software changes. The two things most likely
+to change it are the threshold-key work &mdash; after which the scrambling key will no longer sit in a
+constant &mdash; and any resolution of the erasure problem. Both will be reflected here when they
+ship, and not before.</p>
+
+</main>
+<footer class="site"><div class="wrap">
+  <p>SOV Network — an open, self-contained protocol. No central operator, no single switch to flip.</p>
+  <p>Privacy, version 1.0 — 1 August 2026.</p>
+</div></footer>
+</body>
+</html>

@@ -210,10 +210,18 @@ while the box still silently drops them.</p>
 </blockquote>
 <hr />
 <h2 id="6-install-the-node-software-the-snap">6. Install the node software (the snap)</h2>
-<p>The node software is distributed by <strong>the network itself</strong> — there is no GitHub repo and<br />
-no app store to trust. You download it straight from a running node, and you verify it<br />
-yourself.</p>
-<p><strong>Download from a live node</strong></p>
+<div class="note"><strong>Where this stands (September 2026).</strong> The network is live &mdash; it launched
+on 25 August 2026 on its founding nodes, and every node checks the <em>exact</em> software its peers
+are running before it will talk to them. A node built from anything else is refused, on purpose.
+The Linux node package is <strong>not yet publicly distributed</strong>: the channel described below
+&mdash; the nodes themselves serving the package, so you can check one node's copy against two
+others &mdash; is being brought up, and until it is, a new Linux node cannot join. The Windows app
+(section 7) already contains a full node and is the path being finished first. Nothing below is a
+plan: it is the procedure, written against the real software, for the day the package is served.
+Check this page before you start.</div>
+<p>The node software is distributed by <strong>the network itself</strong> — there is no app store to
+trust. You download it straight from a running node, and you verify it yourself.</p>
+<p><strong>Download from a live node</strong> (once the channel is live)</p>
 <pre><code class="language-bash">curl -O http://&lt;LIVE_NODE_IP&gt;/sov-relay.snap
 </code></pre>
 <p><strong>Verify it before you install it.</strong> Nobody signs this for you and no app store
@@ -423,6 +431,100 @@ purely outbound connection — no port-forward, no domain, no VPS.</p>
 <p>Behind CGNAT the peer-mesh port (7771) is outbound-only — that's normal; citizens still<br />
 reach you inbound on 443 via Funnel.</p>
 <hr />
+<h2 id="reachable-vs-running">Reachable vs running — what the status means</h2>
+
+<p>A node can be <em>on the network</em> and still be reaching nobody. It holds the
+ledger, it talks to other nodes outbound, and it looks busy — but if nothing from
+the outside can open a connection <em>to</em> it, no citizen is being served there.
+The two are different, and the app says which is true instead of flattering you:</p>
+
+<ul>
+<li><strong>Running, but not reachable</strong> — the node is up and syncing, but
+nothing outside has connected to it yet. It is a client, not yet a server.</li>
+<li><strong>Serving citizens</strong> — a real peer has connected in from outside.
+This is <em>earned</em>: the badge turns green on its own the moment someone gets
+through, never just because you switched the node on.</li>
+</ul>
+
+<p>On a home connection the most common reason for "running but not reachable" is
+simply that nothing is letting the outside in yet. There are three ways to fix it,
+and the node picks the best one it can:</p>
+
+<ol>
+<li><strong>Forward the ports on your router.</strong> Open the mesh and gateway
+ports and point them at the computer running the node. This is the most direct
+route: peers connect straight to you. It needs a router you can log into and a
+connection that isn't behind carrier-grade NAT (most home lines are fine).</li>
+<li><strong>Use a tunnel (no port-forward needed).</strong> If you can't open ports
+— a locked-down router, or a mobile/hotspot connection where the address isn't
+yours to forward — a tunnel service can carry inbound traffic to your node over an
+outbound connection it makes itself. This is the path that works <em>behind</em>
+carrier NAT, where forwarding is impossible.</li>
+<li><strong>Circuit relay (automatic).</strong> If neither of the above is set up,
+the node is still reached indirectly, through other nodes. It works everywhere with
+no configuration, but a direct route is better when you can get one.</li>
+</ol>
+
+<p>An old, always-on computer at home is well suited to this: left on with the
+screen off, it can serve the network around the clock. The node has no window and
+needs none — it is a server, the same as any cloud node. You run the wallet app on
+whatever device you already use; the home machine just earns to that wallet.</p>
+
+<h2 id="9-how-your-node-is-found">9. How your node is found</h2>
+
+<p>Nothing publishes your address for you, and no address is written into the
+wallet app. If it were, every published build would be a list of the machines
+worth pressuring — and the app would stop working the day those particular
+machines went away.</p>
+
+<p>Instead the app ships a <em>path</em> to discovery and walks it in order:</p>
+
+<ol>
+<li><strong>Nodes it has reached before</strong> — nothing to look up.</li>
+<li><strong>Pointer mirrors</strong> — small files on independent hosts that say
+where the network currently is. They can be updated without shipping a new app,
+and they are asked <em>all together</em> rather than trusting whichever answers
+first, so one stale mirror can never shrink the list.</li>
+<li><strong>The public BitTorrent DHT</strong> — the same global table torrent
+clients have kept running for twenty years. Nobody owns it, so there is nobody
+to serve an order to, and nothing for anyone to switch off.</li>
+</ol>
+
+<p>Your node announces itself to that table when it starts, and re-announces
+every fifteen minutes. That announcement is what lets someone who has never
+heard of you, holds no list, and was given no address, find you.</p>
+
+<p><strong>Telling a SOV node apart from a stranger.</strong> Anyone can announce
+on a public identifier, and some do — crawlers announce across many of them just
+to map the network. So a discovered address is a <em>place to knock</em>, never a
+node. Two checks, one free and one conclusive:</p>
+
+<ul>
+<li>The <strong>port</strong>. A SOV node always announces the mesh port. Anything
+else is dropped without a single packet being sent. In a real run, ten
+announcements came back and seven were discarded this way — including the right
+machine on the wrong port, because the port is what identifies the service.</li>
+<li>The <strong>signed pool</strong>. What survives must serve a pool listing that
+is signed and carries proper node identities. A parked domain or a crawler's web
+server will happily return something; none of them return that.</li>
+</ul>
+
+<p>Only what passes both is connected to, and only what answers correctly is
+remembered. This is why a stranger on the same identifier costs nothing, and why
+the pool stays a list of real nodes rather than a list of addresses that were
+once mentioned somewhere.</p>
+
+<blockquote>
+<p><strong>If your node is behind Tailscale or CGNAT, it will not appear in the
+DHT — and that is correct, not a fault.</strong> A DHT entry can only hold a raw
+address and a port; there is no room in it for a name. Publishing one anyway
+would advertise your home connection, where nothing is listening, and hand every
+new user a dead address. Your node is found through the pool instead, which
+carries full addresses and is passed between nodes as they meet. Discovery still
+works in the other direction: your node finds the network through the DHT
+perfectly well from behind any NAT.</p>
+</blockquote>
+
 <h2 id="8-earning-the-operator-payout">8. Earning — the operator payout</h2>
 <p>Running a node earns SOV for the real work of keeping the network running: witnessing<br />
 transactions and staying online.</p>
