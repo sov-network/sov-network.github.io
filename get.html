@@ -44,25 +44,25 @@
 
   <div id="all-platforms" class="grid" style="grid-template-columns:1fr">
     <div class="card"><h3>Android <span class="tag">APK</span></h3>
-      <p>Install directly on your phone. 159 MB. Version 1.2.1.<br>
+      <p>Install directly on your phone. 159 MB. Version 1.2.2.<br>
       <a class="btn primary" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-android.apk">Download APK</a></p>
       <p style="font-size:13px">Had a version before 1.2.0 installed? Uninstall it first &mdash; it was signed with a
       different certificate and Android will not update it in place. Then install this one and restore your wallet
       from your recovery words.</p></div>
     <div class="card"><h3>Windows <span class="tag">portable</span></h3>
-      <p>Portable — also runs as a full node. 87 MB. Version 1.2.1.<br>
+      <p>Portable — also runs as a full node. 87 MB. Version 1.2.2.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
     <div class="card"><h3>macOS <span class="tag">.app</span></h3>
-      <p>Runs as a full node on Apple&nbsp;Silicon. Unsigned/ad-hoc &mdash; first launch needs a right-click &rarr; Open. 101 MB. Version 1.2.1.<br>
+      <p>Runs as a full node on Apple&nbsp;Silicon. Unsigned/ad-hoc &mdash; first launch needs a right-click &rarr; Open. 101 MB. Version 1.2.2.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Download for macOS</a></p>
       <p style="font-size:13px"><strong>Intel Macs:</strong> the wallet works, but the built-in node
       cannot start &mdash; this build&rsquo;s node is Apple&nbsp;Silicon only, despite the file name. A
       separate Intel build is coming in the next release. Apple&nbsp;Silicon (M1 and later) is unaffected.</p></div>
     <div class="card"><h3>Linux <span class="tag">AppImage</span></h3>
-      <p>Also runs as a full node. Make it executable, then run it — no install. 95 MB. Version 1.2.1.<br>
+      <p>Also runs as a full node. Make it executable, then run it — no install. 95 MB. Version 1.2.2.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-linux-x64.AppImage">Download for Linux</a></p></div>
   </div>
@@ -86,7 +86,7 @@
             note: 'Portable, 87 MB. No installer — unzip and run. Also works as a full node.' };
     } else if (/Macintosh|Mac OS X/i.test(ua)) {
       p = { label: 'Download for macOS', file: 'sovnode-macos-x64.tar.gz',
-            note: '101 MB. First launch: right-click the app and choose Open. On an Intel Mac the wallet works but the built-in node will not start yet — an Intel build is coming.' };
+            note: '102 MB. First launch: right-click the app and choose Open. On an Intel Mac the wallet works but the built-in node will not start yet — an Intel build is coming.' };
     } else if (/Linux/i.test(ua)) {
       p = { label: 'Download for Linux', file: 'sovnode-linux-x64.AppImage',
             note: 'AppImage, 95 MB. Make it executable and run it — no install. Also works as a full node.' };
@@ -127,24 +127,24 @@
     &mdash; the file the app itself verifies (Ed25519, against the trust key built into it) before it will self-update.
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
-  <p class="sub">GitHub down or blocked where you are? The same v1.2.1 files are also seeded over
+  <p class="sub">GitHub down or blocked where you are? The same v1.2.2 files are also seeded over
   BitTorrent by the network&rsquo;s own nodes &mdash; no account, no company, nothing to suspend.
   Use the <em>.torrent file</em> if your client finds no peers: it carries a web seed, so the
   download completes from either source, and the checksums above still apply.</p>
   <p style="font-size:13px; line-height:2">
-    <a href="magnet:?xt=urn:btih:adfce649d793ca8b31b51233616ef49fbdec98c4&amp;dn=sovnode-android.apk&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-android.apk.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.1%2Fsovnode-android.apk">Android — magnet link</a> &middot; <a href="torrents/sovnode-android.apk.torrent">.torrent file</a><br>
-    <a href="magnet:?xt=urn:btih:beae3c4c8b886375c7234d3235c1bfa4eabf2ea5&amp;dn=sovnode-windows-x64.zip&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-windows-x64.zip.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.1%2Fsovnode-windows-x64.zip">Windows — magnet link</a> &middot; <a href="torrents/sovnode-windows-x64.zip.torrent">.torrent file</a><br>
-    <a href="magnet:?xt=urn:btih:79074009fdea0470f61efe6fe6db0ba00fc4631e&amp;dn=sovnode-macos-x64.tar.gz&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-macos-x64.tar.gz.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.1%2Fsovnode-macos-x64.tar.gz">macOS — magnet link</a> &middot; <a href="torrents/sovnode-macos-x64.tar.gz.torrent">.torrent file</a><br>
-    <a href="magnet:?xt=urn:btih:41ebc7ab774a59fed0ce0ced03ac5f7568cf6088&amp;dn=sovnode-linux-x64.AppImage&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-linux-x64.AppImage.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.1%2Fsovnode-linux-x64.AppImage">Linux — magnet link</a> &middot; <a href="torrents/sovnode-linux-x64.AppImage.torrent">.torrent file</a><br>
+    <a href="magnet:?xt=urn:btih:90b376cfd9715b288fc03892ee62022dd1100ff3&amp;dn=sovnode-android.apk&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-android.apk.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-android.apk">Android — magnet link</a> &middot; <a href="torrents/sovnode-android.apk.torrent">.torrent file</a><br>
+    <a href="magnet:?xt=urn:btih:9ea8443164a2300809489fac40966a2ba51dc743&amp;dn=sovnode-windows-x64.zip&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-windows-x64.zip.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-windows-x64.zip">Windows — magnet link</a> &middot; <a href="torrents/sovnode-windows-x64.zip.torrent">.torrent file</a><br>
+    <a href="magnet:?xt=urn:btih:79074009fdea0470f61efe6fe6db0ba00fc4631e&amp;dn=sovnode-macos-x64.tar.gz&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-macos-x64.tar.gz.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-macos-x64.tar.gz">macOS — magnet link</a> &middot; <a href="torrents/sovnode-macos-x64.tar.gz.torrent">.torrent file</a><br>
+    <a href="magnet:?xt=urn:btih:d5f64fa4f46b1d02faddf90323e3e4618a25e939&amp;dn=sovnode-linux-x64.AppImage&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;xs=https%3A%2F%2Fsov-network.github.io%2Ftorrents%2Fsovnode-linux-x64.AppImage.torrent&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.2%2Fsovnode-linux-x64.AppImage">Linux — magnet link</a> &middot; <a href="torrents/sovnode-linux-x64.AppImage.torrent">.torrent file</a><br>
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
   <p class="sub">Also pinned on IPFS &mdash; content-addressed, so the address itself is the hash of the file
-  and proves it is unmodified. These are the v1.2.1 files; any public IPFS gateway can serve the same CIDs.</p>
+  and proves it is unmodified. These are the v1.2.2 files; any public IPFS gateway can serve the same CIDs.</p>
   <p style="font-size:13px; line-height:2">
-    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeigstfpe6npkin3ofmhbvkw3xowohdx7hmikvlnwrcnwz3f66otbce">Android &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeigstfp&hellip;)</span><br>
-    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeieeis276wdnna2mkyqvnz7jmodbm7gxz5pjw52ffcbext3c5chhji">Windows &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeieeis2&hellip;)</span><br>
+    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeibj64jdh5ga6npa3jwd645nqmfjutgtblnsmtfpcbtq7kxbx263wu">Android &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeigstfp&hellip;)</span><br>
+    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeibntduhjdivkioyenh7sk6zywgwmn6xj7mmyjgjpgzngr6guu2he4">Windows &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeieeis2&hellip;)</span><br>
     <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeia7ds2yxvcy6yehmvf2ij3x6svj7zvfwqziw3gisw5fvsk4tx7fvy">macOS &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeia7ds2&hellip;)</span><br>
-    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeibqbzgebymlixlb4dbeydbu5z5c4zseirfq57jognqzpcekdd3fem">Linux &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeibqbzg&hellip;)</span><br>
+    <a href="https://salmon-advisory-bat-393.mypinata.cloud/ipfs/bafybeifwtr54rivoguqr6cwc5v57uknqwqtmwh2mqc745u2qerzbw7b4de">Linux &mdash; IPFS</a> <span style="color:var(--dim)">(bafybeibqbzg&hellip;)</span><br>
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
   <p class="sub">Want to learn what SOV actually is before installing?</p>
