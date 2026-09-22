@@ -119,8 +119,9 @@
   <p class="note" style="margin-top:18px">
     Every release ships its checksums &mdash; compare your download against
     <a href="https://github.com/sov-network/relay-releases/releases/latest/download/SHA256SUMS.txt">SHA256SUMS.txt</a>
-    before installing. The manifest the network's own nodes sign for each release is not published yet; until it is,
-    the checksum is the check, and this page will say so when that changes.
+    before installing. Each release also carries a signed
+    <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json">sov-manifest.json</a>
+    &mdash; the file the app itself verifies (Ed25519, against the trust key built into it) before it will self-update.
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
   <p class="sub">GitHub down or blocked where you are? The same v1.2.0 files are also seeded over
