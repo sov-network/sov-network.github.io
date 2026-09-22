@@ -51,13 +51,17 @@
       different certificate and Android will not update it in place. Then install this one and restore your wallet
       from your recovery words.</p></div>
     <div class="card"><h3>Windows <span class="tag">portable</span></h3>
-      <p>Portable — also runs as a full node. 163 MB.<br>
+      <p>Portable — also runs as a full node. 87 MB. Version 1.2.0.<br>
       <a class="btn ghost" style="margin-top:10px"
-         href="https://github.com/sov-network/relay-releases/releases/download/v1.1.3/sovnode-windows-x64.zip">Download for Windows</a></p></div>
+         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
     <div class="card"><h3>macOS <span class="tag">.app</span></h3>
-      <p>Also runs as a full node. Unsigned/ad-hoc — first launch needs a right-click &rarr; Open. 111 MB.<br>
+      <p>Also runs as a full node. Unsigned/ad-hoc — first launch needs a right-click &rarr; Open. 101 MB. Version 1.2.0.<br>
       <a class="btn ghost" style="margin-top:10px"
-         href="https://github.com/sov-network/relay-releases/releases/download/v1.1.3/sovnode-macos.tar.gz">Download for macOS</a></p></div>
+         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos.tar.gz">Download for macOS</a></p></div>
+    <div class="card"><h3>Linux <span class="tag">AppImage</span></h3>
+      <p>Also runs as a full node. Make it executable, then run it — no install. 95 MB. Version 1.2.0.<br>
+      <a class="btn ghost" style="margin-top:10px"
+         href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-linux-x64.AppImage">Download for Linux</a></p></div>
   </div>
   <p id="show-all" style="display:none; text-align:center; margin-top:14px">
     <a href="#" style="font-size:13px; color:var(--dim)">Other platforms &darr;</a>
@@ -71,15 +75,18 @@
     // iOS first: iPads report as Mac, so check touch before assuming desktop.
     if (/Android/i.test(ua)) {
       p = { label: 'Download for Android', file: 'sovnode-android.apk',
-            note: 'APK, 192 MB. Your phone will ask you to allow installing from this source — that is normal outside an app store.' };
+            note: 'APK, 159 MB. Your phone will ask you to allow installing from this source — that is normal outside an app store.' };
     } else if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) {
       p = { ios: true };
     } else if (/Windows/i.test(ua)) {
       p = { label: 'Download for Windows', file: 'sovnode-windows-x64.zip',
-            note: 'Portable, 163 MB. No installer — unzip and run. Also works as a full node.' };
+            note: 'Portable, 87 MB. No installer — unzip and run. Also works as a full node.' };
     } else if (/Macintosh|Mac OS X/i.test(ua)) {
       p = { label: 'Download for macOS', file: 'sovnode-macos.tar.gz',
-            note: '111 MB. First launch: right-click the app and choose Open.' };
+            note: '101 MB. First launch: right-click the app and choose Open.' };
+    } else if (/Linux/i.test(ua)) {
+      p = { label: 'Download for Linux', file: 'sovnode-linux-x64.AppImage',
+            note: 'AppImage, 95 MB. Make it executable and run it — no install. Also works as a full node.' };
     }
     if (!p) return;                      // unknown device — leave the full list showing
     var box = document.getElementById('primary-dl');
@@ -91,7 +98,7 @@
       link.href = 'index.html';
       link.className = 'btn ghost';
       link.style.cursor = 'default';
-      note.textContent = 'SOV does not have an iOS build yet. Android, Windows and macOS are ready today.';
+      note.textContent = 'SOV does not have an iOS build yet. Android, Windows, macOS and Linux are ready today.';
     } else {
       link.textContent = p.label;
       link.href = B + p.file;
@@ -117,8 +124,8 @@
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
   <p class="sub">GitHub down or blocked where you are? These copies live outside it
-  — no account, no company, nothing to suspend. The desktop copies are the current desktop
-  builds (v1.1.3). The Android copies are being re-seeded for v1.2.0 and will be listed here
+  — no account, no company, nothing to suspend. The desktop copies are the previous desktop
+  builds (v1.1.3); v1.2.0 copies follow. The Android copies are being re-seeded for v1.2.0 and will be listed here
   when they are; until then use the direct download above.</p>
   <p style="font-size:13px; line-height:2">
     <a href="magnet:?xt=urn:btih:5a800b8ca8557b3791d83ab3c1a687e53f6c4a18&amp;dn=sovnode-windows-x64.zip&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce">Windows — magnet link</a><br>
