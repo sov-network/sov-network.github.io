@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An Old Mac as Network Infrastructure — SOV Network</title>
+<meta name="description" content="SOV Network Academy — how a Mac too old for modern software can run a full, walletless node and earn the operator payout.">
+  <link rel="canonical" href="https://sov-network.github.io/academy/old-mac-node.html">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <span class="brand"><img src="../sov-logo.png" alt="">SOV&nbsp;NETWORK</span>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Academy</a>
+    <a href="run-a-node.html">Run a node</a>
+  </nav>
+</div></header>
+<main class="wrap article">
+<a class="backlink" href="index.html">&larr; Back to the Academy</a>
+
+<h1 id="old-mac-node">An old Mac is still infrastructure</h1>
+
+<blockquote>
+<p>A Mac that is finished as a personal computer is not finished as a node. This page is
+written from a real build on a <strong>2013 iMac running macOS 10.15</strong> — two major
+versions past its last supported release, unable to run the SOV wallet app at all. It runs a
+<strong>full node</strong>: it holds the complete ledger, validates, relays, and earns the
+operator payout.</p>
+</blockquote>
+
+<h2>A node is not a wallet</h2>
+
+<p>This is the distinction that makes old hardware useful. The wallet is the app you hold your
+identity in. The node is a server that keeps the network running. They have different jobs and
+very different requirements.</p>
+
+<p>A SOV node is <strong>walletless</strong>. It holds no keys for anybody. It cannot sign on a
+citizen's behalf, cannot move anyone's funds, and never sees a private key. What it stores is
+the replicated public ledger that every node holds. What it does is validate, relay and stay
+available — and that is what it is paid for.</p>
+
+<p>So the operator of a node takes on no custody and no liability for anyone else's money. You
+are lending the network a computer and a connection, not becoming a bank.</p>
+
+<h2>What the hardware actually has to do</h2>
+
+<p>Far less than people assume. The machine in this example is a twelve-year-old desktop with
+four cores, and it sits idle most of the time. A node is bound by <em>availability</em>, not by
+speed: it must be switched on, connected, and reachable. An old desktop that lives in a corner
+and is never asked to do anything else is close to ideal — better, in some ways, than a laptop
+that travels and sleeps.</p>
+
+<p>What an older machine <em>will</em> hit is a software ceiling rather than a hardware one. An
+operating system a few versions behind cannot run the newest runtimes, and the node's database
+component may refuse to build with a modern compiler flag. Both are solvable, and neither is a
+reason to retire the machine.</p>
+
+<h2>The ceiling that looks worse than it is</h2>
+
+<p>On the machine here, the build stopped on a single line: the compiler rejected the
+<em>name</em> of a language-standard flag that a newer compiler would accept. Not a missing
+feature — a spelling. Substituting the older spelling of the same standard built the component
+correctly and it has run without fault since.</p>
+
+<p>The general lesson is worth more than the specific fix. <strong>Read the error, not the
+reputation of the machine.</strong> "This computer is too old" is a conclusion that arrives
+early and is often wrong; three weeks were spent here planning an elaborate workaround for a
+problem that turned out to be one word. Before accepting that hardware is finished, confirm
+what the tool actually said.</p>
+
+<h2>Two traps that make a broken node look healthy</h2>
+
+<p>Both of these were hit on this build, and both matter to anyone setting a node up.</p>
+
+<p><strong>An install step can report success while doing nothing.</strong> A rebuild command
+run against an empty directory cheerfully announces that it rebuilt everything. Nothing was
+built, because nothing was there. Always finish with a check that cannot pass by accident — ask
+the node's database component to open a database and write a row. If it returns the row, it
+works. If it cannot, no cheerful message means anything.</p>
+
+<p><strong>Reaching out is not the same as being reachable.</strong> A node behind a home router
+can connect outward to every peer on the network and still accept no connections at all. The
+protocol knows this and refuses to take a node's word for it: your node is marked reachable only
+when another node has successfully dialled it back. If your log repeats a request to be dialled,
+that is not a fault — it is the network correctly declining to advertise a door that does not
+open.</p>
+
+<h2>Getting reachable from a home connection</h2>
+
+<p>Three approaches, in the order most people should try them.</p>
+
+<ol>
+<li><strong>Forward the ports on your router</strong> to the machine's address on your home
+network. Check which port your node serves citizens on before you do — it is not always the
+obvious one, and the forward has to match.</li>
+<li><strong>Let the router handle dynamic DNS</strong>, not the computer. Home connections are
+usually given an address that changes. A small updater program running on the machine is the
+common advice and the weaker option: it stops when the machine is off, and it is easily lost
+when the machine is rebuilt. The router always knows the current address and is always on.</li>
+<li><strong>Use an ingress tunnel</strong> if your provider makes forwarding impossible. Some
+connections share one public address between many homes, and then no port can be forwarded at
+all. A tunnel dials outward and gives you a stable public endpoint anyway.</li>
+</ol>
+
+<p>Without any of these your node still takes part — it peers, replicates and validates through
+other nodes — but it cannot accept citizens directly, and it cannot complete operator
+registration, which requires proof that it can be reached.</p>
+
+<h2>Getting paid</h2>
+
+<p>To earn, a node registers as an operator against an enrolled citizen identity. It announces
+itself, a sample of existing nodes interrogate it, and a quorum of them must approve. The
+payout is for uptime and for transactions carried, and the rates are governance parameters —
+citizens vote on them, no company sets them.</p>
+
+<p>Registration will not complete until your node can be reached, so settle reachability first.
+The node keeps retrying on its own; there is nothing to babysit.</p>
+
+<h2>Keeping it alive without touching it</h2>
+
+<p>A node that stops when nobody is watching earns nothing, and the defaults on a desktop
+machine are all wrong for this. Three settings do most of the work:</p>
+
+<ul>
+<li><strong>Restart automatically after a power cut.</strong> Desktops normally stay off. One
+power interruption otherwise ends your node until somebody walks over to it.</li>
+<li><strong>Never sleep.</strong> An idle desktop sleeps within minutes and stops serving. On
+the machine here it was sleeping for two hours at a time before this was changed.</li>
+<li><strong>Start the node at boot, not at login.</strong> This is the one people miss. If the
+node is set up to start when a user logs in, then a machine that reboots and waits at the login
+screen is a machine doing nothing — and if you were relying on reaching it remotely, you now
+cannot reach it at all.</li>
+</ul>
+
+<p>Check that these settings are <em>saved</em>, not merely applied to the current session. Most
+systems distinguish between the two, and only the saved ones survive a restart.</p>
+
+<h2>One habit worth more than any command</h2>
+
+<p>If you ever wipe a node to start it clean, remember that wiping <em>data</em> is not the same
+as wiping <em>configuration</em>. On this machine, several clean wipes removed every database and
+every data directory — and left the service definition untouched. That file quietly preserved
+settings from the machine's previous life, so a node rebuilt from a "clean" start came back
+carrying old values, and said so only in a log line on other nodes that read like noise.</p>
+
+<p>When you rebuild a node, reconcile the service definition too. Otherwise you are not starting
+clean; you are starting with a fresh database and a stale identity.</p>
+
+<hr>
+
+<p><em>A node is the most ordinary contribution anyone can make to SOV, and the most useful. It
+needs no permission, no company, and no new hardware — only a machine that stays on and a
+connection that lets it answer.</em></p>
+
+</main>
+<footer class="site"><div class="wrap">
+  <p>SOV Network — an open, self-contained protocol. No central operator, no single switch to flip.</p>
+  <p>This page is part of the SOV Academy and mirrors the in-app content.</p>
+</div></footer>
+</body>
+</html>
