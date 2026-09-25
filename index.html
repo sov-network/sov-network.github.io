@@ -581,18 +581,19 @@
       <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
     <div class="card"><h3>macOS <span class="tag">.app</span></h3>
       <p>Also runs as a full node. Unsigned/ad-hoc — first launch needs right-click &rarr; Open.<br>
-      <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos.tar.gz">Download for macOS</a></p></div>
+      <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-arm64.tar.gz">Apple&nbsp;Silicon</a>
+      &middot;
+      <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Intel</a></p></div>
     <div class="card"><h3>Linux</h3>
       <p>Run a node or the wallet.<br>
       <a href="https://github.com/sov-network/relay-releases/releases/latest">All downloads &amp; source</a></p></div>
     <div class="card"><h3>Verify</h3>
-      <p>Every release ships a threshold-signed manifest + signature — check it before installing.<br>
-      <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json">manifest</a>
+      <p>Every release ships a threshold-signed manifest — the signature is inside it
+      (<code>sigs</code>, ed25519). Check it before installing.<br>
+      <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json">signed manifest</a>
       &middot;
-      <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json.sig">signature</a></p></div>
+      <a href="https://github.com/sov-network/relay-releases/releases/latest/download/SHA256SUMS.txt">checksums</a></p></div>
   </div>
-  <p class="note" style="margin-top:18px">The signed update manifest isn't published yet —
-  verify the APK/Windows/macOS package checksums against the release page in the meantime.</p>
   <p class="sub" style="margin-top:14px">GitHub down or blocked where you are? Every SOV node
   seeds these files directly over BitTorrent — no account, no company, nothing to suspend.
   <a href="get.html">Get the magnet links →</a></p>
