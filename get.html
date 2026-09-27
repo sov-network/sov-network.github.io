@@ -55,13 +55,15 @@
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
     <div class="card"><h3>macOS <span class="tag">Apple Silicon</span></h3>
-      <p>M1 and later. Also runs as a full node. Unsigned/ad-hoc &mdash; first launch needs a
-      right-click &rarr; Open. 101 MB. Version 1.2.3.<br>
+      <p>M1 and later. Also runs as a full node. Unsigned/ad-hoc &mdash; unpack it, then
+      right-click the app and choose Open. If macOS refuses anyway, open System Settings &rarr;
+      Privacy &amp; Security and choose Open Anyway. 101 MB. Version 1.2.3.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-arm64.tar.gz">Download for Apple Silicon</a></p></div>
     <div class="card"><h3>macOS <span class="tag">Intel</span></h3>
-      <p>Intel Macs. Also runs as a full node. Unsigned/ad-hoc &mdash; first launch needs a
-      right-click &rarr; Open. 102 MB. Version 1.2.3.<br>
+      <p>Intel Macs. Also runs as a full node. Unsigned/ad-hoc &mdash; unpack it, then
+      right-click the app and choose Open. If macOS refuses anyway, open System Settings &rarr;
+      Privacy &amp; Security and choose Open Anyway. 102 MB. Version 1.2.3.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Download for Intel</a></p></div>
     <div class="card"><h3>Linux <span class="tag">AppImage</span></h3>
@@ -91,7 +93,9 @@
       // A browser cannot distinguish an Apple Silicon Mac from an Intel one (both report
       // "MacIntel"), so offer the common case and name the other rather than guess wrong.
       p = { label: 'Download for macOS (Apple Silicon)', file: 'sovnode-macos-arm64.tar.gz',
-            note: '101 MB. First launch: right-click the app and choose Open. On an Intel Mac, use the Intel build below instead.' };
+            note: '101 MB. Unpack it, then right-click the app and choose Open. If macOS refuses anyway, '
+                  + 'open System Settings \u2192 Privacy & Security and choose Open Anyway. '
+                  + 'On an Intel Mac, use the Intel build below instead.' };
     } else if (/Linux/i.test(ua)) {
       p = { label: 'Download for Linux', file: 'sovnode-linux-x64.AppImage',
             note: 'AppImage, 95 MB. Make it executable and run it — no install. Also works as a full node.' };
@@ -130,6 +134,16 @@
     before installing. Each release also carries a signed
     <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json">sov-manifest.json</a>
     &mdash; the file the app itself verifies (Ed25519, against the trust key built into it) before it will self-update.
+  </p>
+  <p class="note" style="margin-top:10px">
+    <strong>On a Mac, why the warning?</strong> The Mac builds are not signed by Apple. Signing means
+    buying an identity from Apple and renewing it every year, and SOV has no company to put on it &mdash;
+    that is the point of the project, not an oversight. So macOS treats the app as coming from an
+    unidentified developer. Unpack it, right-click the app and choose Open; if macOS still refuses,
+    allow it once in System Settings &rarr; Privacy &amp; Security. If you prefer the Terminal:
+    <code>xattr -d com.apple.quarantine &quot;SOV Node.app&quot;</code>.
+    Check the download against <a href="https://github.com/sov-network/relay-releases/releases/latest/download/SHA256SUMS.txt">SHA256SUMS.txt</a>
+    first &mdash; that tells you the file is the one the network published, which is the thing worth knowing.
   </p>
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
   <p class="sub">GitHub down or blocked where you are? The same v1.2.3 files are also seeded over
