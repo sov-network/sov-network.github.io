@@ -83,7 +83,7 @@ protection:</p>
 <pre><code>stored = R &middot; normalize(embedding)</code></pre>
 <ul>
 <li><code>R</code> is a <strong>secret orthogonal transform</strong> derived from a per-network seed.
-  <strong>That seed is not published anywhere.</strong> It is not a value in the source code, so
+  <strong>That seed is minted when a network is born, and is not published anywhere.</strong> It is not a value in the source code, so
   reading the software tells you nothing about how to undo the scrambling &mdash; and a copy of a
   node's database, on its own, is useless.
   <strong>Being precise about what remains:</strong> the operators who run nodes do hold that seed,

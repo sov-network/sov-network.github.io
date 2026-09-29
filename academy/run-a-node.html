@@ -85,8 +85,7 @@ and <strong>AWS Graviton</strong> — pick an Intel/AMD (x86_64) shape.</p>
 <hr />
 <h2 id="2-the-firewall-the-part-that-actually-blocks-people">2. The firewall — the part that actually blocks people</h2>
 <p>The single most common reason a node "installs fine but nobody can reach it" is the<br />
-firewall. <strong>Cloud providers block inbound ports in two separate places, and you must<br />
-open both.</strong></p>
+firewall. <strong>Cloud providers block inbound ports in two separate places, and a directly reachable node needs both open.</strong> A node that cannot open them still works &mdash; it falls back to serving <em>through</em> other nodes automatically (see &ldquo;Circuit relay&rdquo; below), which is slower but needs no configuration at all. Opening both is how you become a fully direct peer, not how you become a peer.</p>
 <ul>
 <li><strong>Door 1 — the cloud firewall</strong> (in the provider console): a <strong>Security List</strong> on<br />
   Oracle, a <strong>Security Group</strong> on AWS, or a <strong>VPC firewall rule</strong> on Google.</li>
