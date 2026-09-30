@@ -66,13 +66,13 @@ biometric cryptography):</p>
 <ul>
 <li>A random <strong>master key K</strong> is generated and wrapped in an <strong>error-correcting code</strong>.</li>
 <li>It is blended with your palm template into a single blob called <strong>Helper Data</strong>.</li>
-<li><strong>K is used to derive your Ed25519 keypair &rarr; your Sovereign ID, then immediately discarded.</strong>
+<li><strong>K is used to derive your Ed25519 keypair &rarr; your SOV ID, then immediately discarded.</strong>
   The master key is never stored anywhere.</li>
 <li>Only <strong>H</strong> is sent to the network. <strong>H looks like random noise</strong> and reveals nothing
   about your palm or key.</li>
 </ul>
 <p>When you come back and re-scan, the error-correcting code fixes the small differences between
-scans and <strong>recovers the exact same K &rarr; the same Sovereign ID.</strong> That's how you restore your
+scans and <strong>recovers the exact same K &rarr; the same SOV ID.</strong> That's how you restore your
 wallet <strong>with your palm instead of a seed phrase</strong> — and why a slightly different scan (or the
 wrong hand) simply fails.</p>
 

@@ -43,7 +43,7 @@ matters to you, it should weigh in your decision to enrol.</p>
 <table>
 <thead><tr><th>What</th><th>Why it exists</th></tr></thead>
 <tbody>
-<tr><td><strong>Your Sovereign ID</strong> (e.g. <code>SOV-XXXXXXXXXXXXXXXX</code>) and public key</td><td>Your account. Everything else hangs off it.</td></tr>
+<tr><td><strong>Your SOV ID</strong> (e.g. <code>SOV-XXXXXXXXXXXXXXXX</code>) and public key</td><td>Your account. Everything else hangs off it.</td></tr>
 <tr><td><strong>A nickname</strong> derived from that ID</td><td>So people see a readable name. It is computed from the ID alone and carries nothing about your body, despite the legacy field name.</td></tr>
 <tr><td><strong>A protected palm template</strong></td><td>The one-human-one-account check. Not a palm image &mdash; a list of numbers put through a scrambling transform.</td></tr>
 <tr><td><strong>A protected face template</strong></td><td>The same check, across both hands: a palm template cannot tell that a person's left and right hands belong to one human, so the face captured during the liveness step is the cross-hand anchor. Also scrambled, never an image.</td></tr>
@@ -116,7 +116,7 @@ the route to do it is being worked out rather than settled. If you are reading t
 to make a request, that is exactly the gap we are describing.</p>
 
 <h2 id="what-others-see">What websites you log into with SOV receive</h2>
-<p>When you use your SOV identity to sign in to another site, that site receives your Sovereign ID,
+<p>When you use your SOV identity to sign in to another site, that site receives your SOV ID,
 your public key and signatures proving the ID is genuine, your ID-derived nickname, a one-way check
 value for the password you chose for that site, and a list of node addresses so it can reach the
 network. <strong>It receives no biometric data of any kind</strong>, and it cannot see your balance, your

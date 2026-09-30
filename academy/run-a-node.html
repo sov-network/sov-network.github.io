@@ -263,7 +263,7 @@ sov-relay  1.3.1    x4   -         -          devmode
 are about to run is byte-for-byte the software the network is running. Keep the hash &mdash;
 after any future upgrade, repeat this check against what the network is serving then.</p>
 <p><strong>Tell the node who you are</strong></p>
-<p>One command. It asks for your Sovereign ID, checks it while you are still
+<p>One command. It asks for your SOV ID, checks it while you are still
 sitting there, and writes the configuration itself.</p>
 <pre><code class="language-bash">sudo snap run sov-relay.setup
 </code></pre>
@@ -272,14 +272,14 @@ because mistyping the ID is the mistake that actually happens:</p>
 <pre><code>SOV Node &mdash; operator setup
 ------------------------------------------------------------
 
-Your Sovereign ID is the wallet the network pays for your proof of service.
+Your SOV ID is the wallet the network pays for your proof of service.
 Enrol on the SOV phone app, then copy it from Profile.
 Form: SOV- followed by 16 hex characters.
-Sovereign ID:   That is not a Sovereign ID. Expected SOV- then 16 hex characters,
+SOV ID:   That is not a SOV ID. Expected SOV- then 16 hex characters,
   for example SOV-1A2B3C4D5E6F7A8B. Copy it exactly from Profile.
 
-Your Sovereign ID is the wallet the network pays for your proof of service.
-Sovereign ID:   Looks right.
+Your SOV ID is the wallet the network pays for your proof of service.
+SOV ID:   Looks right.
 
 A new node needs ONE address to find the network; it learns the rest by gossip.
 Get one from whoever gave you the software, or from another operator.
@@ -300,7 +300,7 @@ wallet app does, and carries on from there. Supplying one is simply faster, and 
 what you do if someone invited you to run a node and handed you theirs.</p>
 
 <blockquote>
-<p><strong>A brand-new node refuses to start without a Sovereign ID, on purpose.</strong>
+<p><strong>A brand-new node refuses to start without a SOV ID, on purpose.</strong>
 Left empty, the network has no wallet to credit &mdash; you would serve citizens for
 weeks and earn nothing, with nothing on screen to tell you. A mistyped ID is refused
 too, because an ID nobody owns sends your payouts nowhere. Upgrading a node that
@@ -318,23 +318,23 @@ output, not an illustration.</p>
 [2/9] Loading node identity...
 
   ==============================================================
-   CANNOT START &mdash; operator Sovereign ID problem
+   CANNOT START &mdash; operator SOV ID problem
   ==============================================================
       OPERATOR_SOVEREIGN_ID is not set.
       This node would serve citizens but earn nothing, because the network has
       no wallet to credit for your proof of service.
-      Enrol on the SOV phone app, copy your Sovereign ID from Profile, set it in
+      Enrol on the SOV phone app, copy your SOV ID from Profile, set it in
       your .env, then start the node again.
 </code></pre>
 <p><em>You mistyped it &mdash; here, one character short:</em></p>
 <pre><code>[2/9] Loading node identity...
 
   ==============================================================
-   CANNOT START &mdash; operator Sovereign ID problem
+   CANNOT START &mdash; operator SOV ID problem
   ==============================================================
-      OPERATOR_SOVEREIGN_ID is "SOV-CA234DCCA7BDEDE", which is not a Sovereign ID.
+      OPERATOR_SOVEREIGN_ID is "SOV-CA234DCCA7BDEDE", which is not a SOV ID.
       Expected SOV- followed by 16 hex characters, e.g. SOV-1A2B3C4D5E6F7A8B.
-      Copy it exactly from your wallet: Profile -&gt; your Sovereign ID.
+      Copy it exactly from your wallet: Profile -&gt; your SOV ID.
 </code></pre>
 <p>Refusing is deliberate. A node that started anyway would serve citizens perfectly well for
 weeks while quietly earning nothing, and you would have no way to notice. A wrong ID is worse
@@ -350,7 +350,7 @@ than a blank one, because the payouts go somewhere real that simply is not you.<
 
 <p><strong>What the rest of the network does with that ID.</strong> Your node does not admit itself.
 When it first meets the mesh it sends a signup, and the peers that receive it check, on their
-own copies of the ledger, that the Sovereign ID belongs to a real enrolled citizen and that
+own copies of the ledger, that the SOV ID belongs to a real enrolled citizen and that
 this citizen is not already running more nodes than the rules allow. A node offering no ID at
 all is refused outright &mdash; anonymous nodes are exactly what a Sybil attack is made of.</p>
 <p>It is not put to every node on the network, which would get slower the more the network grew.
