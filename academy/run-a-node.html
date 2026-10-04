@@ -218,57 +218,65 @@ all three systems: Windows, macOS and Linux. Install it, switch the node on, and
 &mdash; no snap, no VPS, no terminal. That is section 7, and for most operators it is the whole job.
 <br><br>
 This section is the <em>headless server</em> route: the standalone package for a machine with no
-desktop, which you download from a running node and check against two others. Every node serves
-the exact package it is running, so the commands below work as written. The outputs shown are
-real, taken from a fresh install of version 1.4.84; only your SOV ID and the node addresses are
-replaced with examples.</div>
-<p>The node software is distributed by <strong>the network itself</strong> — there is no app store to
-trust. You download it straight from a running node, and you verify it yourself.</p>
-<p><strong>Download from a live node</strong></p>
-<pre><code class="language-bash">curl -O http://&lt;LIVE_NODE_IP&gt;/sov-relay.snap
+desktop. Every command below works as written, and every output shown is real, taken from a fresh
+install of version 1.4.88; only the SOV ID is replaced with an example. You never need a node&rsquo;s
+address: they are not published, and the node finds the network by itself.</div>
+<p>The node software is the exact package every node on the network runs. Get it whichever way
+suits you &mdash; the checksum is the same for all of them:</p>
+<ul>
+<li><strong>In a browser:</strong> the <a href="../get.html#server">download page</a>, under
+<em>Run a node on a server</em>.</li>
+<li><strong>In a terminal</strong> (below): straight from the public release.</li>
+<li><strong>By torrent</strong> &mdash; seeded by the network&rsquo;s own nodes, with a web seed, so it
+completes even if one source is down: <a href="../torrents/sov-relay.snap.torrent">sov-relay.snap.torrent</a>.</li>
+<li><strong>On IPFS</strong> &mdash; the CID is on the download page.</li>
+<li>If another operator gave you their node&rsquo;s address, every node also serves it at
+<code>http://&lt;their-node&gt;/sov-relay.snap</code>.</li>
+</ul>
+<p><strong>Download</strong></p>
+<pre><code class="language-bash">curl -LO https://github.com/sov-network/relay-releases/releases/latest/download/sov-relay.snap
+curl -LO https://github.com/sov-network/relay-releases/releases/latest/download/sov-relay.snap.sha256
+sha256sum -c sov-relay.snap.sha256
 </code></pre>
-<p><strong>Verify it before you install it.</strong> Nobody signs this for you and no app store
-vouched for it, so the checking is yours. It takes about thirty seconds.</p>
-<p><em>Step 1 &mdash; hash what you downloaded.</em></p>
-<pre><code class="language-bash">sha256sum sov-relay.snap
+<p>Real output of the last line:</p>
+<pre><code>sov-relay.snap: OK
 </code></pre>
-<p><em>Step 2 &mdash; fetch the same file from two <strong>other</strong> nodes and hash those too.</em>
-One node could be compromised, or one network path tampered with. Three independent sources
-agreeing is what makes that implausible &mdash; an attacker would need all three at once.</p>
-<pre><code class="language-bash">curl -s -o b.snap http://&lt;SECOND_NODE_IP&gt;/sov-relay.snap
-curl -s -o c.snap http://&lt;THIRD_NODE_IP&gt;/sov-relay.snap
-sha256sum sov-relay.snap b.snap c.snap   # all three MUST match
-rm b.snap c.snap
+<p><strong>Check it a second way.</strong> The torrent comes over a different route, from the nodes
+themselves. Two routes agreeing is what makes a tampered copy implausible:</p>
+<pre><code class="language-bash">aria2c --seed-time=0 -d via-torrent https://sov-network.github.io/torrents/sov-relay.snap.torrent
+sha256sum sov-relay.snap via-torrent/sov-relay.snap   # both MUST match
 </code></pre>
-<p>If even one differs, stop. Do not install it, and tell the community which node served the
-odd copy.</p>
+<pre><code>91d58f27a67700b1d285247f469394263f0ba73bf4ab8d60dccfdd2abd86385f  sov-relay.snap
+91d58f27a67700b1d285247f469394263f0ba73bf4ab8d60dccfdd2abd86385f  via-torrent/sov-relay.snap
+</code></pre>
+<p>If they differ, stop. Do not install it.</p>
 <p><strong>Install</strong> (<code>--dangerous</code> = not from the Snap Store, by design; <code>--devmode</code> =<br />
 unconfined sandbox for now)</p>
 <pre><code class="language-bash">sudo apt-get update &amp;&amp; sudo apt-get install -y snapd
 sudo snap install --dangerous --devmode sov-relay.snap
 </code></pre>
-<p><em>Step 3 &mdash; verify what actually landed on disk.</em> This is the step people skip, and
-it is the one that matters: it proves the software now installed is the software you checked,
-not something swapped in between download and install.</p>
+<p><em>Then verify what actually landed on disk.</em> This is the step people skip, and it is the one
+that matters: it proves the software now installed is the software you checked.</p>
 <pre><code class="language-bash">snap list sov-relay                                  # note the Rev, e.g. x1
 sudo sha256sum /var/lib/snapd/snaps/sov-relay_x1.snap
 </code></pre>
-<p>Real output from a fresh install (your version and hash will be whatever the network runs today):</p>
+<p>Real output (your version and hash will be whatever the network runs today):</p>
 <pre><code>Name       Version       Rev  Tracking  Publisher  Notes
-sov-relay  1.4.84-plain  x1   -         -          devmode
+sov-relay  1.4.88-plain  x1   -         -          devmode
 
-e20887c6723d0aa0793489b29b53bd2261eb51893270079c3313bbad025e8e83
+91d58f27a67700b1d285247f469394263f0ba73bf4ab8d60dccfdd2abd86385f  /var/lib/snapd/snaps/sov-relay_x1.snap
 </code></pre>
-<p>That hash must equal the one all three nodes agreed on in step 2. If it does, the node you
-are about to run is byte-for-byte the software the network is running. Keep the hash &mdash;
-after any future upgrade, repeat this check against what the network is serving then.</p>
+<p>The hash must equal the one you checked above. There is one more check you cannot skip, and it is
+automatic: the network admits a node only if it runs exactly the software the network runs, so a
+node that joins is running a genuine copy.</p>
 <p><strong>Tell the node who you are</strong></p>
 <p>One command. It asks for your SOV ID, checks it while you are still
 sitting there, and writes the configuration itself.</p>
 <pre><code class="language-bash">sudo snap run sov-relay.setup
 </code></pre>
 <p>This is real output from an operator setting up a node, including the typo,
-because mistyping the ID is the mistake that actually happens:</p>
+because mistyping the ID is the mistake that actually happens. At the network address, just press
+Enter:</p>
 <pre><code>SOV Node — operator setup
 ------------------------------------------------------------
 
@@ -286,9 +294,9 @@ Form: SOV- followed by 16 hex characters.
 Sovereign ID: SOV-1A2B3C4D5E6F7A8B
   Looks right.
 
-A new node needs ONE address to find the network; it learns the rest by gossip.
-Get one from whoever gave you the software, or from another operator.
-Bootstrap address(es), comma-separated (blank to skip): &lt;BOOTSTRAP_NODE_IP&gt;
+No network address is needed: just press Enter and the node finds the network by itself.
+If another operator gave you their node's address, you can enter it to connect faster.
+Network address (optional, press Enter to skip): 
 
 Host hygiene
 ------------------------------------------------------------
@@ -306,7 +314,7 @@ back-fills any table that drifts from its peers. Nothing here recurs.
 
 Saved to /var/snap/sov-relay/x1/.env
   operator : SOV-1A2B3C4D5E6F7A8B
-  bootstrap: &lt;BOOTSTRAP_NODE_IP&gt;
+  network address: none - the node finds the network by itself
 
 Start the node and watch it join:
   sudo snap restart sov-relay
@@ -317,10 +325,10 @@ That is the entire reason this command exists.</p>
 <p><strong>Run setup first.</strong> A freshly installed node waits for it: until it has your SOV ID
 it does not start, and its log says <code>Not set up yet</code> and names this command.</p>
 
-<p><strong>About the bootstrap address.</strong> You can leave it blank. A node with
-no address asks the published pool mirrors where the network is, the same way the
-wallet app does, and carries on from there. Supplying one is simply faster, and is
-what you do if someone invited you to run a node and handed you theirs.</p>
+<p><strong>About the network address.</strong> Leave it blank. Node addresses are not published
+anywhere, on purpose, and a node needs none: it finds the network through the public peer-to-peer
+directory (the BitTorrent DHT), usually within a minute. You would only enter one if another operator
+invited you to their own node.</p>
 
 <blockquote>
 <p><strong>A brand-new node refuses to start without a SOV ID, on purpose.</strong>
@@ -387,23 +395,22 @@ so "is this a real citizen" is answered locally, never by asking anyone.</p>
 <pre><code class="language-bash">sudo snap restart sov-relay
 sudo snap logs -f sov-relay.sov-relay
 </code></pre>
-<p>A healthy first boot walks through nine steps, finds its peers, receives the network&rsquo;s
-biometric seed and the citizen records, and asks a sample of peers to approve it. These are real
-lines from a fresh install (a selection; node IDs shortened):</p>
+<p>A healthy first boot walks through nine steps, finds the network with no address given,
+receives the network&rsquo;s biometric seed and the citizen records, and asks a sample of peers to
+approve it. These are real lines from a fresh install (a selection; node IDs shortened):</p>
 <pre><code>[1/9] Verifying software integrity...
-      ✓ Source root: 0664842c8eb97143... (63 files)
+      ✓ Source root: e1e934b3889658c6... (63 files)
 [2/9] Loading node identity...
       ✓ Operator: SOV-1A2B3C4D5E6F7A8B
-      ✓ Node ID: b201198e699a6a8fd50ad936432f89a7...
 [3/9] Opening node database...
       ℹ  No citizens yet - their records arrive from peers once this node joins.
 [4/9] Configuring network reachability...
       ✓ Reachability:  circuit-relay
 [5/9] Loading node discovery pool...
-      ✓ Known nodes in pool: 0
+      No address given - finding the network through the DHT (this can take a minute)
+      ✓ DHT announce active (infohash 97d02d0ec4c5…, storage refused)
       Peer mesh server listening on :7771
 [6/9] Starting phone mesh fragment router...
-      ✓ Fragment routing ready (K=3 of N=5)
 [7/9] Starting SOV transfer engine...
       ✓ Guard 1 (nonce chain)    active
       ✓ Guard 2 (spend lock)     active
@@ -413,10 +420,11 @@ lines from a fresh install (a selection; node IDs shortened):</p>
       ✓ Listening for SOV app connections
 [9/9] Starting system tray and operator dashboard...
       ✓ Operator dashboard at http://127.0.0.1:8080/dashboard
+      ✓ Operator dashboard at http://127.0.0.1:8080/dashboard
 [Mesh] Waiting for the network biometric seed - it arrives with this node's approval; duplicate detection starts then
 [Mesh] Peer connected: … v1.0.0
-[Mesh] Adopted the network seed from … — biometric dedup is now interoperable (fp=a32256118d0c2c2e).
 [Mesh] Peer connected: … v1.0.0
+[Mesh] Adopted the network seed from … — biometric dedup is now interoperable (fp=…).
 [Mesh] Peer connected: … v1.0.0
 [Mesh] STATE_DELTA: synced 2 enrollments
 [Operator] Signing up: asking 3 peer(s); 3 signed approval(s) needed
