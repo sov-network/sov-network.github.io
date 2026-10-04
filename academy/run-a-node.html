@@ -209,7 +209,7 @@ while the box still silently drops them.</p>
 </blockquote>
 <hr />
 <h2 id="6-install-the-node-software-the-snap">6. Install the node software (the snap)</h2>
-<div class="note"><strong>Where this stands (September 2026).</strong> The network is live &mdash; it
+<div class="note"><strong>Where this stands (October 2026).</strong> The network is live &mdash; it
 launched on 25 August 2026 &mdash; and every node checks the exact software its peers are running
 before it will talk to them. A node built from anything else is refused, on purpose.
 <br><br>
@@ -218,13 +218,13 @@ all three systems: Windows, macOS and Linux. Install it, switch the node on, and
 &mdash; no snap, no VPS, no terminal. That is section 7, and for most operators it is the whole job.
 <br><br>
 This section is the <em>headless server</em> route: the standalone package for a machine with no
-desktop, which you download from a running node and check against two others. <strong>That download
-channel is not live yet</strong> &mdash; the nodes do not serve the package at the moment, so the
-commands below cannot be followed today. They are written against the real software and are kept
-here for the day the channel opens. Check this page before you start.</div>
+desktop, which you download from a running node and check against two others. Every node serves
+the exact package it is running, so the commands below work as written. The outputs shown are
+real, taken from a fresh install of version 1.4.84; only your SOV ID and the node addresses are
+replaced with examples.</div>
 <p>The node software is distributed by <strong>the network itself</strong> — there is no app store to
 trust. You download it straight from a running node, and you verify it yourself.</p>
-<p><strong>Download from a live node</strong> (once the channel is live)</p>
+<p><strong>Download from a live node</strong></p>
 <pre><code class="language-bash">curl -O http://&lt;LIVE_NODE_IP&gt;/sov-relay.snap
 </code></pre>
 <p><strong>Verify it before you install it.</strong> Nobody signs this for you and no app store
@@ -250,14 +250,14 @@ sudo snap install --dangerous --devmode sov-relay.snap
 <p><em>Step 3 &mdash; verify what actually landed on disk.</em> This is the step people skip, and
 it is the one that matters: it proves the software now installed is the software you checked,
 not something swapped in between download and install.</p>
-<pre><code class="language-bash">snap list sov-relay                                  # note the Rev, e.g. x4
-sudo sha256sum /var/lib/snapd/snaps/sov-relay_x4.snap
+<pre><code class="language-bash">snap list sov-relay                                  # note the Rev, e.g. x1
+sudo sha256sum /var/lib/snapd/snaps/sov-relay_x1.snap
 </code></pre>
-<p>Real output from a live node:</p>
-<pre><code>Name       Version  Rev  Tracking  Publisher  Notes
-sov-relay  1.3.1    x4   -         -          devmode
+<p>Real output from a fresh install (your version and hash will be whatever the network runs today):</p>
+<pre><code>Name       Version       Rev  Tracking  Publisher  Notes
+sov-relay  1.4.84-plain  x1   -         -          devmode
 
-4fb089dffd604112b67fb2ad9280624fc07cc80cb79c1e8d12a2e2dd208743b1
+e20887c6723d0aa0793489b29b53bd2261eb51893270079c3313bbad025e8e83
 </code></pre>
 <p>That hash must equal the one all three nodes agreed on in step 2. If it does, the node you
 are about to run is byte-for-byte the software the network is running. Keep the hash &mdash;
@@ -269,23 +269,44 @@ sitting there, and writes the configuration itself.</p>
 </code></pre>
 <p>This is real output from an operator setting up a node, including the typo,
 because mistyping the ID is the mistake that actually happens:</p>
-<pre><code>SOV Node &mdash; operator setup
+<pre><code>SOV Node — operator setup
 ------------------------------------------------------------
 
-Your SOV ID is the wallet the network pays for your proof of service.
+
+Your Sovereign ID is the wallet the network pays for your proof of service.
 Enrol on the SOV phone app, then copy it from Profile.
 Form: SOV- followed by 16 hex characters.
-SOV ID:   That is not a SOV ID. Expected SOV- then 16 hex characters,
+Sovereign ID: SOV-1A2B3C4D5E6F7A8
+  That is not a Sovereign ID. Expected SOV- then 16 hex characters,
   for example SOV-1A2B3C4D5E6F7A8B. Copy it exactly from Profile.
 
-Your SOV ID is the wallet the network pays for your proof of service.
-SOV ID:   Looks right.
+Your Sovereign ID is the wallet the network pays for your proof of service.
+Enrol on the SOV phone app, then copy it from Profile.
+Form: SOV- followed by 16 hex characters.
+Sovereign ID: SOV-1A2B3C4D5E6F7A8B
+  Looks right.
 
 A new node needs ONE address to find the network; it learns the rest by gossip.
 Get one from whoever gave you the software, or from another operator.
-Bootstrap address(es), comma-separated (blank to skip):
-Saved to /var/snap/sov-relay/current/.env
+Bootstrap address(es), comma-separated (blank to skip): &lt;BOOTSTRAP_NODE_IP&gt;
+
+Host hygiene
+------------------------------------------------------------
+journald has no size cap, so logs grow until the disk is full.
+Cap the system journal at 200 MB? [Y/n] 
+journald capped at 200 MB and vacuumed (backup: journald.conf.bak_sovsetup)
+Swap present: 4096 MB
+vm.swappiness is 60 (swaps eagerly). 10 is better for a node.
+Set vm.swappiness=10? [Y/n] 
+vm.swappiness=10 (persisted in /etc/sysctl.conf)
+
+Everything else looks after itself: the node prunes its own history hourly,
+compacts its database (auto_vacuum=INCREMENTAL), reaps dead peers, and
+back-fills any table that drifts from its peers. Nothing here recurs.
+
+Saved to /var/snap/sov-relay/x1/.env
   operator : SOV-1A2B3C4D5E6F7A8B
+  bootstrap: &lt;BOOTSTRAP_NODE_IP&gt;
 
 Start the node and watch it join:
   sudo snap restart sov-relay
@@ -293,6 +314,8 @@ Start the node and watch it join:
 </code></pre>
 <p>The mistake is caught while you are typing rather than three restarts later.
 That is the entire reason this command exists.</p>
+<p><strong>Run setup first.</strong> A freshly installed node waits for it: until it has your SOV ID
+it does not start, and its log says <code>Not set up yet</code> and names this command.</p>
 
 <p><strong>About the bootstrap address.</strong> You can leave it blank. A node with
 no address asks the published pool mirrors where the network is, the same way the
@@ -361,28 +384,23 @@ will be picked. The check itself is free &mdash; every node already holds the en
 so "is this a real citizen" is answered locally, never by asking anyone.</p>
 
 <p><strong>Start it and watch it join</strong></p>
-<pre><code class="language-bash">sudo snap start sov-relay.sov-relay
+<pre><code class="language-bash">sudo snap restart sov-relay
 sudo snap logs -f sov-relay.sov-relay
 </code></pre>
-<p>A healthy first boot walks through nine steps. This is real output from a live node &mdash;
-yours should look like this:</p>
-<pre><code>══════════════════════════════════════════════════════════
-   SOV Node  —  Sovereign Citizen Infrastructure
-══════════════════════════════════════════════════════════
-[1/9] Verifying software integrity...
-      ✓ Source files verified
+<p>A healthy first boot walks through nine steps, finds its peers, receives the network&rsquo;s
+biometric seed and the citizen records, and asks a sample of peers to approve it. These are real
+lines from a fresh install (a selection; node IDs shortened):</p>
+<pre><code>[1/9] Verifying software integrity...
+      ✓ Source root: 0664842c8eb97143... (63 files)
 [2/9] Loading node identity...
-      Node key loaded from encrypted file
       ✓ Operator: SOV-1A2B3C4D5E6F7A8B
       ✓ Node ID: b201198e699a6a8fd50ad936432f89a7...
-      ✓ Key: encrypted-file
 [3/9] Opening node database...
-      Node database: /var/snap/sov-relay/current/node.db (AES-256 encrypted)
+      ℹ  No citizens yet - their records arrive from peers once this node joins.
 [4/9] Configuring network reachability...
-      ✓ Public IP:     &lt;your-ip&gt;:443
       ✓ Reachability:  circuit-relay
 [5/9] Loading node discovery pool...
-      ✓ Known nodes in pool: 6
+      ✓ Known nodes in pool: 0
       Peer mesh server listening on :7771
 [6/9] Starting phone mesh fragment router...
       ✓ Fragment routing ready (K=3 of N=5)
@@ -393,10 +411,25 @@ yours should look like this:</p>
       ✓ Operator engine initialised
 [8/9] Opening citizen gateway...
       ✓ Listening for SOV app connections
+[9/9] Starting system tray and operator dashboard...
+      ✓ Operator dashboard at http://127.0.0.1:8080/dashboard
+[Mesh] Waiting for the network biometric seed - it arrives with this node's approval; duplicate detection starts then
+[Mesh] Peer connected: … v1.0.0
+[Mesh] Adopted the network seed from … — biometric dedup is now interoperable (fp=a32256118d0c2c2e).
+[Mesh] Peer connected: … v1.0.0
+[Mesh] Peer connected: … v1.0.0
+[Mesh] STATE_DELTA: synced 2 enrollments
+[Operator] Signing up: asking 3 peer(s); 3 signed approval(s) needed
+[Operator] Approval 1/3 from …
+[Operator] Approval 2/3 from …
+[Operator] ✓ Registration approved by 3 peer(s)
+[Operator] Registered locally (approved by: …, …, …)
 </code></pre>
-<p><strong>How to read it.</strong> Step 2 is the one to check first: if it says
-<code>! No OPERATOR_SOVEREIGN_ID set &mdash; this node earns nothing</code>, stop and fix your
-<code>.env</code> before walking away. At step 4, <code>Reachability: circuit-relay</code> is
+<p><strong>How to read it.</strong> Step 2 is the one to check first: if it stops with
+<code>CANNOT START &mdash; operator Sovereign ID problem</code>, run
+<code>sudo snap run sov-relay.setup</code> again before walking away. The last lines are the
+ones that matter: <code>Registration approved by 3 peer(s)</code> means the network has checked
+you and accepted the node. At step 4, <code>Reachability: circuit-relay</code> is
 normal and fine &mdash; it means your box sits behind NAT and reaches the mesh through peers
 instead of directly. Step 5 binding <code>:7771</code> is what proves the peer mesh came up; if
 you see <code>EADDRINUSE</code> retries there instead, a second copy of the node is almost
