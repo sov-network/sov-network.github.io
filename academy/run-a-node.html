@@ -194,15 +194,25 @@ prefer Oracle Always Free (no expiry).</p>
 <ol start="4">
 <li><strong>Networking → Virtual Cloud Networks → your VCN → Security Lists → Default → Add<br />
    Ingress Rules.</strong></li>
-<li>For each of <strong>22, 80, 443, 7771</strong>: Source <code>0.0.0.0/0</code> · IP Protocol <strong>TCP</strong> · that<br />
-   Destination Port.</li>
+<li>Source <code>0.0.0.0/0</code> · IP Protocol <strong>TCP</strong> · Destination Port Range
+   <code>80,443,7771</code> (22 is already there). Oracle creates one rule per port.</li>
 </ol>
 <p><strong>Door 2 — the box's own firewall</strong> (Oracle images block these by default)</p>
-<pre><code class="language-bash">sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443  -j ACCEPT
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 7771 -j ACCEPT
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80   -j ACCEPT
+<pre><code class="language-bash">sudo iptables -I INPUT -p tcp -m state --state NEW --dport 80   -j ACCEPT
+sudo iptables -I INPUT -p tcp -m state --state NEW --dport 443  -j ACCEPT
+sudo iptables -I INPUT -p tcp -m state --state NEW --dport 7771 -j ACCEPT
 sudo netfilter-persistent save     # persists across reboot
+sudo iptables -L INPUT -n --line-numbers   # the new rules must sit ABOVE the REJECT line
 </code></pre>
+<p>No position number: <code>-I INPUT</code> puts each rule at the top. (An older version of this guide said
+<code>-I INPUT 6</code>; on a current Oracle Ubuntu 22.04 image the REJECT rule is line 5, so that put the rules
+<em>below</em> it and the ports stayed blocked.)</p>
+<p><strong>Check it from your own computer</strong> (needs <code>nc</code>):</p>
+<pre><code class="language-bash">nc -zv -w 5 &lt;your-server-ip&gt; 443 7771
+</code></pre>
+<p><code>No route to host</code> or a timeout = still blocked (check both doors). <code>Connection refused</code> = the
+port is open and reachable &mdash; nothing answers only because the node is not running yet. Test 443 and 7771:
+many home connections answer port 80 by themselves, so a port-80 test from home proves nothing.</p>
 <blockquote>
 <p>❗ Skipping Door 2 is the classic Oracle mistake — the console shows the ports "open"<br />
 while the box still silently drops them.</p>
