@@ -139,3 +139,8 @@ section .sub{color:var(--dim); margin:0 0 22px}
 
 footer.site{padding:30px 0 50px; color:var(--dim); font-size:13.5px; text-align:center}
 footer.site p{margin:4px 0}
+
+.videos{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin:14px 0 18px}
+.videos figure{margin:0}
+.videos video{width:100%; aspect-ratio:16/9; background:#0c0e14; border-radius:10px; display:block}
+.videos figcaption{font-size:.9rem; opacity:.8; margin-top:6px}

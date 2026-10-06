@@ -138,21 +138,39 @@ to stay on localhost.</p>
 below show exactly where each provider hides Door 1.</p>
 <hr />
 <h2 id="3-google-cloud-stand-up-a-free-node">3. Google Cloud — stand up a free node</h2>
+<p>Recorded for real on Google Cloud (account details and addresses hidden). Three short parts:</p>
+<div class="videos">
+<figure><video controls preload="none" playsinline src="video/google-1-create-server.mp4"></video><figcaption>Part 1 &middot; Create the server</figcaption></figure>
+<figure><video controls preload="none" playsinline src="video/google-2-open-ports.mp4"></video><figcaption>Part 2 &middot; Open the ports</figcaption></figure>
+<figure><video controls preload="none" playsinline src="video/google-3-server.mp4"></video><figcaption>Part 3 &middot; Install the node</figcaption></figure>
+</div>
 <p><strong>Create the instance</strong></p>
 <ol>
-<li><strong>Compute Engine → VM instances → Create.</strong> Region <code>us-west1</code> / <code>us-central1</code> /<br />
-<code>us-east1</code>, machine type <strong><code>e2-micro</code></strong> (always-free-eligible).</li>
-<li>Boot disk <strong>Ubuntu 22.04 LTS</strong> (x86_64). Allow HTTP/HTTPS if asked. Create, and copy<br />
-   the <strong>External IP</strong>.</li>
+<li><strong>Compute Engine → VM instances → Create instance.</strong> Name it (we use <code>sov-node</code>).
+   Region <code>us-central1</code>, <code>us-west1</code> or <code>us-east1</code> &mdash; the regions where the free
+   <code>e2-micro</code> is offered. Series <strong>E2</strong>, machine type <strong><code>e2-micro</code></strong>.</li>
+<li><strong>OS and storage → Change:</strong> <strong>Ubuntu 22.04 LTS</strong> (x86/64), boot disk
+   <strong>Standard persistent disk</strong>, <strong>30 GB</strong> (the size the free tier covers) → Select.</li>
+<li><strong>Networking:</strong> in <strong>Network tags</strong> type <code>sov-node</code> &mdash; the firewall rule
+   below uses this tag. Keep <strong>External IPv4 address: Ephemeral</strong> (the public address).</li>
+<li><strong>Security → Manage access → Add manually generated SSH keys → Add item:</strong> paste your public
+   key. The key's last word becomes your username on the server.</li>
+<li><strong>Create.</strong> Note the <strong>External IP</strong>.</li>
 </ol>
+<p>The price estimate shows the normal price; Google's free tier covers one <code>e2-micro</code> a month in those
+three regions.</p>
 <p><strong>Open the ports (VPC firewall — Door 1)</strong></p>
-<ol start="3">
-<li><strong>VPC network → Firewall → Create firewall rule.</strong></li>
-<li>Direction <strong>Ingress</strong> · Targets <strong>All instances</strong> · Source IPv4 ranges <code>0.0.0.0/0</code>.</li>
-<li>Protocols and ports → <strong>TCP</strong> → <code>443,7771,80,22</code> → <strong>Create</strong>.</li>
-<li>GCP's Ubuntu images don't ship an extra host firewall, so Door 2 is usually already<br />
-   open — but verify you can reach port 443 after installing.</li>
+<ol start="6">
+<li>Search <strong>firewall</strong> → <strong>Firewall → Create firewall rule.</strong> Name <code>allow-sov-node</code>,
+   network <code>default</code>, direction <strong>Ingress</strong>, action <strong>Allow</strong>.</li>
+<li>Targets <strong>Specified target tags</strong> → <code>sov-node</code> &middot; Source IPv4 ranges <code>0.0.0.0/0</code>.</li>
+<li><strong>Specified protocols and ports → TCP</strong> → <code>80,443,7771</code> → <strong>Create</strong>.
+   (SSH, port 22, is already allowed by Google's default rule.)</li>
 </ol>
+<p><strong>Door 2:</strong> Google's Ubuntu image has no host firewall to open &mdash; <code>sudo iptables -L INPUT -n</code>
+shows <code>policy ACCEPT</code>. Check from your own computer with <code>nc -zv -w 5 &lt;your-server-ip&gt; 443 7771</code>:
+<code>Connection refused</code> means open (nothing listening yet); <code>No route to host</code> means the rule or the tag is missing.
+Then install the node as in section 6.</p>
 <blockquote>
 <p>⚠️ GCP free instances have been billing-terminated before. Set a <strong>Budget alert</strong><br />
 (e.g. at \$1) so an accident can't silently run up a bill.</p>
@@ -180,6 +198,12 @@ prefer Oracle Always Free (no expiry).</p>
 </blockquote>
 <hr />
 <h2 id="5-oracle-cloud-free-forever-node-recommended">5. Oracle Cloud — free-forever node (recommended)</h2>
+<p>Recorded for real on Oracle Cloud (account details and addresses hidden). Three short parts:</p>
+<div class="videos">
+<figure><video controls preload="none" playsinline src="video/oracle-1-create-server.mp4"></video><figcaption>Part 1 &middot; Create the server</figcaption></figure>
+<figure><video controls preload="none" playsinline src="video/oracle-2-open-ports.mp4"></video><figcaption>Part 2 &middot; Open the ports (Door 1)</figcaption></figure>
+<figure><video controls preload="none" playsinline src="video/oracle-3-server.mp4"></video><figcaption>Part 3 &middot; Door 2, then install the node</figcaption></figure>
+</div>
 <p>Oracle Cloud Infrastructure "Always Free" is the recommended host: free forever with no<br />
 12-month expiry.</p>
 <p><strong>Create the instance</strong></p>
