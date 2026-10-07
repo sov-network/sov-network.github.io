@@ -37,7 +37,8 @@ copy-pasteable commands for a technical reader.</p>
 <li><a href="#5-oracle-cloud--free-forever-node-recommended">Oracle Cloud — free-forever node (recommended)</a></li>
 <li><a href="#6-install-the-node-software-the-snap">Install the node software (the snap)</a></li>
 <li><a href="#7-run-a-node-on-windows--no-vps-no-linux">Run a node on Windows — no VPS, no Linux</a></li>
-<li><a href="#8-earning--the-operator-payout">Earning — the operator payout</a></li>
+<li><a href="#8-how-your-node-is-found">How your node is found</a></li>
+<li><a href="#9-earning-the-operator-payout">Earning — the operator payout</a></li>
 </ol>
 <hr />
 <h2 id="1-where-to-run-it-pick-a-host">1. Where to run it — pick a host</h2>
@@ -52,7 +53,7 @@ copy-pasteable commands for a technical reader.</p>
 <tbody>
 <tr>
 <td><strong>Oracle Cloud "Always Free"</strong> ✅ recommended</td>
-<td>Free <strong>forever</strong> (no 12-month expiry)</td>
+<td>Always Free tier (advertised with no expiry at the time of writing)</td>
 <td>Pick shape <code>VM.Standard.E2.1.Micro</code> (AMD x86_64).</td>
 </tr>
 <tr>
@@ -62,26 +63,25 @@ copy-pasteable commands for a technical reader.</p>
 </tr>
 <tr>
 <td><strong>Amazon AWS <code>t3.micro</code>/<code>t2.micro</code></strong></td>
-<td>Free <strong>12 months only</strong>, then paid</td>
+<td>Time-limited free offer, then paid (check current terms)</td>
 <td>Fine to learn on; not ideal for a node you want to keep for years.</td>
 </tr>
 <tr>
-<td><strong>Your Windows PC at home</strong></td>
+<td><strong>Your own computer at home</strong> (Windows, macOS or Linux)</td>
 <td>Free · no VPS · easiest</td>
 <td>The SOV app is itself a full node — see <a href="#7-run-a-node-on-windows--no-vps-no-linux">section 7</a>.</td>
 </tr>
 </tbody>
 </table>
-<p>Any provider works — a paid droplet, a home server, any box with a public IPv4 and<br />
-ports you can open.</p>
+<p>Any provider works — a paid droplet, a home server. A public IPv4 with ports you can open makes<br />
+a node a direct peer; without one it still serves through other nodes.</p>
 <blockquote>
 <h3 id="the-one-hard-rule-choose-x86_64-not-arm">🔴 The one hard rule: choose x86_64, not ARM</h3>
 <p>The node ships an <strong>x86_64</strong> Node.js runtime and a native AES SQLite module. It will<br />
 <strong>not</strong> start on an ARM machine. Avoid <strong>Oracle Ampere A1</strong> (<code>VM.Standard.A1.Flex</code>)<br />
 and <strong>AWS Graviton</strong> — pick an Intel/AMD (x86_64) shape.</p>
 </blockquote>
-<p><strong>Minimum spec:</strong> Ubuntu 20.04+ (22.04 LTS recommended), 1 GB RAM (2 GB comfortable),<br />
-10 GB disk, a public IPv4.</p>
+<p><strong>Tested on:</strong> Ubuntu 22.04 LTS, 1 GB RAM (Google e2-micro, Oracle E2.1.Micro). A public IPv4 makes it a direct peer.</p>
 <hr />
 <h2 id="2-the-firewall-the-part-that-actually-blocks-people">2. The firewall — the part that actually blocks people</h2>
 <p>The single most common reason a node "installs fine but nobody can reach it" is the<br />
@@ -193,8 +193,8 @@ Then install the node as in section 6.</p>
 <li>Keep the SSH (<strong>22</strong>) rule but tighten its source to <strong>My IP</strong>. Save rules.</li>
 </ol>
 <blockquote>
-<p>⏳ AWS free tier is only <strong>12 months</strong> — great to learn on, but for a permanent node<br />
-prefer Oracle Always Free (no expiry).</p>
+<p>⏳ The AWS free offer is time-limited — great to learn on, but for a permanent node<br />
+prefer Oracle Always Free (check current terms).</p>
 </blockquote>
 <hr />
 <h2 id="5-oracle-cloud-free-forever-node-recommended">5. Oracle Cloud — free-forever node (recommended)</h2>
@@ -204,8 +204,8 @@ prefer Oracle Always Free (no expiry).</p>
 <figure><video controls preload="none" playsinline src="video/oracle-2-open-ports.mp4"></video><figcaption>Part 2 &middot; Open the ports (Door 1)</figcaption></figure>
 <figure><video controls preload="none" playsinline src="video/oracle-3-server.mp4"></video><figcaption>Part 3 &middot; Door 2, then install the node</figcaption></figure>
 </div>
-<p>Oracle Cloud Infrastructure "Always Free" is the recommended host: free forever with no<br />
-12-month expiry.</p>
+<p>Oracle Cloud Infrastructure "Always Free" is the recommended host: at the time of writing it is<br />
+advertised as free with no expiry (check Oracle's current terms).</p>
 <p><strong>Create the instance</strong></p>
 <ol>
 <li><strong>Compute → Instances → Create.</strong> Image <strong>Canonical Ubuntu 22.04</strong>.</li>
@@ -253,7 +253,7 @@ all three systems: Windows, macOS and Linux. Install it, switch the node on, and
 <br><br>
 This section is the <em>headless server</em> route: the standalone package for a machine with no
 desktop. Every command below works as written, and every output shown is real, taken from a fresh
-install of version 1.4.88; only the SOV ID is replaced with an example. You never need a node&rsquo;s
+install of version 1.4.88 (your version and hashes will be whatever the network runs today); only the SOV ID is replaced with an example. You never need a node&rsquo;s
 address: they are not published, and the node finds the network by itself.</div>
 <p>The node software is the exact package every node on the network runs. Get it whichever way
 suits you &mdash; the checksum is the same for all of them:</p>
@@ -261,11 +261,9 @@ suits you &mdash; the checksum is the same for all of them:</p>
 <li><strong>In a browser:</strong> the <a href="../get.html#server">download page</a>, under
 <em>Run a node on a server</em>.</li>
 <li><strong>In a terminal</strong> (below): straight from the public release.</li>
-<li><strong>By torrent</strong> &mdash; seeded by the network&rsquo;s own nodes, with a web seed, so it
+<li><strong>By torrent</strong> &mdash; seeded by a network node, with a GitHub web seed, so it
 completes even if one source is down: <a href="../torrents/sov-relay.snap.torrent">sov-relay.snap.torrent</a>.</li>
 <li><strong>On IPFS</strong> &mdash; the CID is on the download page.</li>
-<li>If another operator gave you their node&rsquo;s address, every node also serves it at
-<code>http://&lt;their-node&gt;/sov-relay.snap</code>.</li>
 </ul>
 <p><strong>Download</strong></p>
 <pre><code class="language-bash">curl -LO https://github.com/sov-network/relay-releases/releases/latest/download/sov-relay.snap
@@ -361,8 +359,7 @@ it does not start, and its log says <code>Not set up yet</code> and names this c
 
 <p><strong>About the network address.</strong> Leave it blank. Node addresses are not published
 anywhere, on purpose, and a node needs none: it finds the network through the public peer-to-peer
-directory (the BitTorrent DHT), usually within a minute. You would only enter one if another operator
-invited you to their own node.</p>
+directory (the BitTorrent DHT), usually within a minute.</p>
 
 <blockquote>
 <p><strong>A brand-new node refuses to start without a SOV ID, on purpose.</strong>
@@ -379,11 +376,11 @@ output, not an illustration.</p>
 <p><em>You left the field blank:</em></p>
 <pre><code>[1/9] Verifying software integrity...
       &#10003; Source files verified
-      &#10003; Source root: fd50c4e5ec915012... (42 files)
+      &#10003; Source root: e1e934b3889658c6... (63 files)
 [2/9] Loading node identity...
 
   ==============================================================
-   CANNOT START &mdash; operator SOV ID problem
+   CANNOT START &mdash; operator Sovereign ID problem
   ==============================================================
       OPERATOR_SOVEREIGN_ID is not set.
       This node would serve citizens but earn nothing, because the network has
@@ -395,7 +392,7 @@ output, not an illustration.</p>
 <pre><code>[2/9] Loading node identity...
 
   ==============================================================
-   CANNOT START &mdash; operator SOV ID problem
+   CANNOT START &mdash; operator Sovereign ID problem
   ==============================================================
       OPERATOR_SOVEREIGN_ID is "SOV-CA234DCCA7BDEDE", which is not a SOV ID.
       Expected SOV- followed by 16 hex characters, e.g. SOV-1A2B3C4D5E6F7A8B.
@@ -416,13 +413,13 @@ than a blank one, because the payouts go somewhere real that simply is not you.<
 <p><strong>What the rest of the network does with that ID.</strong> Your node does not admit itself.
 When it first meets the mesh it sends a signup, and the peers that receive it check, on their
 own copies of the ledger, that the SOV ID belongs to a real enrolled citizen and that
-this citizen is not already running more nodes than the rules allow. A node offering no ID at
+the node runs exactly the software the rest of the network runs. Extra nodes are admitted, but a
+citizen's fourth and later relays earn nothing. A node offering no ID at
 all is refused outright &mdash; anonymous nodes are exactly what a Sybil attack is made of.</p>
 <p>It is not put to every node on the network, which would get slower the more the network grew.
-A small random sample of peers is asked, and a majority of that sample has to agree. The cost
-stays flat as the network grows, and the security improves rather than degrades: an attacker
-would have to control most of a randomly chosen group, and cannot know in advance which peers
-will be picked. The check itself is free &mdash; every node already holds the enrollment ledger,
+A small sample of peers is asked (currently 5), and a set number of them (currently 3, never more
+than the peers available) must sign approval; other nodes accept the newcomer only with a certificate
+of those signatures from nodes they already know. The cost stays flat as the network grows. The check itself is free &mdash; every node already holds the enrollment ledger,
 so "is this a real citizen" is answered locally, never by asking anyone.</p>
 
 <p><strong>Start it and watch it join</strong></p>
@@ -490,19 +487,19 @@ app is itself a full node.</p>
 <p><strong>Path A — normal home broadband</strong></p>
 <ol>
 <li>Install the SOV app (<code>SovNode.exe</code>) and sign in / restore your wallet.</li>
-<li>Open the <strong>Node</strong> tab → the <strong>"Run a Node"</strong> card. Leave <strong>Reachability = Auto</strong>.</li>
-<li>Toggle <strong>Run a Node → ON.</strong> It opens your router by UPnP, or relays <em>through</em> the SOV<br />
-   mesh if it can't. When it's serving, the card shows <strong>"Reachable at: …"</strong>.</li>
+<li>Open <strong>Settings → Run a SOV Node</strong> (or tap the network chip on Home). Leave <strong>"How citizens reach this node"</strong> on <strong>Automatic</strong>.</li>
+<li>Switch the <strong>Full Node</strong> card <strong>ON</strong>. It opens your router by UPnP, or relays <em>through</em> the SOV<br />
+   mesh if it can't. When it is serving, the status line reads <strong>"Serving citizens"</strong>.</li>
 </ol>
 <p>That's the whole setup for most people. Keep the PC on — <strong>uptime is what earns.</strong></p>
 <p><strong>Path B — mobile hotspot / CGNAT / "can't port-forward"</strong></p>
 <p>Use this if Path A can't make you reachable (common on mobile hotspots and CGNAT ISPs).<br />
-Tailscale Funnel gives your node a stable public HTTPS address, free forever, over a<br />
+Tailscale Funnel gives your node a stable public HTTPS address (free on its personal plan at the time of writing), over a<br />
 purely outbound connection — no port-forward, no domain, no VPS.</p>
 <ol>
 <li>Make a free Tailscale account at <code>login.tailscale.com/start</code> and install Tailscale for<br />
    Windows; log in once. (Tailscale uses SSO — there is no in-app password by design.)</li>
-<li>In the SOV app: <strong>Node</strong> tab → set <strong>Reachability = Tailscale Funnel</strong> → toggle <strong>ON</strong>.</li>
+<li>In the SOV app: <strong>Settings → Run a SOV Node</strong> → set <strong>"How citizens reach this node"</strong> to <strong>Tailscale Funnel</strong> → switch <strong>Full Node</strong> ON.</li>
 <li>The first time only, tap <strong>"Enable Tailscale Funnel"</strong> and click <strong>Approve</strong> in the<br />
    browser. The app then serves at <code>wss://&lt;your-pc&gt;.&lt;tailnet&gt;.ts.net</code>.</li>
 </ol>
@@ -517,14 +514,14 @@ the outside can open a connection <em>to</em> it, no citizen is being served the
 The two are different, and the app says which is true instead of flattering you:</p>
 
 <ul>
-<li><strong>Running, but not reachable</strong> — the node is up and syncing, but
-nothing outside has connected to it yet. It is a client, not yet a server.</li>
-<li><strong>Serving citizens</strong> — a real peer has connected in from outside.
-This is <em>earned</em>: the badge turns green on its own the moment someone gets
-through, never just because you switched the node on.</li>
+<li><strong>Starting • joining the mesh…</strong> — the node has just been switched on.</li>
+<li><strong>Joining the mesh</strong> — the node is up and working out how the network will route
+citizens to it. If no direct route exists it serves through the mesh automatically.</li>
+<li><strong>Serving citizens</strong> — citizens can reach the node: directly, through Tailscale Funnel,
+or through the mesh.</li>
 </ul>
 
-<p>On a home connection the most common reason for "running but not reachable" is
+<p>On a home connection the most common reason a node stays on "Joining the mesh" for a while is
 simply that nothing is letting the outside in yet. There are three ways to fix it,
 and the node picks the best one it can:</p>
 
@@ -548,7 +545,7 @@ screen off, it can serve the network around the clock. The node has no window an
 needs none — it is a server, the same as any cloud node. You run the wallet app on
 whatever device you already use; the home machine just earns to that wallet.</p>
 
-<h2 id="9-how-your-node-is-found">9. How your node is found</h2>
+<h2 id="8-how-your-node-is-found">8. How your node is found</h2>
 
 <p>Nothing publishes your address for you, and no address is written into the
 wallet app. If it were, every published build would be a list of the machines
@@ -603,16 +600,16 @@ works in the other direction: your node finds the network through the DHT
 perfectly well from behind any NAT.</p>
 </blockquote>
 
-<h2 id="8-earning-the-operator-payout">8. Earning — the operator payout</h2>
-<p>Running a node earns SOV for the real work of keeping the network running: witnessing<br />
-transactions and staying online.</p>
+<h2 id="9-earning-the-operator-payout">9. Earning — the operator payout</h2>
+<p>Running a node earns SOV for the real work of keeping the network running: staying online and<br />
+serving (a per-transaction reward also exists, currently set to 0 by vote).</p>
 <ul>
 <li>A node must be <strong>continuously up for a qualifying period</strong> (a governance-set default of<br />
   about three weeks) before it earns — sleeping or shutting the machine down breaks the<br />
   streak, so payouts reward genuine uptime, not machines that are mostly off.</li>
-<li>Payment is a <strong>fixed reward per relay per 30-day period</strong> (governance-set), with a<br />
+<li>Payment is a <strong>fixed reward per relay per 30-day period</strong> (currently 20 SOV, set by vote), with a<br />
   steep anti-monopoly curve: your first relay earns the full reward, a second and third<br />
-  earn a small fraction, and a fourth or beyond earns nothing — so running a farm of<br />
+  earn a quarter each, and a fourth or beyond earns nothing — so running a farm of<br />
   nodes gives you no advantage, and the network stays spread across many independent<br />
   operators.</li>
 <li>Operators are paid <strong>from the fees that flow in first</strong>, and only then, capped, from<br />

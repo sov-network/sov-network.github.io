@@ -52,29 +52,28 @@ done without storing real biometric data. SOV does exactly that.</p>
 <h2 id="what-actually-happens">What actually happens (step by step)</h2>
 
 <h3 id="on-your-phone">1. On your phone — a number, not a picture</h3>
-<p>Your phone camera looks at your palm and a small on-device AI model (TFLite) turns it into a
-<strong>list of numbers</strong> (an "embedding") &mdash; a mathematical summary of the shape, with no picture in it.</p>
+<p>Your phone camera looks at your palm; an on-device model finds it, and a texture summary of its creases
+(LBP) becomes a <strong>list of numbers</strong> (an "embedding") &mdash; a mathematical summary, with no picture in it.</p>
 <ul>
 <li><strong>The palm photo never leaves your phone.</strong> It isn't uploaded, and it isn't even saved.</li>
 <li>An embedding is a <em>one-way</em> summary: you <strong>cannot rebuild the palm image</strong> from those
   numbers (and the image is gone anyway).</li>
 </ul>
 
-<h3 id="your-palm-becomes-your-key">2. Your palm becomes your key — and the key is never stored</h3>
+<h3 id="your-palm-becomes-your-key">2. Your palm is bound to your key — and the key never leaves your phone</h3>
 <p>SOV runs a <strong>fuzzy commitment scheme</strong> (Juels&ndash;Wattenberg, 1999 — the basis of modern
 biometric cryptography):</p>
 <ul>
-<li>A random <strong>master key K</strong> is generated and wrapped in an <strong>error-correcting code</strong>.</li>
-<li>It is blended with your palm template into a single blob called <strong>Helper Data</strong>.</li>
-<li><strong>K is used to derive your Ed25519 keypair &rarr; your SOV ID, then immediately discarded.</strong>
-  The master key is never stored anywhere.</li>
-<li>Only <strong>H</strong> is sent to the network. <strong>H looks like random noise</strong> and reveals nothing
-  about your palm or key.</li>
+<li>A random <strong>master key K</strong> is generated &mdash; your <strong>12 seed words are K written as words</strong> &mdash; and it is wrapped in an <strong>error-correcting code</strong>.</li>
+<li>It is blended with your palm template into a single blob called <strong>Helper Data (H)</strong>.</li>
+<li><strong>K derives your Ed25519 keypair &rarr; your SOV ID.</strong> Your phone keeps the private key in its
+  secure key store, and you keep K as your 12 words. The network never sees either.</li>
+<li><strong>H</strong> and your palm reading go to the network over the encrypted connection. <strong>H looks like random noise</strong>
+  on its own; the reading is scrambled by the node before it is stored (step 3), never kept raw.</li>
 </ul>
-<p>When you come back and re-scan, the error-correcting code fixes the small differences between
-scans and <strong>recovers the exact same K &rarr; the same SOV ID.</strong> That's how you restore your
-wallet <strong>with your palm instead of a seed phrase</strong> — and why a slightly different scan (or the
-wrong hand) simply fails.</p>
+<p>The scheme is built so that a later re-scan can correct the small differences between scans and
+<strong>recover the exact same K &rarr; the same SOV ID.</strong> <strong>Palm re-scan recovery is designed but switched off in the current app:</strong>
+today you restore your wallet with your 12 words, your backup file, or your guardians.</p>
 
 <h3 id="what-the-network-stores">3. What the network stores — a scrambled, revocable token</h3>
 <p>For the <em>one-human-one-account</em> check, the network keeps a representation of the embedding.
@@ -103,7 +102,7 @@ protection:</p>
   templates, and one that is close enough to an existing citizen is blocked as a repeat enrollment.
   The scrambling matrix is cosine-preserving, so the check still works mesh-wide <strong>without
   ever unscrambling anything</strong>.</li>
-<li><strong>Seedless recovery:</strong> re-scan &rarr; recover your keypair (above).</li>
+<li><strong>Recovery by re-scan:</strong> designed (above), not enabled in the current app.</li>
 <li><strong>Hand binding:</strong> the template is bound to LEFT/RIGHT, so the wrong hand fails even if similar.</li>
 </ul>
 <p>The stored token can answer exactly one thing: <em>"does this match an existing SOV citizen?"</em>
@@ -140,10 +139,9 @@ you'd get nothing usable:</p>
    the scrambling. Splitting the key so no single node holds it is planned work, not shipped work.
    The seed can also be rotated at any time, which re-scrambles every template and kills any copy
    taken earlier &mdash; that has been exercised on the live network, not just designed.</li>
-<li>Your <strong>identity key</strong> is recomputed from your live palm and <strong>never stored at all</strong>.</li>
+<li>Your <strong>identity key</strong> lives only in your phone&rsquo;s secure key store (your 12 words can rebuild it) and is <strong>never sent to the network</strong>.</li>
 </ol>
-<p>What SOV deliberately keeps is the <em>minimum</em> needed to enforce one-human-one-citizen and to let
-you recover your wallet with your hand — and not one bit more. It is a <strong>representative token</strong>
+<p>What SOV deliberately keeps is the <em>minimum</em> needed to enforce one-human-one-citizen — and not one bit more. It is a <strong>representative token</strong>
 that "could be anything," carries no real-world meaning, and cannot be used to trace, surveil,
 or de-anonymize the human behind it.</p>
 <blockquote>
@@ -194,7 +192,7 @@ them &mdash; a reviewer gets the whole picture, while a casual attacker does not
 <tr><td>No palm image ever leaves the phone</td><td>The camera frame is turned into numbers on the device and discarded. There is no upload, and nothing to steal from the network, because it was never there.</td></tr>
 <tr><td>No raw biometric template is stored</td><td>What the node keeps has been put through a secret, cosine-preserving transform. A stolen database yields scrambled vectors, not palms.</td></tr>
 <tr><td>The scrambling key is a secret, shared between operators, and being split</td><td>The seed is a per-network secret and appears nowhere in the published source, so a stolen database alone cannot be unscrambled. Operators who run nodes do hold it, so an operator could &mdash; splitting it so no one operator can is planned work. Rotation has been exercised on the live network: every stored template was re-scrambled under a new key and verified to be the same biometric afterwards. We publish the current state rather than the intended one.</td></tr>
-<tr><td>Your identity key is never stored</td><td>It is recomputed from your live palm each time and thrown away. There is no copy on any node to seize, subpoena or leak.</td></tr>
+<tr><td>Your identity key never leaves your phone</td><td>It is kept in the phone&rsquo;s secure key store and can be rebuilt from your 12 words. There is no copy on any node to seize, subpoena or leak.</td></tr>
 <tr><td>The helper data reveals nothing on its own</td><td>Without a live palm it is indistinguishable from noise. It is not a template and cannot be turned back into one.</td></tr>
 <tr><td>The stored token answers one question only</td><td><em>"Is this the same citizen who already enrolled?"</em> It cannot be matched against a police, passport or phone-vendor database: those systems hold their own formats, computed by their own models, and a number produced by one system has no meaning in another.</td></tr>
 <tr><td>A leak is recoverable</td><td>Rotating the network secret re-scrambles every stored token and turns any stolen copy into dead data. This is the thing a fingerprint database can never do.</td></tr>
@@ -205,9 +203,9 @@ them &mdash; a reviewer gets the whole picture, while a casual attacker does not
 <h3 id="compliance-summary">Compliance summary (one paragraph for a data-protection enquiry)</h3>
 <p>SOV does not collect, transmit or store biometric images. Palm capture happens entirely on the
 citizen's own device and the image is discarded immediately. What reaches the network is a
-protected, revocable token that cannot be reversed to a biometric, cannot be linked to any
-real-world identity record, and is used for exactly two purposes: preventing one human from
-holding multiple citizenships, and allowing that human to recover their own wallet. No name,
+protected, revocable token (for the palm, irreversible by construction) that cannot be linked to any
+real-world identity record, and is used for one purpose: preventing one human from
+holding multiple citizenships. No name,
 address, phone number, email or government identifier is collected at any point. Because the
 protection is revocable, a compromise can be remediated by rotating the network secret &mdash;
 a property conventional biometric databases do not have.</p>

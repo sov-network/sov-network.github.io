@@ -41,14 +41,14 @@
   human, one wallet, proven by your own biometrics on your device. Identity, messaging,
   justice, and governance on one protocol.</p>
   <div class="grid">
-    <div class="card"><h3>One human, one wallet</h3><p>Your palm is your key — processed
-      on your device, never sent to a server. No bots, no fake accounts, no whales who
-      joined a hundred times. Everyone counts equally.</p></div>
+    <div class="card"><h3>One human, one wallet</h3><p>Your palm proves you are one
+      unique person — the photo never leaves your phone; only a scrambled template does. The
+      network refuses a second enrolment, so nobody joins a hundred times. Everyone counts equally.</p></div>
     <div class="card"><h3>Your money, your rules</h3><p>Send SOV in seconds for a tiny,
       capped, citizen-voted fee that flows to the people running the network — not a bank.
       Fixed 50,000,000 supply.</p></div>
     <div class="card"><h3>Messaging &amp; justice built in</h3><p>Messages route through
-      standard ports and work behind firewalls; no content ever touches a relay. Disputes
+      standard ports and work behind firewalls; nodes pass on only encrypted messages and keep none of them. Disputes
       are settled by randomly-selected citizen juries, not courts.</p></div>
     <div class="card"><h3>Owned by the people who run it</h3><p>Self-contained nodes,
       no central operator list, no single switch to flip. Anyone can run one, and earn
@@ -69,7 +69,7 @@
     <img src="screens/apk_enroll_1_palmkey.jpg" alt="Your palm is your key" loading="lazy">
     </div>
     <div class="info"><h4>Your palm is your key</h4><span class="platform-tag">Phone (APK)</span>
-      <p class="subtitle">The onboarding explains it: your palm's crease pattern is your unbreakable identity.</p>
+      <p class="subtitle">The onboarding explains it: your palm's crease pattern proves you are one unique person; your 12 words restore your wallet.</p>
     </div>
   </div>
   <div class="tour-shot">
@@ -216,7 +216,7 @@
   </div>
 
   <div class="tour-stage"><span class="num">3</span><div>
-    <h3>Your money</h3><p>Send, receive and hold SOV. Your balance lives on your device.</p>
+    <h3>Your money</h3><p>Send, receive and hold SOV. Your balance is held by the network and only your key can move it.</p>
   </div></div>
   <div class="tour-shot">
     <div class="shot-img">
@@ -328,8 +328,8 @@
       <span class="marker" style="left:66.0%;top:7.5%">1</span>
     </div>
     <div class="info"><h4>SOV Enclave — the public town square</h4><span class="platform-tag">Phone + Desktop</span>
-      <p class="subtitle">The Enclave is citizen-governed: it goes live once citizens vote it on. Then any citizen can post — and any citizen can flag spam.</p>
-      <ol class="marker-list"><li>SOV Enclave — activated by a citizen vote in the Constitution tab</li></ol>
+      <p class="subtitle">The Enclave has been on since genesis: any citizen can post and any citizen can flag spam — and citizens can vote to switch it off.</p>
+      <ol class="marker-list"><li>SOV Enclave — on since genesis; a citizen vote in the Constitution tab can switch it off</li></ol>
     </div>
   </div>
   <div class="tour-shot">
@@ -343,7 +343,7 @@
   </div>
 
   <div class="tour-stage"><span class="num">6</span><div>
-    <h3>Vault — your funds can never be lost</h3><p>Lock SOV for your family, claim an inherited vault, or serve on a recovery jury.</p>
+    <h3>Vault — protect your funds for your family</h3><p>Lock SOV for your family, claim an inherited vault, or serve on a recovery jury.</p>
   </div></div>
   <div class="tour-shot">
     <div class="shot-img">
@@ -389,7 +389,7 @@
     <div class="info"><h4>Justice</h4><span class="platform-tag">Phone + Desktop</span>
       <ol class="marker-list">
         <li>Justice — cases you're a juror on</li>
-        <li>File a dispute with a 10 SOV bond — a random jury reviews it within 72 hours</li>
+        <li>File a dispute with a 10 SOV bond — a random jury of 3 to 7 citizens judges it; each juror has 48 hours to respond</li>
       </ol>
     </div>
   </div>
@@ -542,7 +542,7 @@
       <span class="marker" style="left:50.0%;top:56.0%">3</span>
     </div>
     <div class="info"><h4>Register a Platform</h4><span class="platform-tag">Phone + Desktop</span>
-      <p class="subtitle">Profile → Register a Platform. Your registration is signed by your wallet; a one-time SOV fee goes to the node operator pool.</p>
+      <p class="subtitle">Profile → Register a Platform. Your registration is signed by your wallet; a yearly SOV fee (currently 10 SOV) goes to the node operator pool.</p>
       <ol class="marker-list">
         <li>Enter your website's domain</li>
         <li>Your callback URL — where the network sends the signed login result</li>
@@ -588,14 +588,14 @@
       <p>Run a node or the wallet.<br>
       <a href="https://github.com/sov-network/relay-releases/releases/latest">All downloads &amp; source</a></p></div>
     <div class="card"><h3>Verify</h3>
-      <p>Every release ships a threshold-signed manifest — the signature is inside it
+      <p>Every release ships a signed manifest (currently one release key; threshold signing comes later) — the signature is inside it
       (<code>sigs</code>, ed25519). Check it before installing.<br>
       <a href="https://github.com/sov-network/relay-releases/releases/latest/download/sov-manifest.json">signed manifest</a>
       &middot;
       <a href="https://github.com/sov-network/relay-releases/releases/latest/download/SHA256SUMS.txt">checksums</a></p></div>
   </div>
-  <p class="sub" style="margin-top:14px">GitHub down or blocked where you are? Every SOV node
-  seeds these files directly over BitTorrent — no account, no company, nothing to suspend.
+  <p class="sub" style="margin-top:14px">GitHub down or blocked where you are? SOV nodes
+  also seed these files over BitTorrent — no account, no company, nothing to suspend.
   <a href="get.html">Get the magnet links →</a></p>
 </div></section>
 

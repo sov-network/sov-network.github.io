@@ -105,17 +105,17 @@ all. A tunnel dials outward and gives you a stable public endpoint anyway.</li>
 </ol>
 
 <p>Without any of these your node still takes part — it peers, replicates and validates through
-other nodes — but it cannot accept citizens directly, and it cannot complete operator
-registration, which requires proof that it can be reached.</p>
+other nodes, and it can still serve citizens through a circuit relay on a public node. Direct
+reachability makes it faster and more robust.</p>
 
 <h2>Getting paid</h2>
 
 <p>To earn, a node registers as an operator against an enrolled citizen identity. It announces
 itself, a sample of existing nodes interrogate it, and a quorum of them must approve. The
-payout is for uptime and for transactions carried, and the rates are governance parameters —
+payout is currently for continuous uptime (20 SOV per relay per 30 days; the per-transaction reward is currently 0), and the rates are governance parameters —
 citizens vote on them, no company sets them.</p>
 
-<p>Registration will not complete until your node can be reached, so settle reachability first.
+<p>Settle reachability early: a directly reachable node serves faster than one relayed through others.
 The node keeps retrying on its own; there is nothing to babysit.</p>
 
 <h2>Keeping it alive without touching it</h2>
