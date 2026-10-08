@@ -44,14 +44,14 @@
 
   <div id="all-platforms" class="grid" style="grid-template-columns:1fr">
     <div class="card"><h3>Android <span class="tag">APK</span></h3>
-      <p>Install directly on your phone. 116 MB. Version 1.2.25.<br>
+      <p>Install directly on your phone. 138 MB. Version 1.2.25.<br>
       <a class="btn primary" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-android.apk">Download APK</a></p>
       <p style="font-size:13px">Had a version before 1.2.0 installed? Uninstall it first &mdash; it was signed with a
       different certificate and Android will not update it in place. Then install this one and restore your wallet
       from your recovery words.</p></div>
     <div class="card"><h3>Windows <span class="tag">portable</span></h3>
-      <p>Portable — also runs as a full node. 87 MB. Version 1.2.25.<br>
+      <p>Portable — also runs as a full node. 92 MB. Version 1.2.25.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-windows-x64.zip">Download for Windows</a></p></div>
     <div class="card"><h3>macOS <span class="tag">Apple Silicon</span></h3>
@@ -67,7 +67,7 @@
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-macos-x64.tar.gz">Download for Intel</a></p></div>
     <div class="card"><h3>Linux <span class="tag">AppImage</span></h3>
-      <p>Also runs as a full node. Make it executable, then run it — no install. 95 MB. Version 1.2.25.<br>
+      <p>Also runs as a full node. Make it executable, then run it — no install. 108 MB. Version 1.2.25.<br>
       <a class="btn ghost" style="margin-top:10px"
          href="https://github.com/sov-network/relay-releases/releases/latest/download/sovnode-linux-x64.AppImage">Download for Linux</a></p></div>
   </div>
@@ -83,22 +83,22 @@
     // iOS first: iPads report as Mac, so check touch before assuming desktop.
     if (/Android/i.test(ua)) {
       p = { label: 'Download for Android', file: 'sovnode-android.apk',
-            note: 'APK, 116 MB. Your phone will ask you to allow installing from this source — that is normal outside an app store.' };
+            note: 'APK, 138 MB. Your phone will ask you to allow installing from this source — that is normal outside an app store.' };
     } else if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) {
       p = { ios: true };
     } else if (/Windows/i.test(ua)) {
       p = { label: 'Download for Windows', file: 'sovnode-windows-x64.zip',
-            note: 'Portable, 87 MB. No installer — unzip and run. Also works as a full node.' };
+            note: 'Portable, 92 MB. No installer — unzip and run. Also works as a full node.' };
     } else if (/Macintosh|Mac OS X/i.test(ua)) {
       // A browser cannot distinguish an Apple Silicon Mac from an Intel one (both report
       // "MacIntel"), so offer the common case and name the other rather than guess wrong.
       p = { label: 'Download for macOS (Apple Silicon)', file: 'sovnode-macos-arm64.tar.gz',
-            note: '101 MB. Unpack it, then right-click the app and choose Open. If macOS refuses anyway, '
+            note: '109 MB. Unpack it, then right-click the app and choose Open. If macOS refuses anyway, '
                   + 'open System Settings \u2192 Privacy & Security and choose Open Anyway. '
                   + 'On an Intel Mac, use the Intel build below instead.' };
     } else if (/Linux/i.test(ua)) {
       p = { label: 'Download for Linux', file: 'sovnode-linux-x64.AppImage',
-            note: 'AppImage, 95 MB. Make it executable and run it — no install. Also works as a full node.' };
+            note: 'AppImage, 108 MB. Make it executable and run it — no install. Also works as a full node.' };
     }
     if (!p) return;                      // unknown device — leave the full list showing
     var box = document.getElementById('primary-dl');
