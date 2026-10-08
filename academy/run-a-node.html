@@ -273,8 +273,8 @@ sha256sum -c sov-relay.snap.sha256
 <p>Real output of the last line:</p>
 <pre><code>sov-relay.snap: OK
 </code></pre>
-<p><strong>Check it a second way.</strong> The torrent comes over a different route, from the nodes
-themselves. Two routes agreeing is what makes a tampered copy implausible:</p>
+<p><strong>Check it a second way.</strong> The torrent comes over a different route, from a network node
+(with a GitHub web seed). Two routes agreeing is what makes a tampered copy implausible:</p>
 <pre><code class="language-bash">aria2c --seed-time=0 -d via-torrent https://sov-network.github.io/torrents/sov-relay.snap.torrent
 sha256sum sov-relay.snap via-torrent/sov-relay.snap   # both MUST match
 </code></pre>
@@ -487,8 +487,8 @@ app is itself a full node.</p>
 <p><strong>Path A — normal home broadband</strong></p>
 <ol>
 <li>Install the SOV app (<code>SovNode.exe</code>) and sign in / restore your wallet.</li>
-<li>Open <strong>Settings → Run a SOV Node</strong> (or tap the network chip on Home). Leave <strong>"How citizens reach this node"</strong> on <strong>Automatic</strong>.</li>
-<li>Switch the <strong>Full Node</strong> card <strong>ON</strong>. It opens your router by UPnP, or relays <em>through</em> the SOV<br />
+<li>On <strong>Home</strong>, tap <strong>"SOV Network · View Dashboard →"</strong> to open <strong>Node Status</strong>. Leave <strong>"How citizens reach this node"</strong> on <strong>Automatic</strong>.</li>
+<li>Switch <strong>Full Node</strong> <strong>ON</strong>. It opens your router by UPnP, or relays <em>through</em> the SOV<br />
    mesh if it can't. When it is serving, the status line reads <strong>"Serving citizens"</strong>.</li>
 </ol>
 <p>That's the whole setup for most people. Keep the PC on — <strong>uptime is what earns.</strong></p>
@@ -499,7 +499,7 @@ purely outbound connection — no port-forward, no domain, no VPS.</p>
 <ol>
 <li>Make a free Tailscale account at <code>login.tailscale.com/start</code> and install Tailscale for<br />
    Windows; log in once. (Tailscale uses SSO — there is no in-app password by design.)</li>
-<li>In the SOV app: <strong>Settings → Run a SOV Node</strong> → set <strong>"How citizens reach this node"</strong> to <strong>Tailscale Funnel</strong> → switch <strong>Full Node</strong> ON.</li>
+<li>In the SOV app: <strong>Home → "SOV Network · View Dashboard →"</strong> → set <strong>"How citizens reach this node"</strong> to <strong>Tailscale Funnel</strong> → switch <strong>Full Node</strong> ON.</li>
 <li>The first time only, tap <strong>"Enable Tailscale Funnel"</strong> and click <strong>Approve</strong> in the<br />
    browser. The app then serves at <code>wss://&lt;your-pc&gt;.&lt;tailnet&gt;.ts.net</code>.</li>
 </ol>
