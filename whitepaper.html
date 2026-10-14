@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOV Network whitepaper</title>
+<meta name="description" content="SOV Network technical whitepaper: one human, one account; a fixed-supply ledger of signed, majority-granted, replicated operations; end-to-end encrypted messages nodes do not store; a threat model, and a plain account of what the current release enforces and what is planned.">
+<link rel="canonical" href="https://sov-network.github.io/whitepaper.html">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Whitepaper typography — built on the site tokens in style.css */
+  .paper{padding:40px 0 56px}
+  .paper h1{font-size:34px; line-height:1.2; color:#fff; margin:0 0 8px}
+  .paper .meta{color:var(--dim); font-size:14px; margin:0 0 28px}
+  .paper h2{font-size:23px; color:#fff; margin:44px 0 10px; padding-top:8px; border-top:1px solid var(--line)}
+  .paper h3{font-size:17px; color:var(--gold); margin:26px 0 6px}
+  .paper p, .paper li{color:#d7e2f0}
+  .paper p{margin:0 0 14px}
+  .paper ul, .paper ol{margin:0 0 14px; padding-left:22px}
+  .paper li{margin-bottom:6px}
+  .paper code{background:rgba(255,255,255,.06); border-radius:5px; padding:1px 6px; font-size:.92em; color:var(--ink)}
+  .paper pre{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:14px 16px;
+             overflow-x:auto; font-size:13.5px; line-height:1.5; color:var(--ink); margin:0 0 16px}
+  .paper pre code{background:none; padding:0}
+  .abstract{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:0 0 28px}
+  .abstract p:last-child{margin-bottom:0}
+  .status{background:rgba(91,141,239,.08); border-left:3px solid var(--blue); border-radius:0 10px 10px 0;
+          padding:10px 14px; margin:4px 0 18px}
+  .status p{margin:0 0 6px; font-size:15px}
+  .status p:last-child{margin-bottom:0}
+  .status b{color:#fff}
+  .toc{background:var(--navy2); border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:16px 20px; margin:0 0 8px}
+  .toc h2{border:0; margin:0 0 8px; padding:0; font-size:17px}
+  .toc ol{margin:0; padding-left:22px; columns:2; column-gap:28px}
+  @media(max-width:640px){.toc ol{columns:1} .paper h1{font-size:28px}}
+  .paper table{width:100%; border-collapse:collapse; margin:0 0 16px; font-size:14.5px}
+  .paper th, .paper td{border-bottom:1px solid rgba(255,255,255,.08); padding:7px 8px; text-align:left; vertical-align:top; color:#d7e2f0}
+  .paper th{color:var(--gold); font-weight:700}
+  .tablewrap{overflow-x:auto}
+  @media print{
+    header.site, footer.site{display:none}
+    body{background:#fff; color:#000}
+    .paper p, .paper li, .paper td, .paper th, .paper h1, .paper h2, .status b{color:#000}
+    .paper h3, a{color:#000}
+    .abstract, .toc, .paper pre, .status{background:#fff; border-color:#999}
+  }
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <span class="brand"><img src="sov-logo.png" alt="">SOV&nbsp;NETWORK</span>
+  <nav>
+    <a href="index.html#what">What it is</a>
+    <a href="index.html#download">Download</a>
+    <a href="academy/index.html">Academy</a>
+    <a href="academy/run-a-node.html">Run a node</a>
+  </nav>
+</div></header>
+
+<main class="paper"><div class="wrap">
+
+<h1>SOV Network: one human, one account, on a network its users run</h1>
+<p class="meta">Version 1.2 — October 2026, node 1.4.99, app 1.2.35</p>
+
+<div class="abstract" id="abstract">
+<p><b>Abstract.</b> SOV stands for <b>Self-Owned Value</b>. SOV Network is an open protocol for identity,
+payments, messaging and self-government in which each account is meant to belong to exactly one living
+person. A palm scan and a live face check are made on the person's phone; nodes compare protected numeric
+templates, never images, and refuse a second enrolment that matches an existing one. Money is a fixed
+supply of 50,000,000 SOV in a replicated ledger that is not a blockchain: every balance change is an
+operation that must conserve value, and a spend of a citizen's own funds needs the citizen's signature
+and a slot granted by a majority of voting nodes. Messages are end-to-end encrypted, and nodes refuse
+plain text and keep no message content. Anyone can run a node; each node declares a fingerprint of the
+source it runs, and peers refuse nodes that declare unrecognised source. The network is in an early phase
+with a small set of operators: anything a citizen did not sign is accepted only from the network's own
+servers, and the app talks only to a server that proves which one it is. Each section below says what the current release enforces and what is
+planned, and section 2 sets out who can do what today.</p>
+</div>
+
+<nav class="toc" aria-label="Contents">
+<h2>Contents</h2>
+<ol>
+  <li><a href="#problem">The problem</a></li>
+  <li><a href="#threats">Threat model</a></li>
+  <li><a href="#identity">One human, one account</a></li>
+  <li><a href="#ledger">The ledger</a></li>
+  <li><a href="#messages">Messages</a></li>
+  <li><a href="#nodes">Nodes</a></li>
+  <li><a href="#economy">Economy</a></li>
+  <li><a href="#governance">Governance and justice</a></li>
+  <li><a href="#signin">Sign in with SOV</a></li>
+  <li><a href="#limits">Limits and open work</a></li>
+  <li><a href="#verify">Verify it yourself</a></li>
+</ol>
+</nav>
+
+<!-- ───────────────────────────────────────────────────────────── 1 -->
+<h2 id="problem">1. The problem</h2>
+<p>Most online systems cannot tell whether two accounts belong to one person. That gap explains much of
+what goes wrong: bot networks that simulate public opinion, sock-puppet accounts that outvote real users,
+scammers who are banned and return under a new name, and "one person, one vote" systems that are in
+practice "one email address, one vote".</p>
+<p>The usual remedies create a second problem. Proving uniqueness normally means handing a passport, a
+phone number or a selfie to a company that then holds a central database of real identities. Payments add
+a third: most digital money moves through intermediaries that see every transaction and can freeze an
+account. And platforms can remove a user or a whole community with one decision.</p>
+<p>SOV Network's approach: a person proves uniqueness once, with biometrics captured on their own phone;
+their identity is a key they hold; their money, messages and votes are handled by nodes that anyone can
+run and that check each other's work. How far each of those checks reaches in the current release is the
+subject of the rest of this paper.</p>
+
+<!-- ───────────────────────────────────────────────────────────── 2 -->
+<h2 id="threats">2. Threat model</h2>
+<p>Four adversaries, and what each can and cannot do against the current release (node 1.4.99, app
+1.2.35). The network today has a small set of operators who run its three servers, and in the places
+listed below the protocol relies on those servers being honest. Removing each of those dependencies is
+the open work in section 10.</p>
+
+<h3>2.1 A dishonest citizen</h3>
+<ul>
+  <li><b>Cannot</b> spend another citizen's SOV: every node verifies a spend against the signing key
+  recorded at enrolment. <b>Cannot</b> spend the same SOV twice: each spend needs a majority-granted
+  slot (section 4). <b>Cannot</b> create SOV: every operation must conserve value and the total is capped.</li>
+  <li><b>Cannot</b> enrol twice with the same palm or face: nodes refuse a template that matches an
+  enrolled one (palm cosine ≥ 0.92, face ≥ 0.70).</li>
+  <li><b>Can</b>, with a modified app, submit templates that did not come from a live capture. The
+  liveness challenge runs in the app; a node checks only that submitted templates are well formed and
+  match no one enrolled. It cannot prove they came from a living person. This is open.</li>
+  <li>A jury is drawn at random from all enrolled citizens, so capturing one requires controlling many
+  enrolled identities. The defence against that is the enrolment check above, not anything in the
+  justice system itself.</li>
+</ul>
+
+<h3>2.2 A dishonest node operator</h3>
+<p>Two kinds of node matter here. The network's <b>servers</b> are three nodes whose identity keys are built
+into every node and every app (a fixed trusted list, section 6.2). Any other node — a citizen's desktop
+node, or anyone running the published source — is admitted, serves citizens and relays what they sign,
+but is not trusted with anything a citizen did not sign.</p>
+<ul>
+  <li><b>Cannot</b> read message content (it is end-to-end encrypted), forge a citizen's signature, or
+  get a non-conserving operation accepted by honest nodes.</li>
+  <li><b>Can</b> reverse the transform on the biometric templates its node holds. Every full node holds
+  the network transform secret and a copy of every enrolled citizen's palm and face templates. What it
+  gets is numeric feature vectors — 128 numbers per palm and 192 per face — not photos. They are
+  encrypted at rest, so a stolen database file alone yields nothing usable; the running node and its
+  operator hold the key. Splitting the secret so that no single node holds it is open.</li>
+  <li>An operator outside the server list <b>cannot</b> get any other node to accept state no citizen
+  signed — replicated records, a system money operation, or a vote on a payment slot. It <b>cannot</b>
+  invent or alter a vote, a petition or a juror's vote (each carries the citizen's signed request, checked
+  by every node), and <b>cannot</b> change a governance parameter: a node takes a parameter from its peers
+  only when a majority of the servers report the same legal value.</li>
+  <li>A <b>server</b> operator <b>can</b> misdirect funds in operations a single server decides, which the
+  other nodes apply on its word, checking only conservation, balances and the supply cap: escrow release
+  and refund on orders it hosts, enrolment grants and operator payouts from the pools, and vault claims.
+  Jury verdicts are not in that list: every node re-checks a verdict from the plaintiff's signed filing
+  and each juror's signed vote (section 8.2).</li>
+  <li><b>Can</b> see the delivery records and connection times of citizens who connect to it, and can
+  run different code from the source it declares (section 6.4).</li>
+</ul>
+
+<h3>2.3 A network attacker</h3>
+<ul>
+  <li><b>Passive observer:</b> sees which addresses connect to which nodes and how much they send. Phone
+  to node traffic is TLS; node to node traffic is sealed per link; message content is end-to-end
+  encrypted on top.</li>
+  <li><b>Active attacker between a phone and a node:</b> nodes use self-signed certificates, so the app
+  does not rely on certificate authorities. Instead each server's first message carries a statement signed
+  with its identity key naming the certificate it serves, and the app sends nothing — no greeting, no
+  request, no enrolment data — until that statement verifies, names the certificate this connection
+  actually received, and comes from one of the built-in server keys. An attacker in between must present
+  his own certificate, so he is refused. He can still block or delay traffic. A citizen who pins their own
+  node is exempt from the built-in list (section 6.2).</li>
+  <li><b>Between nodes:</b> a node proves its identity key in every greeting, so an attacker cannot pose
+  as an existing node.</li>
+</ul>
+
+<h3>2.4 A compromised phone</h3>
+<ul>
+  <li>Whoever holds the unlocked device, or the signing key, can act as the citizen: spend, vote and
+  message. Optional per-transaction and daily caps bind every spend at every node. An optional
+  Spend-Lock encrypts the key under a PIN, and on Windows an optional Hardware-Lock seals it in the TPM.</li>
+  <li>Guardians (section 3.4) can move the account to a new key. Spends already made are not reversed.</li>
+</ul>
+
+<!-- ───────────────────────────────────────────────────────────── 3 -->
+<h2 id="identity">3. One human, one account</h2>
+
+<h3>3.1 Enrolment</h3>
+<p>The phone's camera captures the palm, and a bundled detector runs a live face check with a random
+movement challenge. On the device each capture is reduced to a feature vector: 128 numbers for the palm,
+192 for the face. Photos are not stored and are not sent; only the vectors travel, over TLS, to the node
+the app is connected to. Joining needs no phone number and no email address.</p>
+<p>The node refuses an enrolment that lacks either vector. The face is mandatory because palm matching
+cannot link one person's left palm to their right palm. If any part of the duplicate check cannot run,
+the node refuses.</p>
+
+<h3>3.2 Protected templates and the duplicate check</h3>
+<p>Before storing, the node transforms each vector with a secret orthogonal matrix
+(<code>stored = R · normalise(embedding)</code>). An orthogonal transform preserves cosine similarity, so
+two scans of the same palm still match. The matrix is derived from a network secret that each node
+receives when it is admitted. Templates are stored and replicated only in this form, in a database that
+is AES-256 encrypted at rest.</p>
+<p>Every new template is compared with every enrolled one. A palm at cosine ≥ 0.92 or a face at ≥ 0.70 is a
+duplicate, and the enrolment is refused. Templates travel with the enrolment broadcast; in the 3 October
+2026 live test a second node checked a palm enrolled ten seconds earlier through another node. Nodes
+short of disk run as "light" nodes: they hold no templates and ask three full nodes to run the check,
+accepting the answer only with two agreeing signed replies and no dissent.</p>
+
+<h3>3.3 Keys</h3>
+<p>The app generates a 128-bit random master key, shown once as a standard 12-word recovery phrase. The
+Ed25519 signing key is derived from it, and so is the Sovereign ID (<code>SOV-</code> plus 16 hexadecimal
+characters of the SHA-256 of the master key). The 12 words alone restore the wallet. A session for an
+enrolled Sovereign ID must be signed with the enrolled key; a re-enrolment that presents a different key
+is refused.</p>
+
+<h3>3.4 Guardians</h3>
+<p>A citizen can appoint up to 5 guardians, each appointment signed by the citizen. To move the account to
+a new key, guardians sign approvals naming the old and new key; a node re-keys only after it has itself
+verified at least 2 distinct approvals within a 72-hour window.</p>
+
+<div class="status">
+<p><b>Today:</b> duplicates are refused on every enrolment path, and the template protection holds against
+a copied database file. Templates are readable by any full node's operator, and a node cannot tell a live
+capture from a fabricated template.</p>
+<p><b>Planned:</b> splitting the transform secret across nodes is recorded as open work, and so is
+server-verifiable liveness. Duplicate matching is a linear scan, and an indexed search will be needed
+before the population reaches the millions.</p>
+</div>
+
+<!-- ───────────────────────────────────────────────────────────── 4 -->
+<h2 id="ledger">4. The ledger</h2>
+
+<h3>4.1 Not a blockchain</h3>
+<p>There is no mining, no block production and no global chain. Each node holds a full ledger. Agreement
+is reached per operation. Spends from an account are ordered by that account's own counter, so no global
+order of all transactions is needed. The closest published relatives are consensus-less payment protocols
+such as FastPay and the owned-object fast path in Sui.</p>
+
+<h3>4.2 Supply</h3>
+<p>The supply is fixed at <b>50,000,000 SOV</b> (1 SOV = 1,000,000 seeds, the unit all arithmetic uses):</p>
+<div class="tablewrap"><table>
+<tr><th>Pool</th><th>Allocation</th><th>Purpose</th></tr>
+<tr><td><code>citizen_enrollment</code></td><td>30,000,000 SOV</td><td>Enrolment grants</td></tr>
+<tr><td><code>witness_operator</code></td><td>20,000,000 SOV</td><td>Operator rewards; receives all fees</td></tr>
+<tr><td><code>bonds_held</code></td><td>0</td><td>Refundable bonds while outstanding</td></tr>
+<tr><td><code>community_contributors</code></td><td>0</td><td>Empty; fundable only by citizen vote</td></tr>
+</table></div>
+<p>The old issuance mechanism was retired in node 1.4.89, and a credit that would push the total above the
+cap is refused.</p>
+
+<h3>4.3 Every balance change is an operation</h3>
+<p>An operation lists wallet, holding (escrow, vault, bond) and pool deltas. Before any node applies it,
+the deltas must sum to exactly zero; otherwise it is refused. Each operation has a unique id and is
+applied atomically and at most once, never partially. Operations are kept permanently; a node that missed
+some pulls them from peers through a digest exchanged every 60 seconds and on every new link. State
+synchronisation between nodes never writes a balance.</p>
+
+<h3>4.4 Owner operations: the (account, nonce) slot</h3>
+<p>A spend of a citizen's own funds — transfer, exchange listing, vault lock, bond, platform fee — must use
+the account's next nonce. The node that received it asks the voting nodes to grant the slot
+<code>(account, nonce)</code> to this exact operation:</p>
+<ul>
+  <li>A node grants a slot to at most one operation; a different operation for the same slot is refused.</li>
+  <li>The operation commits only with signed grants from a majority of the voting set
+  (<code>floor(N/2) + 1</code>). A vote not received within 3 seconds counts as no.</li>
+  <li>The grants travel with the operation as a certificate, and each receiving node re-checks it before
+  applying. A reply counts only for the node on whose authenticated link it arrived.</li>
+  <li>When two or more operators are known, the majority must also be a majority of operators, so one
+  person's several nodes carry one weight.</li>
+</ul>
+
+<h3>4.5 Who counts as a voting node</h3>
+<p>There is no global membership list. Each node keeps its own record of voting validators: every voting
+peer on the server list that has passed its greeting checks (section 6), with the time it was first and
+last admitted. A node not on the list never counts, whatever role it declares. Its
+voting set for an operation is itself (if voting), every validator it admitted within the last 14 days,
+and every live voting peer. Serving nodes are never recorded, so they are never in N.</p>
+<p>A receiving node rejects a certificate whose set leaves out any validator the receiver knew to be active
+at the commit time, or leaves out the receiver itself. So an origin cannot shrink the set to reach a
+cheaper majority. Identifiers the receiver does not know count for nothing, so padding the set does not
+help either. A node that once had peers and now sees none refuses to commit spends.</p>
+<p>In a partition, a side that cannot reach a majority of the validators it has seen in 14 days cannot
+commit spends; payments there pause with <code>QUORUM_UNAVAILABLE</code>. Nodes can disagree about N when
+their views of recent validators differ, for example when a validator was admitted by some nodes and not
+yet by others. Safety then rests on those views overlapping, not on an agreed set. A formal per-epoch
+validator set is the planned replacement.</p>
+
+<h3>4.6 The citizen's signature, checked by every node</h3>
+<p>Every wallet request is signed with the citizen's Ed25519 key. For transfers, and since node 1.4.95 for
+every other owner operation, the signed request travels inside the operation. Each node, before granting
+and again before applying, checks that:</p>
+<ul>
+  <li>the signature verifies under the enrolled key, and the signer is the account debited;</li>
+  <li>the request is the right kind of operation, the debit is exactly what was signed (or the governance
+  value for fees and bonds), and the reference is the one named;</li>
+  <li>the request was signed within the last 5 minutes.</li>
+</ul>
+<p>The operation id is derived from the signature, so one request can move money at most once. Optional
+automation caps (per transaction, daily, recipient allowlist) are enforced by every node before granting.</p>
+
+<h3>4.7 Invariant and live test</h3>
+<p>Every node recomputes, every five minutes, whether wallets plus holdings plus pools equal exactly
+50,000,000 SOV, and publishes the result at <code>/economy/snapshot</code>. A stable discrepancy is recorded and
+flips the public <code>ok</code> flag; it is never absorbed into a pool. On 7 October 2026, on the production
+network, the same-nonce 600 SOV payment was sent through two nodes at once, totalling more than the
+balance: one committed and the other was refused
+(<code>QUORUM_DENIED:SLOT_GRANTED_TO_OTHER_OP,SLOT_COMMITTED</code>), with identical balances on every node.
+Throughput has not been benchmarked.</p>
+
+<div class="status">
+<p><b>Today:</b> owner operations need the citizen's signature, a majority-granted slot and conservation,
+checked by every node. Operations a single node decides — escrow release and refund, vault claims,
+enrolment grants, operator payouts and verdicts — are applied by the others on that node's word, subject
+only to conservation, balance and supply checks. Agreement on N is per node.</p>
+<p><b>Planned</b> (ledger v2 design): every node re-derives each node-decided operation independently; a
+total-order path for shared objects; and explicit epochs with an agreed validator set. Tolerating a
+dishonest minority, rather than crashes only, needs at least four independent operators.</p>
+</div>
+
+<!-- ───────────────────────────────────────────────────────────── 5 -->
+<h2 id="messages">5. Messages</h2>
+<p>Messages are encrypted on the sending phone: X25519 key agreement, HKDF-SHA256, AES-256-GCM. Nodes accept
+only ciphertext. Since node 1.4.81 they refuse plain text for direct messages
+(<code>PLAINTEXT_REFUSED</code>), groups (<code>GROUP_PLAINTEXT_REFUSED</code>, each member's copy encrypted
+separately) and chat inside an exchange trade.</p>
+<p>Nodes keep no message content. A node delivers to a recipient who is connected, directly or through
+another node, and otherwise answers <code>RECIPIENT_OFFLINE</code>; the message then waits on the sender's
+device and is retried when the recipient comes online. For receipts a node keeps a delivery record —
+message id, the two pseudonymous Sovereign IDs, type and time, with no content — deleted after 90 days by
+default. Citizens can vote that period anywhere from 7 to 365 days (<code>message_retention_days</code>).</p>
+
+<div class="status">
+<p><b>Today:</b> content is unreadable to nodes. Since app 1.2.33 each citizen signs their messaging key with
+their identity key, and a node replaces a key it holds only with a newer one carrying a valid signature, so
+no node can swap a citizen's key on another node. The app fetches contacts' keys from a server that has
+proven its identity (section 2.3). Keys are long-lived and there is no per-message ratchet, so there is no
+forward secrecy.</p>
+<p><b>Planned:</b> a per-message ratchet is open.</p>
+</div>
+
+<!-- ───────────────────────────────────────────────────────────── 6 -->
+<h2 id="nodes">6. Nodes</h2>
+<p>A node serves citizens' connections, holds the ledger, votes on slots, replicates operations and checks
+its peers. It ships as a Linux snap and inside the desktop apps. Its node id is the SHA-256 of its Ed25519
+public key.</p>
+
+<h3>6.1 Voting and serving nodes</h3>
+<p>Since 1.4.96 every node declares a signed role. <b>Voting</b> nodes (servers, the default) grant slots and
+count toward N. <b>Serving</b> nodes (the desktop app) serve citizens and replicate everything but never
+vote, so a home computer going offline cannot stall payments. A greeting with no valid role is refused.</p>
+
+<h3>6.2 Admission</h3>
+<p>A joining node sends a signed signup and is interrogated by a random sample of 5 nodes. It enters other
+nodes' registries only with a certificate of signed approvals from distinct nodes spanning distinct
+operators, meeting the quorum (<code>operator_signup_quorum</code> = 3, capped by the operators a node can
+see). Approvers must already be known to the receiver. Operators must be enrolled citizens.</p>
+<p>Admission lets a node serve and relay; it does not make it trusted. Since node 1.4.97 a node accepts
+replicated state, governance or ledger updates that no citizen signed, system money operations, and
+validator standing only from the servers on a fixed list built into the node (the three current servers;
+an operator can override it locally). This is interim: it goes away as each kind of replicated record
+gets its own proof. Since app 1.2.34 the app likewise connects only to a server that proves its identity
+(section 2.3), or to a node the citizen pinned themself.</p>
+
+<h3>6.3 Links</h3>
+<p>The greeting (<code>PEER_HELLO</code>) proves possession of the identity key, carries a timestamp accepted
+within 60 seconds, and a per-connection X25519 key signed by the identity key. Every later frame is sealed
+with NaCl <code>secretbox</code>, and plain frames are dropped.</p>
+
+<h3>6.4 The source_root declaration</h3>
+<p>A node computes <code>source_root</code> at start: the SHA-256 over sorted lines
+<code>sha256(content)&nbsp;&nbsp;path</code> for each file of its <code>src/</code> tree, so identical source gives
+an identical root on any system. Node 1.4.99 is <code>40eaf1516208d274…</code> over 67 files. The node
+<i>declares</i> this value in every greeting and at <code>/node-info</code>. Peers refuse a declaration that is
+neither their own root nor one at least two distinct operators with 21 days of observed uptime already run
+(<code>HELLO_SOFTWARE_NOT_AUTHENTIC</code>, under <code>release_enforce_mode = refuse</code>, the live setting).</p>
+<p>What this proves: an honest operator cannot accidentally join with modified or mismatched code, and
+anyone can check that the published source is what the network says it runs. What it does not prove:
+what code a dishonest operator actually executes. There is no hardware attestation, and a modified node
+can declare any root.</p>
+
+<h3>6.5 Distribution and discovery</h3>
+<p>The apps are not on Google Play or the App Store, by design. Releases are published on the website, on
+GitHub releases with a signed manifest and checksums, on IPFS, and over BitTorrent with GitHub as a web
+seed; the node snap is published on the same channels. Nodes find each other through the public BitTorrent
+DHT under an infohash every node derives (<code>SHA-1("sov-network-mainnet-v1")</code>). Reachable nodes
+re-announce every 15 minutes, discovered addresses are only dial targets, and DHT data-storage requests are
+refused. In the 7 October test the published Windows app found the network this way with no address
+configured.</p>
+
+<div class="status">
+<p><b>Today:</b> admission, encrypted links, declared-source checks, the server list and the app's server
+identity check are enforced. App updates are verified against one release key.</p>
+<p><b>Planned:</b> the node contains an election of witness signers that opens once the network has 1,000
+citizens and 5 operators, designed so that any 3 of the 5 elected signers co-sign a release.</p>
+</div>
+
+<!-- ───────────────────────────────────────────────────────────── 7 -->
+<h2 id="economy">7. Economy</h2>
+<p>There is nothing to buy. SOV enters circulation only from the two funded pools.</p>
+
+<h3>7.1 Enrolment grant</h3>
+<p>The curve spends the 30,000,000 SOV pool exactly, and a grant is paid only as far as the pool can back it.
+There is no referral reward.</p>
+<div class="tablewrap"><table>
+<tr><th>Citizens already enrolled</th><th>Grant</th><th>Pool spent in band</th></tr>
+<tr><td>0 – 9,999</td><td>1,000 SOV</td><td>10,000,000</td></tr>
+<tr><td>10,000 – 24,999</td><td>500 SOV</td><td>7,500,000</td></tr>
+<tr><td>25,000 – 114,999</td><td>100 SOV</td><td>9,000,000</td></tr>
+<tr><td>115,000 – 289,999</td><td>20 SOV</td><td>3,500,000</td></tr>
+<tr><td>290,000+</td><td>0</td><td>—</td></tr>
+</table></div>
+
+<h3>7.2 Fees</h3>
+<ul>
+  <li><b>Transfers:</b> 0.1%, rounded up to the next seed and capped at 1 SOV, to the operators' pool.
+  Fees are not burned.</li>
+  <li><b>Exchange:</b> 1% of a completed trade, to the operators' pool.</li>
+  <li><b>Sign in with SOV:</b> 10 SOV per year, paid by the platform owner, to the operators' pool.</li>
+  <li><b>Bonds</b> (refundable): 10 SOV to open a dispute, 5 to publish an Academy article, 1 to upvote one.</li>
+</ul>
+
+<h3>7.3 The exchange</h3>
+<p>A seller lists up to 10,000 SOV per order at a price they choose, or on terms agreed in chat. Listings
+expire after 7 days by default, 30 at most. Listing is an owner operation that moves the SOV into escrow.
+The buyer pays the seller off-network by the agreed method. When the seller confirms, escrow releases to
+the buyer minus 1%, in one operation that can happen at most once. A buyer can ask for a refund or mark the
+trade disputed, which keeps the SOV in escrow, and either party can take a case to a jury.</p>
+<div class="status">
+<p><b>Today:</b> the order's home node decides release and refund, and the other nodes apply its decision on
+its word if it is one of the servers (section 2.2).</p>
+<p><b>Planned:</b> release re-derived by every node, with competing claims ordered on a total-order path.</p>
+</div>
+
+<h3>7.4 Operator rewards</h3>
+<p>Every 30 days, an operator qualifies if one of its active nodes has an uptime streak of at least 21 days
+and reported within the last 90 minutes. A qualifying operator earns 20 SOV, plus 25% for a second and a
+third node; further nodes add nothing, so the maximum is 30 SOV.</p>
+<p>The node count is the number of that operator's nodes the paying node has itself observed. A node counts
+as observed when its own hourly proof-of-service message arrives over its authenticated link. A proof
+relayed by a third node is recorded but does not count. A gap of more than 3 hours resets that node's
+streak, and a node unseen for 6 hours is not counted.</p>
+<p>Payouts come from fee income first. The 20,000,000 SOV reserve tops up by at most 50,000 SOV per period,
+and payouts go pro rata if claims exceed the budget. Joining needs no stake.</p>
+<div class="status">
+<p><b>Today:</b> payouts are node-decided operations, applied by other nodes on the paying server's word.
+Uptime proofs are accepted only from server-list nodes, so for now only those operators can qualify.</p>
+<p><b>Planned:</b> every node re-derives each payout independently.</p>
+</div>
+
+<h3>7.5 The citizens' value vote</h3>
+<p>Each week every enrolled citizen may submit once what they think one SOV is worth in US dollars, between
+0.0001 and 50. Nodes publish the median of the latest completed week with at least 25 submissions, derived
+from the replicated submissions. It is published for information only. Nobody guarantees it, and this paper
+makes no claim about what SOV is or will be worth.</p>
+
+<!-- ───────────────────────────────────────────────────────────── 8 -->
+<h2 id="governance">8. Governance and justice</h2>
+
+<h3>8.1 Parameters, polls and petitions</h3>
+<p>The node source declares 51 votable parameters, each with a range: fees, caps, poll rules, jury sizes,
+guardian thresholds, retention periods, operator rewards, admission quorums and the software-enforcement
+mode. Switches such as the Enclave forum and Sign in with SOV are binary parameters.</p>
+<ul>
+  <li><b>Polls</b> run 1 to 7 days. Each Sovereign ID votes once. A result binds only if at least 10% of
+  enrolled citizens voted, and the same parameter cannot be proposed again for 7 days after a poll on it
+  closes.</li>
+  <li><b>Petitions</b> flip switches. 33% of enrolled citizens' signatures open a binding poll; 67% flip the
+  switch directly.</li>
+</ul>
+<div class="status">
+<p><b>Today:</b> since node 1.4.97, creating a poll, voting, opening a petition and signing one each need an
+enrolled citizen's signed request, and every node re-verifies that request before counting it. A peer
+cannot close a poll before its time or activate a parameter: a node applies a parameter only from a poll it
+closed itself, or catches up from peers only when a majority of the servers report the same legal value.
+A node that was offline catches up on open polls and petitions together with each signed vote and
+signature, and checks every one.</p>
+<p><b>Planned:</b> a poll result every node derives from one agreed set of votes (today each node counts the
+signed votes it has received).</p>
+</div>
+
+<h3>8.2 Justice</h3>
+<p>A citizen opens a dispute naming the amount at issue and posts a 10 SOV bond. Jurors are drawn from all
+enrolled citizens except the parties, by a cryptographically secure shuffle, starting at 3 and growing to
+at most 7. Each has 48 hours to accept, every accepted juror must vote, and conviction needs two-thirds. On
+conviction the bond is returned, the disputed amount moves from defendant to plaintiff as far as the
+defendant's balance covers it, any shortfall is recorded, and each voting juror is paid 0.5 SOV by the
+defendant. On dismissal the bond pays the jurors and the rest goes to the defendant. The verdict is one
+conserving ledger operation.</p>
+<div class="status">
+<p><b>Today:</b> since node 1.4.97 a verdict carries its proof: the plaintiff's signed filing and each juror's
+signed vote. Every node, before granting and before applying it, checks those signatures, that the verdict
+follows from the votes and the conviction threshold, and that money goes only to the parties and the voting
+jurors, within the disputed sum and the juror fees. The verdict is recounted over every signed vote the node
+holds, so a proof that leaves votes out is refused if they would change the outcome. The node hosting the
+case still draws the jury with its own randomness.</p>
+<p><b>Planned:</b> a jury every node can derive, and verdicts on the total-order path in the ledger v2 design.</p>
+</div>
+
+<!-- ───────────────────────────────────────────────────────────── 9 -->
+<h2 id="signin">9. Sign in with SOV</h2>
+<p>A website can let visitors prove they are an enrolled SOV citizen without collecting their identity. A
+platform registers by a citizen-signed request and pays its annual fee. The site shows a 6-digit code
+(valid 5 minutes, one use), and the citizen types it into the app, which shows the registered domain. The
+citizen approves and chooses a password for that site. The app signs the approval and sends a bcrypt
+verifier of the password, never the password. The node verifies the signature against the enrolled key and
+sends the result, HMAC-authenticated, only to the platform's registered return URL; a different
+caller-supplied URL is refused.</p>
+<p>The site receives the Sovereign ID, the network nickname, the citizen's public key and the password
+verifier, and checks later logins itself. It never receives a name, email, phone number, biometric data,
+balance, transactions or messages.</p>
+<div class="status">
+<p><b>Today:</b> every site receives the same Sovereign ID, so two sites can tell they share a user.</p>
+<p><b>Planned:</b> per-site identifiers are recorded as future design and are not in the code.</p>
+</div>
+
+<!-- ───────────────────────────────────────────────────────────── 10 -->
+<h2 id="limits">10. Limits and open work</h2>
+<p>Gathered in one place, as they stand in the current code:</p>
+<ul>
+  <li><b>Small operator set.</b> Tolerating a dishonest participant needs at least four independent
+  operators; until then the voting fleet tolerates failures, not a dishonest majority.</li>
+  <li><b>A fixed server list.</b> State no citizen signed, system money operations and validator standing
+  come only from the three current servers, and the app trusts only their keys (or the citizen's own pinned
+  node). A new server needs a release. Records created only on a non-server node (for example an enrolment
+  made through a citizen's desktop node) do not reach the servers. This is interim (section 6.2).</li>
+  <li><b>Server-decided operations:</b> escrow release and refund, vault claims, enrolment grants and
+  operator payouts are applied on the deciding server's word (sections 2.2, 7). The jury is drawn by the
+  hosting node (section 8.2).</li>
+  <li><b>No agreed validator set:</b> each node computes N from the validators it has seen in 14 days. There
+  are no epochs and no total-order path (section 4.5). Payments pause in a partition without a majority.</li>
+  <li><b>Liveness is checked in the app, not by nodes</b>, so fabricated templates from a modified app are
+  not detected (section 2.1).</li>
+  <li><b>The biometric transform secret is held by every full node</b> (section 2.2). Duplicate matching is
+  a linear scan.</li>
+  <li><b>Messaging keys are long-lived</b>, with no forward secrecy (section 5).</li>
+  <li><b>source_root is a declaration</b>, not attestation (section 6.4).</li>
+  <li><b>One Sovereign ID across all sites</b> (section 9). <b>One release key</b> for app updates (section
+  6.5).</li>
+  <li><b>Throughput has not been benchmarked.</b></li>
+  <li><b>Platforms:</b> Android, Windows, macOS, Linux. No iPhone app yet.</li>
+</ul>
+
+<!-- ───────────────────────────────────────────────────────────── 11 -->
+<h2 id="verify">11. Verify it yourself</h2>
+<p>The source is open under the Apache-2.0 licence:</p>
+<ul>
+  <li>Source: <a href="https://github.com/sov-network-dev/sov-build-source">github.com/sov-network-dev/sov-build-source</a>
+  (node in <code>wallet/windows/sov-node/</code>, app in <code>lib/</code>).</li>
+  <li>Releases, signed manifest and checksums: <a href="https://github.com/sov-network/relay-releases">github.com/sov-network/relay-releases</a>.</li>
+</ul>
+<p>Compute the root of the node source you hold:</p>
+<pre><code>cd wallet/windows/sov-node
+node -e "console.log(require('./src/release/source_root.js').sourceRoot('.',{include:['src']}))"</code></pre>
+<p>Then compare it with what nodes you chose yourself declare:</p>
+<pre><code>curl -s http://&lt;node-address&gt;/node-info</code></pre>
+<p>For node 1.4.99 the <code>source_root</code> is <code>40eaf1516208d274…</code> over 67 files. The root hashes
+bytes, so check that git has not converted line endings under <code>src/</code> (the repository pins LF). A
+match shows that the published source is what those nodes declare, not what they execute (section 6.4).
+To check a node snap before installing, <code>src/network/sdk/verify-snap.py</code> computes the snap's own root
+and accepts it only if at least two nodes you name declare exactly that root; do not take that list from
+the node that served you the file. <code>/economy/snapshot</code> on any node shows the supply total and the
+invariant.</p>
+<p><b>Where the project stands.</b> SOV Network is an open protocol in an early phase. It runs on a small
+set of operators, and several of its protections still rely on those operators being honest. What
+the current release enforces — citizen signatures on spends, majority-granted slots, conservation and a
+fixed supply, end-to-end encrypted messages that nodes do not store, and duplicate refusal at enrolment —
+is described above as it is in the code. So is each place where it still trusts its servers.
+Closing those, and recruiting independent operators, is the work ahead.</p>
+
+</div></main>
+
+<footer class="site"><div class="wrap">
+  <p>SOV Network — an open protocol, in an early phase, run by the people who operate its nodes.</p>
+  <p><a href="privacy.html">Privacy</a> — what the network holds about a citizen, and what it does not.</p>
+</div></footer>
+<!-- Visit counting: Cloudflare Web Analytics - no cookies, no IP addresses kept, counts and countries only (see privacy.html#site-visits) --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "eb6d3e43d6444443afef8f3db9148e1f"}'></script>
+</body>
+</html>
