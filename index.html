@@ -38,10 +38,28 @@
   <p class="tagline">SOV isn't a blockchain — it's a <b>sovereign, proof-of-personhood mesh</b>:
   self-contained nodes, one human one wallet, no central operator, no app store.</p>
   <div class="cta">
-    <a class="btn primary" href="#download">Download</a>
+    <a id="hero-dl" class="btn primary" href="#download">Download</a>
     <a class="btn ghost" href="https://github.com/sov-network-dev/sov-build-source/discussions">Ask a question</a>
     <a class="btn ghost" href="academy/run-a-node.html">Run a node</a>
   </div>
+  <p id="hero-dl-note" style="color:var(--dim); font-size:13px; margin:10px 0 0"></p>
+  <script>
+  // One click: offer the build for the visitor's own device. Never auto-start a download (browsers block it and it
+  // reads as an attack); the button just points at the right file. Unknown device -> the normal #download section.
+  (function () {
+    var B = 'https://github.com/sov-network/relay-releases/releases/latest/download/';
+    var ua = navigator.userAgent || '', a = document.getElementById('hero-dl'), n = document.getElementById('hero-dl-note'), p = null;
+    if (/Android/i.test(ua)) p = ['Download for Android', 'sovnode-android.apk', 'APK, 138 MB. Your phone will ask you to allow installing from this source; that is normal outside an app store.'];
+    else if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) p = ['ios'];
+    else if (/Windows/i.test(ua)) p = ['Download for Windows', 'sovnode-windows-x64.zip', 'Portable, 92 MB. Unzip and run, no installer.'];
+    else if (/Macintosh|Mac OS X/i.test(ua)) p = ['Download for macOS', 'sovnode-macos-arm64.tar.gz', 'Apple Silicon build. Intel Mac? '];
+    else if (/Linux/i.test(ua)) p = ['Download for Linux', 'sovnode-linux-x64.AppImage', 'AppImage, 108 MB. Make it executable and run it.'];
+    if (!p || !a) return;
+    if (p[0] === 'ios') { n.innerHTML = 'There is no iPhone app yet. SOV runs on Android, Windows, macOS and Linux.'; return; }
+    a.textContent = p[0]; a.href = B + p[1]; a.setAttribute('download', '');
+    n.innerHTML = p[2] + (p[1].indexOf('macos') >= 0 ? '<a href="get.html">Get the Intel build</a>.' : ' <a href="get.html">Other systems and checksums</a>.');
+  })();
+  </script>
 </div></div>
 
 <section id="problems"><div class="wrap">
