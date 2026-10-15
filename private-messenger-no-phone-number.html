@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private messages without a phone number | SOV Network</title>
+<meta name="description" content="End-to-end encrypted messages with no phone number and no email. SOV Network nodes refuse plaintext and keep no message content.">
+<link rel="canonical" href="https://sov-network.github.io/private-messenger-no-phone-number.html">
+<meta property="og:title" content="Private messages without a phone number | SOV Network">
+<meta property="og:description" content="End-to-end encrypted messages with no phone number and no email. SOV Network nodes refuse plaintext and keep no message content.">
+<meta property="og:image" content="https://sov-network.github.io/sov-logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <span class="brand"><img src="sov-logo.png" alt="">SOV&nbsp;NETWORK</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="academy/index.html">Academy</a>
+    <a href="whitepaper.html">Whitepaper</a>
+    <a href="get.html">Download</a>
+  </nav>
+</div></header>
+<main class="wrap article">
+<a class="backlink" href="index.html">&larr; Back to home</a>
+
+<h1>Private messages, without handing over your phone number</h1>
+<p class="sub">Most "private" messengers still start by asking for your phone number, which ties every conversation to
+your real identity and your mobile network. SOV Network asks for no phone number and no email, ever.</p>
+
+<h2>What you get</h2>
+<ul>
+<li><strong>End-to-end encryption:</strong> only the sender and the recipient can read a message.</li>
+<li><strong>Nodes keep no message content.</strong> Since node 1.4.81 they refuse plaintext messages outright. If the
+recipient is offline, the message waits on <em>your</em> device and is sent when they come online, not on a server.</li>
+<li><strong>No phone number, no email.</strong> Your account is a SOV ID and a nickname derived from it.</li>
+<li><strong>No bot farms.</strong> Every account belongs to one verified human, so spam farms and fake accounts
+cannot sign up by the thousand.</li>
+</ul>
+
+<h2>What a node does keep, stated precisely</h2>
+<p>For delivery and read receipts, a node keeps a small delivery record: the message ID, the two pseudonymous SOV IDs,
+the message type and the time. No content, no names, no phone numbers. It deletes itself after 90 days by default,
+and citizens can vote that down to 7.</p>
+
+<h2>"But you scan my palm and face?"</h2>
+<p>Yes, once, to prove you are one unique person. The scan happens on your own phone, and no photo of your palm or face
+is ever stored or sent. The phone sends a set of numbers describing the scan, and the node turns it into a protected
+template and stores only that. What a node operator could learn from those templates today is set out plainly in the
+<a href="academy/biometric-explained.html">biometric explainer</a> and the <a href="privacy.html">privacy page</a>.</p>
+
+<h2>Ask us anything</h2>
+<p>Questions and criticism are welcome in public, where anyone can read the answer:
+<a href="https://github.com/sov-network-dev/sov-build-source/discussions">SOV Network Q&amp;A</a>. The full design, including
+what the network does not do yet, is in the <a href="whitepaper.html">whitepaper</a> (section 10 lists the limits in one place).</p>
+<p><a href="get.html"><strong>Download SOV Network</strong></a> &mdash; Android, Windows, macOS and Linux. Free, open source (Apache-2.0), nothing to buy.</p>
+</main>
+<footer class="site"><div class="wrap">
+  <p>SOV Network — an open, self-contained protocol. No central operator, no single switch to flip.</p>
+  <p><a href="privacy.html">Privacy</a> — what the network holds about a citizen, and what it does not.</p>
+</div></footer>
+<!-- Visit counting: Cloudflare Web Analytics - no cookies, no IP addresses kept, counts and countries only (see privacy.html#site-visits) --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "eb6d3e43d6444443afef8f3db9148e1f"}}'></script>
+</body>
+</html>
