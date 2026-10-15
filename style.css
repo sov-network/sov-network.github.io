@@ -144,3 +144,13 @@ footer.site p{margin:4px 0}
 .videos figure{margin:0}
 .videos video{width:100%; aspect-ratio:16/9; background:#0c0e14; border-radius:10px; display:block}
 .videos figcaption{font-size:.9rem; opacity:.8; margin-top:6px}
+
+/* Phone: the menu used to run off the right edge (links past 390 px were unreachable). It now sits on its own row
+   under the logo and scrolls sideways. 2026-10-15 */
+@media(max-width:640px){
+  header.site .wrap{height:auto; flex-wrap:wrap; row-gap:4px; padding-top:8px; padding-bottom:6px}
+  header.site nav{margin-left:0; width:100%; overflow-x:auto; white-space:nowrap; gap:16px; padding-bottom:4px;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none}
+  header.site nav::-webkit-scrollbar{display:none}
+  header.site nav a{flex:0 0 auto; padding:4px 0}
+}

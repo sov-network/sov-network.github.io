@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Get the SOV Network app</title>
-<meta name="description" content="Download the SOV Network app directly — no Play Store, no app store account, no middleman. Verify the signature before installing.">
+<meta name="description" content="Download the SOV Network app directly — no Play Store, no app store account, no middleman. Verify the signature before installing."
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SOV Network">
+<meta property="og:title" content="Get the SOV Network app">
+<meta property="og:description" content="Download the SOV Network app directly — no Play Store, no app store account, no middleman. Verify the signature before installing.">
+<meta property="og:url" content="https://sov-network.github.io/get.html">
+<meta property="og:image" content="https://sov-network.github.io/sov-logo.png">
+<meta name="twitter:card" content="summary">>
   <link rel="canonical" href="https://sov-network.github.io/get.html">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -161,14 +168,14 @@
 <!-- IPFS:BEGIN -->
   <p class="sub">Also on IPFS &mdash; content-addressed, so the address itself is the hash of the file
   and proves it is unmodified. These are the v1.2.35 files, pinned by the SOV nodes themselves. With an IPFS
-  client, fetch them by CID as below. Public web gateways often refuse large files (HTTP 429), so the
-  gateway links are a convenience, not a promise.</p>
+  client, fetch them by CID as below. Public web gateways refuse files this large, so use an IPFS client
+  (for example <a href="https://docs.ipfs.tech/install/">IPFS Desktop or kubo</a>).</p>
   <p style="font-size:13px; line-height:2">
-    Android: <code style="word-break:break-all">ipfs get bafybeihqje3274yx35lzr4zhzhukyd4nrz46iqq6exnz4w3225yyvk3nwu -o sovnode-android.apk</code> <a href="https://ipfs.io/ipfs/bafybeihqje3274yx35lzr4zhzhukyd4nrz46iqq6exnz4w3225yyvk3nwu?filename=sovnode-android.apk" style="color:var(--dim)">(gateway)</a><br>
-    Windows: <code style="word-break:break-all">ipfs get bafybeib5pyn5dewunefgnergkjgd6wwcrxe6kjhpa4lnbwuh6whnbiqo6y -o sovnode-windows-x64.zip</code> <a href="https://ipfs.io/ipfs/bafybeib5pyn5dewunefgnergkjgd6wwcrxe6kjhpa4lnbwuh6whnbiqo6y?filename=sovnode-windows-x64.zip" style="color:var(--dim)">(gateway)</a><br>
-    macOS (Apple Silicon): <code style="word-break:break-all">ipfs get bafybeiaxkyshnu2xunyf2raaatsyll7irg7c4dvh5crlvsa3ll6y6eov2i -o sovnode-macos-arm64.tar.gz</code> <a href="https://ipfs.io/ipfs/bafybeiaxkyshnu2xunyf2raaatsyll7irg7c4dvh5crlvsa3ll6y6eov2i?filename=sovnode-macos-arm64.tar.gz" style="color:var(--dim)">(gateway)</a><br>
-    macOS (Intel): <code style="word-break:break-all">ipfs get bafybeigthogn2qw5hdzzc6267qtdk33kk56a3bxwsaegoi76r6fbrqadum -o sovnode-macos-x64.tar.gz</code> <a href="https://ipfs.io/ipfs/bafybeigthogn2qw5hdzzc6267qtdk33kk56a3bxwsaegoi76r6fbrqadum?filename=sovnode-macos-x64.tar.gz" style="color:var(--dim)">(gateway)</a><br>
-    Linux: <code style="word-break:break-all">ipfs get bafybeifw7psjzzcwvv3myu3m2ycnbnwztpipgamrsbjpg7k4s5xkoymjx4 -o sovnode-linux-x64.AppImage</code> <a href="https://ipfs.io/ipfs/bafybeifw7psjzzcwvv3myu3m2ycnbnwztpipgamrsbjpg7k4s5xkoymjx4?filename=sovnode-linux-x64.AppImage" style="color:var(--dim)">(gateway)</a><br>
+    Android: <code style="word-break:break-all">ipfs get bafybeihqje3274yx35lzr4zhzhukyd4nrz46iqq6exnz4w3225yyvk3nwu -o sovnode-android.apk</code><br>
+    Windows: <code style="word-break:break-all">ipfs get bafybeib5pyn5dewunefgnergkjgd6wwcrxe6kjhpa4lnbwuh6whnbiqo6y -o sovnode-windows-x64.zip</code><br>
+    macOS (Apple Silicon): <code style="word-break:break-all">ipfs get bafybeiaxkyshnu2xunyf2raaatsyll7irg7c4dvh5crlvsa3ll6y6eov2i -o sovnode-macos-arm64.tar.gz</code><br>
+    macOS (Intel): <code style="word-break:break-all">ipfs get bafybeigthogn2qw5hdzzc6267qtdk33kk56a3bxwsaegoi76r6fbrqadum -o sovnode-macos-x64.tar.gz</code><br>
+    Linux: <code style="word-break:break-all">ipfs get bafybeifw7psjzzcwvv3myu3m2ycnbnwztpipgamrsbjpg7k4s5xkoymjx4 -o sovnode-linux-x64.AppImage</code><br>
   </p>
 <!-- IPFS:END -->
   <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:26px 0">
@@ -185,7 +192,6 @@
     By torrent: <a href="torrents/sov-relay.snap.torrent">sov-relay.snap.torrent</a> &middot;
     <a href="magnet:?xt=urn:btih:95b619644cad2291e0eaacaa16f793e2c225ff52&amp;dn=sov-relay.snap&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;ws=https%3A%2F%2Fgithub.com%2Fsov-network%2Frelay-releases%2Freleases%2Fdownload%2Fv1.2.35%2Fsov-relay.snap">magnet link</a><br>
     On IPFS: <code style="word-break:break-all">ipfs get bafybeicq4lr3hsricbe3bfwlny2sh3pwaafnyenvbarob2m5pqrfeilnnm -o sov-relay.snap</code>
-    <a href="https://ipfs.io/ipfs/bafybeicq4lr3hsricbe3bfwlny2sh3pwaafnyenvbarob2m5pqrfeilnnm?filename=sov-relay.snap" style="color:var(--dim)">(gateway)</a>
   </p>
   <p class="sub">Then follow <a href="academy/run-a-node.html#6-install-the-node-software-the-snap">the operator
   guide</a>: install, run setup with your SOV ID, and leave the network address blank &mdash; the node finds
