@@ -26,7 +26,7 @@
     + '#sovask .chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}#sovask .chips button{background:none;border:1px solid rgba(212,175,55,.5);color:#f1e3b3;border-radius:999px;padding:5px 10px;font:13px system-ui,sans-serif;cursor:pointer}'
     + '#sovask .chips button:hover{background:rgba(212,175,55,.15)}'
     + '#sovask form{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(255,255,255,.1)}#sovask input{flex:1;min-width:0;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:#0a1220;color:#fff;font-size:16px}'
-    + '#sovask form button{background:' + GOLD + ';color:#1a1300;border:0;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer}#sovask .note{font-size:11.5px;color:#8a96a8;padding:0 14px 8px}'
+    + '#sovask form button{background:' + GOLD + ';color:#1a1300;border:0;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer}'
     + '@media (max-width:520px){#sovask-btn .lbl{display:none}#sovask-btn{padding:14px}#sovask-btn .dot{left:30px}#sovask{right:12px;bottom:76px;height:calc(100vh - 100px)}}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
@@ -38,7 +38,6 @@
   var box = document.createElement('div'); box.id = 'sovask'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Ask SOV');
   box.innerHTML = '<header><div class="av">SOV</div><div class="t"><b>Ask SOV</b><small>&#9679; Online &middot; answers from the SOV docs</small></div><button type="button" aria-label="Close">&times;</button></header>'
     + '<div class="log" aria-live="polite"></div><div class="chips"></div>'
-    + '<div class="note">Answers come from the whitepaper and the Academy. Nothing is stored. For anything else, ask in the <a href="https://github.com/sov-network-dev/sov-build-source/discussions" style="color:' + GOLD + '">public Q&amp;A</a>.</div>'
     + '<form><input maxlength="500" placeholder="Type your question…" aria-label="Your question"><button>Send</button></form>';
   document.body.appendChild(tease); document.body.appendChild(btn); document.body.appendChild(box);
 
