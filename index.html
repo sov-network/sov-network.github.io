@@ -55,9 +55,23 @@
     else if (/Macintosh|Mac OS X/i.test(ua)) p = ['Download for macOS', 'sovnode-macos-arm64.tar.gz', 'Apple Silicon build. Intel Mac? '];
     else if (/Linux/i.test(ua)) p = ['Download for Linux', 'sovnode-linux-x64.AppImage', 'AppImage, 108 MB. Make it executable and run it.'];
     if (!p || !a) return;
-    if (p[0] === 'ios') { n.innerHTML = 'There is no iPhone app yet. SOV runs on Android, Windows, macOS and Linux.'; return; }
-    a.textContent = p[0]; a.href = B + p[1]; a.setAttribute('download', '');
-    n.innerHTML = p[2] + (p[1].indexOf('macos') >= 0 ? '<a href="get.html">Get the Intel build</a>.' : ' <a href="get.html">Other systems and checksums</a>.');
+    // Joining (palm + live face scan) needs a phone camera: the desktop apps cannot create an account, they restore
+    // an existing citizen and run a node. So only Android gets the one-click download; everyone else is sent to the
+    // phone first, with a QR code to scan (2026-10-17: ~2/3 of real downloads were desktop builds, 0 joined).
+    var qr = '<span style="display:block;margin:14px 0 6px"><img src="qr-android-apk.svg" alt="QR code: download the Android app" width="132" height="132" style="background:#fff;padding:8px;border-radius:10px"></span>';
+    if (p[0] === 'ios') { n.innerHTML = 'There is no iPhone app yet. To join you need an <b>Android phone</b>: open this page on it, or scan this code with it.' + qr; a.textContent = 'Join on an Android phone'; a.href = 'get.html'; return; }
+    if (p[1].indexOf('android') >= 0) {
+      a.textContent = p[0]; a.href = B + p[1]; a.setAttribute('download', '');
+      n.innerHTML = p[2] + ' You join inside the app with a palm scan and a live face check. <a href="get.html">Checksums</a>.';
+      return;
+    }
+    a.textContent = 'Join on your Android phone'; a.href = '#join-phone';
+    a.onclick = function (e) { e.preventDefault(); n.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+    n.innerHTML = 'You join with a palm scan and a live face check, which needs a phone camera, so <b>joining is on Android</b>. '
+      + 'Scan this code with your phone to get the app:' + qr
+      + 'The ' + p[0].replace('Download for ', '') + ' app is for citizens who have already joined (restore with your 12 words) and for running a node: '
+      + '<a href="' + B + p[1] + '" download>download the ' + p[0].replace('Download for ', '') + ' app</a>'
+      + (p[1].indexOf('macos') >= 0 ? ' (Intel Mac: <a href="get.html">other builds</a>)' : '') + '.';
   })();
   </script>
 </div></div>
