@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questions and answers | SOV Network (Self-Owned Value)</title>
+<meta name="description" content="Real questions people have asked about SOV Network (Self-Owned Value), answered by the developers: privacy of palm and face templates, spoofing, joining, app stores and security. Ask your own, no account needed.">
+<link rel="canonical" href="https://sov-network.github.io/questions.html">
+<meta property="og:site_name" content="SOV Network (Self-Owned Value)">
+<meta property="og:title" content="Questions and answers | SOV Network (Self-Owned Value)">
+<meta property="og:description" content="Real questions people have asked about SOV Network (Self-Owned Value), answered by the developers: privacy of palm and face templates, spoofing, joining, app stores and security. Ask your own, no account needed.">
+<meta property="og:image" content="https://sov-network.github.io/sov-logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <span class="brand"><img src="sov-logo.png" alt="">SOV&nbsp;NETWORK</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="academy/index.html">Academy</a>
+    <a href="whitepaper.html">Whitepaper</a>
+    <a href="get.html">Download</a>
+  </nav>
+</div></header>
+<main class="wrap article">
+<a class="backlink" href="index.html">&larr; Back to home</a>
+
+<h1>Questions and answers</h1>
+<p class="sub">Real questions people have asked about SOV Network (Self-Owned Value), answered by the developers.
+Have your own? <a href="#ask-developers" data-sovask-dev="question"><strong>Ask the developers</strong></a>: no account
+needed, and a developer reads every message.</p>
+
+<h2>Asked in the Lemmy privacy community</h2>
+<h3>If the palm or face data ever escaped, could it identify someone? Could it be fooled with images from surveillance video?</h3>
+<p><strong>No picture is ever stored or sent.</strong> Your phone turns each scan into numbers and sends them over an
+encrypted link. The node turns them into a protected, cancelable template and keeps only that: on its own, scrambled
+numbers.</p>
+<p><strong>Surveillance video doesn't get you in.</strong> Joining needs a flat palm close to the camera plus a live face
+check where the app asks for a random movement, which ordinary footage doesn't give you. And every node refuses a palm or
+face that matches an existing citizen, so nobody can open a second account with their own body.</p>
+<p><strong>Next on the roadmap:</strong> liveness verified by the nodes as well as the app, and the template key split
+across independent operators.</p>
+<h3>Could someone fake a palm, or steal an account?</h3>
+<p>A copy of an enrolled person's palm can't open a new account: the nodes refuse any palm or face that matches someone
+already enrolled, and every new citizen also passes a live face check.</p>
+<p><strong>If a key is ever lost or stolen,</strong> the guardians you appointed step in: two of them approving within 72
+hours make the nodes move the account to a new key, and the old key can no longer spend.</p>
+
+<h2>Questions we hear most</h2>
+<h3>Why isn't SOV on Google Play or the App Store?</h3>
+<p>By design: no single company should be able to switch off a network that belongs to its users. Every release is signed, the code is open, and every node proves the exact code it runs. <a href="why-sov.html#app-store">Full answer</a>.</p>
+<h3>If it isn't a blockchain and has no mining, what keeps it secure?</h3>
+<p>Every node checks every rule, a majority of nodes must approve every spend, and one real person gets one account. The same 600 SOV sent twice at the same moment was paid once and refused once, live. <a href="why-sov.html#security">Full answer</a>.</p>
+<h3>Can I join with an iPhone?</h3>
+<p>You join on an <strong>Android</strong> phone, because joining uses the phone's camera for the palm scan and face check. The Windows, macOS and Linux apps then restore your wallet with your 12 words and can run a node. <a href="get.html">Get the app</a>.</p>
+<h3>Is my palm or face photo stored anywhere?</h3>
+<p>No. The scan happens on your own phone; only protected numbers leave it, and the network keeps protected templates, never a photo.</p>
+<h3>What if I lose my phone?</h3>
+<p>Restore with your 12 words or your encrypted backup file. If you lose those too, your guardians can move your account to a new key. <a href="lost-crypto-key.html">How recovery works</a>.</p>
+<h3>Does it cost anything?</h3>
+<p>No. SOV Network is free and open source, with nothing to buy. The first 10,000 citizens are each welcomed with 1,000 SOV.</p>
+
+<h2>Ask your own question</h2>
+<p><a href="#ask-developers" data-sovask-dev="question"><strong>Ask the developers</strong></a> or
+<a href="#ask-developers" data-sovask-dev="problem"><strong>report a problem</strong></a>. No account is needed and no IP
+address is kept. You can leave a contact if you'd like a personal reply; good questions are answered on this page,
+never with your contact details. You can also join our <a href="https://discord.gg/d2JYGPrRmH" rel="noopener">Discord</a>.</p>
+</main>
+<footer class="site"><div class="wrap">
+  <p><b>Questions?</b> <a href="#ask-developers" data-sovask-dev="question">Ask the developers</a> · <a href="#ask-developers" data-sovask-dev="problem">Report a problem</a> · <a href="questions.html">Questions &amp; answers</a></p>
+  <p><b>SOV Network (Self-Owned Value)</b>: one human, one account.</p>
+  <p>Community: <a href="https://discord.gg/d2JYGPrRmH" rel="noopener">Discord</a> · <a href="https://github.com/sov-network-dev/sov-build-source/discussions" rel="noopener">public Q&amp;A</a> — questions welcome, from anyone.</p>
+  <p>SOV Network — an open, self-contained protocol. No central operator, no single switch to flip.</p>
+  <p><a href="privacy.html">Privacy</a> — what the network holds about a citizen, and what it does not.</p>
+</div></footer>
+<!-- Visit counting: Cloudflare Web Analytics - no cookies, no IP addresses kept, counts and countries only (see privacy.html#site-visits) --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "eb6d3e43d6444443afef8f3db9148e1f"}'></script>
+<script src="ask.js?v=3" defer></script><script src="count.js?v=1" defer></script>
+</body>
+</html>

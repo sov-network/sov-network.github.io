@@ -27,6 +27,12 @@
     + '#sovask .chips button:hover{background:rgba(212,175,55,.15)}'
     + '#sovask form{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(255,255,255,.1)}#sovask input{flex:1;min-width:0;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:#0a1220;color:#fff;font-size:16px}'
     + '#sovask form button{background:' + GOLD + ';color:#1a1300;border:0;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer}'
+    + '#sovask .dev{display:block;margin:-4px 22px 10px 0;font-size:12.5px;color:#f1e3b3;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-align:left}'
+    + '#sovask .devbox{margin:0 0 10px;padding:10px;border:1px solid rgba(212,175,55,.45);border-radius:12px;background:rgba(212,175,55,.08)}'
+    + '#sovask .devbox b{display:block;color:#fff;margin-bottom:6px}#sovask .devbox textarea,#sovask .devbox input{width:100%;box-sizing:border-box;margin:0 0 6px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:#0a1220;color:#fff;font:14px system-ui,sans-serif}'
+    + '#sovask .devbox textarea{min-height:70px;resize:vertical}#sovask .devbox small{display:block;color:#9aa6b8;font-size:12px;margin-bottom:6px}'
+    + '#sovask .devbox button{background:' + GOLD + ';color:#1a1300;border:0;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer}'
+    + '#sovask header .rp{font-size:12px;color:#f1e3b3;text-decoration:underline;margin-right:4px;background:none;border:0;cursor:pointer}'
     + '@media (max-width:520px){#sovask-btn .lbl{display:none}#sovask-btn{padding:14px}#sovask-btn .dot{left:30px}#sovask{right:12px;bottom:76px;height:calc(100vh - 100px)}}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
@@ -36,7 +42,7 @@
   var tease = document.createElement('div'); tease.id = 'sovask-tease'; tease.setAttribute('role', 'status');
   tease.innerHTML = '<button type="button" aria-label="Dismiss">&times;</button><b>Hi! Questions about SOV Network?</b>I can explain how it works, how to get started, recovery and privacy. Ask me anything.';
   var box = document.createElement('div'); box.id = 'sovask'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Ask SOV');
-  box.innerHTML = '<header><div class="av">SOV</div><div class="t"><b>Ask SOV</b><small>&#9679; Online &middot; answers from the SOV docs</small></div><button type="button" aria-label="Close">&times;</button></header>'
+  box.innerHTML = '<header><div class="av">SOV</div><div class="t"><b>Ask SOV</b><small>&#9679; Online &middot; answers from the SOV docs</small></div><button type="button" class="rp">Report a problem</button><button type="button" class="x" aria-label="Close">&times;</button></header>'
     + '<div class="log" aria-live="polite"></div><div class="chips"></div>'
     + '<form><input maxlength="500" placeholder="Type your question…" aria-label="Your question"><button>Send</button></form>';
   document.body.appendChild(tease); document.body.appendChild(btn); document.body.appendChild(box);
@@ -61,17 +67,44 @@
   window.SOVAsk = { open: open, close: close };
 
   btn.onclick = function () { box.classList.contains('open') ? close() : open(); };
-  box.querySelector('header button').onclick = close;
+  box.querySelector('header .x').onclick = close;
+  box.querySelector('header .rp').onclick = function () { open(); devForm('problem', ''); };
   tease.onclick = function (e) { if (e.target.tagName === 'BUTTON') { hideTease(); return; } open(); };
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && box.classList.contains('open')) close(); });
   document.addEventListener('click', function (e) {
+    var dv = e.target.closest && e.target.closest('[data-sovask-dev]');
+    if (dv) { e.preventDefault(); open(); devForm(dv.getAttribute('data-sovask-dev') || 'question', ''); return; }
     var t = e.target.closest && e.target.closest('[data-sovask]');
     if (t) { e.preventDefault(); open(); }
   });
   if (location.hash === '#ask') open();
+  if (location.hash === '#ask-developers') { open(); devForm('question', ''); }
 
   // Pop a short greeting once per visit, a few seconds after the page settles. Never opens the chat by itself.
   if (!store('sovask_teased')) setTimeout(function () { if (!box.classList.contains('open')) tease.classList.add('show'); }, 5000);
+
+  // "Ask the developers": a person reads it. Stored privately (no IP, no cookies) until answered.
+  function devForm(kind, q) {
+    var old = log.querySelector('.devbox'); if (old) old.remove(); chips.style.display = 'none';
+    var d = document.createElement('div'); d.className = 'devbox';
+    d.innerHTML = '<b>' + (kind === 'problem' ? 'Report a problem to the developers' : 'Ask the developers') + '</b>'
+      + '<textarea maxlength="1500" placeholder="' + (kind === 'problem' ? 'What happened? Which device, and at which step?' : 'Your question') + '"></textarea>'
+      + '<input maxlength="120" placeholder="Optional: how to reach you (Discord, Reddit, Mastodon or email)">'
+      + '<small>A developer reads every message. No account needed, and we keep no IP address. Good questions may be answered on our public Questions page, never with your contact details.</small>'
+      + '<button type="button">Send to the developers</button>';
+    log.appendChild(d); log.scrollTop = log.scrollHeight;
+    var ta = d.querySelector('textarea'), ci = d.querySelector('input'), sb = d.querySelector('button');
+    ta.value = q || ''; ta.focus();
+    sb.onclick = function () {
+      var text = ta.value.trim(); if (text.length < 5) { ta.focus(); return; }
+      sb.disabled = true; sb.textContent = 'Sending…';
+      fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ dev: 1, kind: kind, q: text, contact: ci.value.trim(), page: location.pathname, h: hist.slice(-4) }) })
+        .then(function (r) { return r.json(); })
+        .then(function (r) { if (!r.ok) throw 0; d.innerHTML = '<b>Sent. Thank you!</b><small>A developer will read it. If you left a contact, we will reply there; answers to common questions appear on the <a href="https://sov-network.github.io/questions.html" style="color:#d4af37">Questions page</a>.</small>'; })
+        .catch(function () { sb.disabled = false; sb.textContent = 'Send to the developers'; alert('Sorry, it did not send. Please try again in a moment.'); });
+    };
+  }
+  window.SOVAsk = { open: open, close: close, dev: function (k) { open(); devForm(k || 'question', ''); } };
 
   function ask(q) {
     if (busy || !q) return; busy = true; chips.style.display = 'none';
@@ -79,7 +112,9 @@
     var wait = say('a', ''); wait.innerHTML = '<span class="typing"><span></span><span></span><span></span></span>'; sendBtn.disabled = true;
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ q: q, h: hist.slice(-4) }) })
       .then(function (r) { return r.json(); })
-      .then(function (d) { var a = d.answer || 'Sorry, I could not answer that. Please ask in the public Q&A.'; wait.innerHTML = link(a); hist.push({ r: 'u', c: q }, { r: 'a', c: a }); })
+      .then(function (d) { var a = d.answer || 'Sorry, I could not answer that. Please ask in the public Q&A.'; wait.innerHTML = link(a); hist.push({ r: 'u', c: q }, { r: 'a', c: a });
+        var dl = document.createElement('button'); dl.type = 'button'; dl.className = 'dev'; dl.textContent = 'Not answered? Ask the developers';
+        dl.onclick = function () { devForm('question', q); }; wait.after(dl); })
       .catch(function () { wait.textContent = 'Sorry, the assistant is not reachable right now. Please try again in a moment.'; })
       .then(function () { busy = false; sendBtn.disabled = false; log.scrollTop = log.scrollHeight; input.focus(); });
   }
