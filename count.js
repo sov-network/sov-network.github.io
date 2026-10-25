@@ -21,4 +21,13 @@
     if (n) send(n);
     else if (a.id === 'hero-dl') send('hero_button');
   }, true);
+  // "Not installing today?" one-tap reasons on get.html: sends why_<reason>, nothing else.
+  document.addEventListener('click', function (ev) {
+    var b = ev.target && ev.target.closest ? ev.target.closest('button[data-why]') : null;
+    if (!b) return;
+    send('why_' + b.getAttribute('data-why'));
+    var box = b.closest('#why-not'); if (!box) return;
+    box.querySelector('.whybtns').style.display = 'none';
+    var t = box.querySelector('#why-thanks'); if (t) t.style.display = 'block';
+  }, true);
 })();
